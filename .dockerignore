@@ -1,0 +1,19 @@
+# Build output
+target/
+
+# Version control / IDE
+.git/
+.github/
+.idea/
+*.iml
+nb-configuration.xml
+nbactions.xml
+
+# Secrets & local config (never bake into the image)
+.env
+env
+*.env
+
+# Docs / patches not needed for the build
+*.md
+*.patch
