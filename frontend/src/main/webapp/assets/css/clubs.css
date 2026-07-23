@@ -1,0 +1,29 @@
+/* ============================================================================
+   TryTons — Clubs page (Green-Gold redesign)
+   Only what differs from catalog.css: the backdrop photo and the four-column
+   row grid. Load order is theme.css → sidebar.css → catalog.css → this.
+   ========================================================================== */
+
+.clubs-page .catalog-backdrop {
+    background-image: linear-gradient(160deg, rgba(8, 18, 13, .96) 0%, rgba(8, 18, 13, .9) 45%, rgba(8, 18, 13, .97) 100%),
+                      url("../images/Stadium%20hero.jpg");
+}
+
+/* Club · Location · Home venue · Status. Wider than the players grid because
+   there are fewer columns and venue names run long. */
+.clubs-page .crow {
+    grid-template-columns: minmax(0, 1.6fr) 1fr 1.3fr .9fr;
+}
+
+/* ---------- Narrow screens ------------------------------------------------------ */
+@media (max-width: 900px) {
+    .clubs-page .crow {
+        grid-template-columns: minmax(0, 1.6fr) 1.2fr;
+    }
+
+    /* Location and status go; the venue is the more useful second column. */
+    .clubs-page .crow > :nth-child(2),
+    .clubs-page .crow > :nth-child(4) {
+        display: none;
+    }
+}

@@ -1,0 +1,355 @@
+/* ============================================================================
+   TryTons — Profile page (Green-Gold redesign)
+   Profile hero, account-details card and an underline-style edit form. Loads on
+   top of theme.css (palette tokens, fonts, .brand-font, .btn-gold and the
+   shared .field-* form styles), sidebar.css (shared left nav) and catalog.css
+   (main column, page header).
+   ========================================================================== */
+
+.pf-page .catalog-content {
+    max-width: 980px;
+}
+
+.pf-alert {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 3px solid #c0524a;
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
+}
+
+.pf-alert-success {
+    border-left-color: #5fae7a;
+}
+
+/* ---------- Profile hero ---------------------------------------------------------- */
+.pf-hero {
+    overflow: hidden;
+    margin: 24px 0 22px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: #091810;
+}
+
+.pf-banner {
+    position: relative;
+    height: 96px;
+    background: linear-gradient(120deg, rgba(201, 162, 39, .28), rgba(9, 24, 16, .5));
+}
+
+.pf-banner::after {
+    content: "";
+    position: absolute;
+    top: -80px;
+    right: -40px;
+    width: 320px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201, 162, 39, .28) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.pf-identity {
+    display: flex;
+    align-items: flex-end;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 0 26px 22px;
+    /* Overlaps the banner. */
+    margin-top: -44px;
+}
+
+.pf-avatar {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    /* The 3px ring is the card colour, so the avatar reads as lifted off the banner. */
+    border: 3px solid #091810;
+    background: linear-gradient(155deg, #1c3527, #0d1c13);
+    overflow: hidden;
+}
+
+/* Absolute and after the initials in the DOM, so a loaded picture paints over
+   them. Hidden (no pic, or a broken/cleared URL) → the initials underneath show.
+   The explicit [hidden] rule is needed because this class selector would
+   otherwise outrank the UA [hidden] { display: none }. */
+.pf-avatar img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pf-avatar img[hidden] {
+    display: none;
+}
+
+/* Initials sit behind the image; when the image is absent or fails, they show. */
+.pf-avatar-initials {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.pf-identity-text {
+    flex: 1;
+    min-width: 0;
+    /* Nudge the name/email down so they sit beside the avatar, not its ring top. */
+    padding-bottom: 4px;
+}
+
+.pf-username {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pf-email {
+    margin: .15rem 0 0;
+    color: var(--silver-dim);
+    font-size: .85rem;
+}
+
+.pf-pills {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-bottom: 4px;
+}
+
+/* ---------- Pills ------------------------------------------------------------------ */
+.pf-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .25rem .6rem;
+    border-radius: 6px;
+    font-size: .74rem;
+    font-weight: 600;
+}
+
+.pf-pill-gold { background: rgba(201, 162, 39, .15); color: var(--gold-bright); }
+.pf-pill-silver { background: rgba(199, 209, 201, .1); color: var(--silver); }
+.pf-pill-active { background: rgba(95, 174, 122, .14); color: #8fd0a5; }
+.pf-pill-inactive { background: rgba(192, 82, 74, .14); color: #e08279; }
+
+.pf-pill-active::before,
+.pf-pill-inactive::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* ---------- Fact strip -------------------------------------------------------------- */
+.pf-facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+}
+
+.pf-fact {
+    padding: 16px 26px;
+}
+
+.pf-fact + .pf-fact {
+    border-left: 1px solid var(--line);
+}
+
+.pf-fact-label {
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.pf-fact-value {
+    color: var(--silver-bright);
+    font-size: .9rem;
+    font-weight: 500;
+}
+
+/* ---------- Two-column body --------------------------------------------------------- */
+.pf-columns {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+}
+
+@media (max-width: 860px) {
+    .pf-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+.panel {
+    padding: 24px 26px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+}
+
+.panel + .panel {
+    margin-top: 20px;
+}
+
+.pf-panel-heading {
+    margin: 0 0 18px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.pf-panel-helper {
+    margin: -12px 0 18px;
+    color: var(--silver-dim);
+    font-size: .82rem;
+}
+
+/* ---------- Account-details definition list ----------------------------------------- */
+.pf-dl {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 12px 14px;
+    margin: 0;
+}
+
+.pf-dl dt {
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    align-self: center;
+}
+
+.pf-dl dd {
+    margin: 0;
+    color: var(--silver-bright);
+    font-size: .88rem;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Update form ------------------------------------------------------------- */
+/* Field styling (.field-label / .field-row / .field-icon / .field-input) is shared
+   from theme.css, same as the login and register pages. */
+.pf-form .field-label {
+    margin-top: 18px;
+}
+
+.pf-form .field-label:first-child {
+    margin-top: 0;
+}
+
+.pf-save {
+    margin-top: 24px;
+    width: 100%;
+    padding: .8rem 1rem;
+}
+
+/* ---------- Security card ------------------------------------------------------------ */
+.pf-security {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.pf-security-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(201, 162, 39, .14);
+    color: var(--gold);
+}
+
+.pf-security-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.pf-security-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .98rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.pf-security-sub {
+    margin: .2rem 0 0;
+    color: var(--silver-dim);
+    font-size: .82rem;
+}
+
+.pf-security-link {
+    color: var(--gold-bright);
+    font-size: .85rem;
+    font-weight: 500;
+    border-bottom: none;
+    white-space: nowrap;
+}
+
+.pf-security-link:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+}
+
+/* ---------- Could-not-load fallback -------------------------------------------------- */
+.pf-fallback {
+    margin-top: 24px;
+    padding: 40px 24px;
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    text-align: center;
+    color: var(--silver-dim);
+    font-size: .9rem;
+}
+
+/* ---------- Narrow screens ----------------------------------------------------------- */
+@media (max-width: 620px) {
+    .pf-facts {
+        grid-template-columns: 1fr;
+    }
+
+    .pf-fact + .pf-fact {
+        border-left: none;
+        border-top: 1px solid var(--line);
+    }
+
+    .pf-dl {
+        grid-template-columns: 1fr;
+        gap: 4px 0;
+    }
+
+    .pf-dl dd {
+        margin-bottom: 10px;
+    }
+}

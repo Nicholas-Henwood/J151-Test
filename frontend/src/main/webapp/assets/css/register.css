@@ -1,0 +1,21 @@
+/* ============================================================================
+   TryTons — Register page (Green-Gold redesign)
+   Shares field/alert/hero component classes with login.css via theme.css.
+   Page-specific bits only: the lighter left-panel background (signals a
+   different page than login) and this page's own hero photo.
+   ========================================================================== */
+
+body.register-page {
+  font-size: 0.9rem;
+}
+
+/* ---------- Left panel: lighter green than the page base --------------------- */
+.register-left-panel {
+  background: #132a1f;
+}
+
+/* ---------- This page's hero photo -------------------------------------------- */
+.register-visual-bg {
+  background-image: linear-gradient(170deg, rgba(12, 23, 18, .92) 0%, rgba(12, 23, 18, .78) 45%, rgba(12, 23, 18, .95) 100%),
+                     url("../images/register-photo.jpg");
+}

@@ -1,0 +1,638 @@
+/* ============================================================================
+   TryTons — Leagues page (Green-Gold redesign)
+   Master-leaderboard spotlight with a top-3 podium, a tab switch, and a grid of
+   league cards. Loads on top of theme.css (palette tokens, fonts, .brand-font),
+   sidebar.css (shared left nav) and catalog.css (page chrome: main column,
+   header, backdrop, empty state).
+   ========================================================================== */
+
+/* ---------- Header actions ---------------------------------------------------- */
+.lg-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 40px;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: none;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease;
+}
+
+.btn-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold-bright);
+}
+
+/* The shared .btn-gold is a block CTA elsewhere; here it sits inline in a
+   toolbar next to the outline button, so match that height and spacing. */
+.lg-actions .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 40px;
+    padding: 0 1rem;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+/* ---------- Spotlight --------------------------------------------------------- */
+.lg-spotlight {
+    position: relative;
+    overflow: hidden;
+    margin: 26px 0 0;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background-color: #091810;
+    background-image: linear-gradient(105deg, rgba(6, 15, 10, .96) 30%, rgba(6, 15, 10, .82) 62%, rgba(6, 15, 10, .55) 100%),
+                      url("../images/Leagues.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Soft gold glow, top-right, behind the podium. */
+.lg-spotlight::before {
+    content: "";
+    position: absolute;
+    top: -170px;
+    right: -110px;
+    width: 460px;
+    height: 460px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201, 162, 39, .2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.lg-spotlight-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    padding: 30px 34px;
+}
+
+.lg-spotlight-content {
+    max-width: 460px;
+    min-width: 0;
+}
+
+.lg-pill {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: .25rem .6rem;
+    border-radius: 6px;
+    background: rgba(201, 162, 39, .15);
+    color: var(--gold-bright);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.lg-spotlight h2 {
+    margin: 0 0 .4rem;
+    color: var(--silver-bright);
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+.lg-spotlight-caption {
+    margin: 0 0 20px;
+    color: var(--silver-dim);
+    font-size: .82rem;
+}
+
+.lg-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+}
+
+.lg-stat-label {
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.lg-stat-value {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.lg-stat-value.is-gold {
+    color: var(--gold-bright);
+}
+
+/* ---------- Podium ------------------------------------------------------------ */
+.lg-podium {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+}
+
+.lg-podium-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 104px;
+    text-align: center;
+}
+
+.lg-medal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    color: #141f0e;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .95rem;
+    font-weight: 700;
+}
+
+.lg-medal-1 {
+    width: 56px;
+    height: 56px;
+    font-size: 1.1rem;
+    background: linear-gradient(155deg, #f0d47a, #b8901c);
+    box-shadow: 0 0 0 6px rgba(201, 162, 39, .16);
+}
+
+.lg-medal-2 { background: linear-gradient(155deg, #dfe6e0, #97a89c); }
+.lg-medal-3 { background: linear-gradient(155deg, #d9a273, #90603a); }
+
+.lg-crown {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--gold-bright);
+}
+
+.lg-podium-team {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lg-podium-points {
+    margin-top: 2px;
+    color: var(--silver-dim);
+    font-size: .78rem;
+}
+
+/* The stand under each column; first place is tallest. */
+.lg-podium-stand {
+    width: 100%;
+    margin-top: 12px;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid var(--line);
+    border-bottom: none;
+    background: linear-gradient(180deg, rgba(201, 162, 39, .1), rgba(9, 24, 16, .2));
+}
+
+.lg-podium-col:nth-child(1) .lg-podium-stand { height: 42px; }
+.lg-podium-col:nth-child(2) .lg-podium-stand { height: 66px; }
+.lg-podium-col:nth-child(3) .lg-podium-stand { height: 30px; }
+
+/* ---------- Rank movement chip -------------------------------------------------- */
+.lg-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: .15rem .4rem;
+    border-radius: 5px;
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--silver-dim);
+    background: rgba(199, 209, 201, .08);
+}
+
+.lg-chip-up {
+    color: #5fae7a;
+    background: rgba(95, 174, 122, .12);
+}
+
+.lg-chip-down {
+    color: #c0524a;
+    background: rgba(192, 82, 74, .12);
+}
+
+/* ---------- Tabs ---------------------------------------------------------------- */
+.lg-tabs {
+    display: flex;
+    gap: 22px;
+    margin: 30px 0 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.lg-tab {
+    position: relative;
+    padding: 0 0 11px;
+    border: none;
+    border-bottom: none;
+    background: none;
+    color: var(--silver-dim);
+    font-family: inherit;
+    font-size: .88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color .15s ease;
+}
+
+.lg-tab:hover {
+    color: var(--silver-bright);
+}
+
+.lg-tab.is-active {
+    color: var(--gold-bright);
+}
+
+.lg-tab.is-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--gold);
+}
+
+.lg-tab-count {
+    margin-left: 6px;
+    color: var(--silver-dim);
+    font-size: .78rem;
+}
+
+/* ---------- Card grid ------------------------------------------------------------ */
+.lg-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.lg-grid[hidden] {
+    display: none;
+}
+
+.lg-card {
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.lg-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px -18px rgba(0, 0, 0, .9);
+}
+
+.lg-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.lg-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: rgba(201, 162, 39, .14);
+    color: var(--gold);
+}
+
+.lg-card-heading {
+    flex: 1;
+    min-width: 0;
+}
+
+.lg-card-name {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lg-card-sub {
+    margin: .2rem 0 0;
+    color: var(--silver-dim);
+    font-size: .78rem;
+}
+
+.lg-type {
+    flex-shrink: 0;
+    padding: .2rem .5rem;
+    border-radius: 6px;
+    font-size: .72rem;
+    font-weight: 600;
+}
+
+.lg-type-public {
+    background: rgba(95, 174, 122, .14);
+    color: #8fd0a5;
+}
+
+.lg-type-private {
+    background: rgba(201, 162, 39, .15);
+    color: var(--gold-bright);
+}
+
+/* ---------- Your-leagues card: position block + mini standings -------------------- */
+.lg-position {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.lg-position-rank {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.lg-position-of {
+    color: var(--silver-dim);
+    font-size: .78rem;
+    font-family: "Inter", system-ui, sans-serif;
+    font-weight: 400;
+}
+
+.lg-standings {
+    margin: 14px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lg-standing {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 9px;
+    border-radius: 7px;
+    font-size: .82rem;
+    color: var(--silver);
+}
+
+.lg-standing.is-you {
+    background: rgba(201, 162, 39, .1);
+    color: var(--gold-bright);
+}
+
+.lg-standing-rank {
+    color: var(--silver-dim);
+    font-size: .78rem;
+    font-weight: 600;
+}
+
+.lg-standing.is-you .lg-standing-rank {
+    color: var(--gold-bright);
+}
+
+.lg-standing-team {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lg-standing-owner {
+    color: var(--silver-dim);
+    font-size: .75rem;
+}
+
+.lg-standing.is-you .lg-standing-owner {
+    color: rgba(232, 199, 101, .75);
+}
+
+.lg-standing-points {
+    font-weight: 600;
+}
+
+.lg-card-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.lg-link {
+    color: var(--gold-bright);
+    font-size: .82rem;
+    font-weight: 500;
+    border-bottom: none;
+}
+
+.lg-link:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+}
+
+/* ---------- Discover card -------------------------------------------------------- */
+.lg-desc {
+    margin: 16px 0 0;
+    color: var(--silver);
+    font-size: .84rem;
+    line-height: 1.5;
+    /* Two to three lines, per the spec, without letting a long description
+       stretch one card taller than its row neighbours. */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.lg-spots {
+    color: var(--silver-dim);
+    font-size: .78rem;
+}
+
+.lg-join {
+    flex-shrink: 0;
+    padding: .5rem .95rem;
+    font-size: .8rem;
+}
+
+.lg-join:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.lg-join-form {
+    margin: 0;
+}
+
+/* ---------- "You need a team first" notice ----------------------------------------- */
+/* Shown above the league lists when the signed-in user has no fantasy team.
+   Joining is impossible until then (leagueMembership.teamId is NOT NULL), so
+   the page explains it rather than letting the join fail. */
+.lg-noteam {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 26px 0 0;
+    padding: 18px 22px;
+    border: 1px solid var(--gold-deep);
+    border-radius: 14px;
+    background: rgba(201, 162, 39, .07);
+}
+
+.lg-noteam-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: rgba(201, 162, 39, .16);
+    color: var(--gold);
+}
+
+.lg-noteam-text {
+    flex: 1;
+    min-width: 200px;
+}
+
+.lg-noteam-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.lg-noteam-sub {
+    margin: .25rem 0 0;
+    color: var(--silver);
+    font-size: .84rem;
+}
+
+.lg-noteam .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 40px;
+    padding: 0 1rem;
+    flex-shrink: 0;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+/* ---------- Join page: private-code card ------------------------------------------ */
+.lg-code-card {
+    margin-top: 26px;
+    max-width: 620px;
+}
+
+.lg-code-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0 0;
+    flex-wrap: wrap;
+}
+
+.lg-code-form .search-wrap {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Match the 44px field beside it; the card-footer Join is deliberately smaller. */
+.lg-code-form .lg-join {
+    height: 44px;
+    padding: 0 1.2rem;
+}
+
+/* The join page pairs the count with the search box rather than the page header. */
+.catalog-toolbar .catalog-count {
+    margin-left: auto;
+}
+
+/* ---------- Narrow screens -------------------------------------------------------- */
+@media (max-width: 900px) {
+    .lg-spotlight-inner {
+        padding: 24px 20px;
+        gap: 24px;
+    }
+
+    .lg-spotlight h2 {
+        font-size: 1.4rem;
+    }
+
+    .lg-stats {
+        gap: 20px;
+    }
+
+    .lg-podium-col {
+        width: 88px;
+    }
+
+    .lg-actions {
+        flex-wrap: wrap;
+    }
+}
+
+/* ---------- Clickable league name (Your leagues → league detail) --------------- */
+/* theme.css underlines and recolours every <a>; keep the name reading as a heading. */
+a.lg-card-name-link {
+    display: block;
+    border-bottom: none;
+    color: var(--silver-bright);
+}
+
+a.lg-card-name-link:hover {
+    color: var(--gold-bright);
+}

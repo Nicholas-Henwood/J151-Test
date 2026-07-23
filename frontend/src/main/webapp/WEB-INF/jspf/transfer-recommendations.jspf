@@ -1,0 +1,31 @@
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+
+<section id="transferRecommendations">
+    <h2>Recommended Transfers</h2>
+    <c:choose>
+        <c:when test="${empty transferRecommendations}">
+            <p id="transferRecommendationsEmptyState">No transfer recommendations available.</p>
+        </c:when>
+        <c:otherwise>
+            <ul id="transferRecommendationsList">
+                <c:forEach var="rec" items="${transferRecommendations}">
+                    <li class="recommendation-card" data-player-id="${rec.playerId}">
+                        <span class="recommendation-card__name">${fn:escapeXml(rec.playerName)}</span>
+                        <span class="recommendation-card__value"><t:money value="${rec.value}" /></span>
+                        <button type="button" class="recommendation-card__toggle" aria-expanded="false">
+                            Why?
+                        </button>
+                        <p class="recommendation-card__reason" hidden>${fn:escapeXml(rec.reason)}</p>
+                        <button type="button" class="recommendation-card__apply">
+                            Apply to transfer
+                        </button>
+                    </li>
+                </c:forEach>
+            </ul>
+        </c:otherwise>
+    </c:choose>
+</section>
+
+<script src="${pageContext.request.contextPath}/assets/js/transfer-recommendations.js"></script>

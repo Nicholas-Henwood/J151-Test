@@ -1,0 +1,153 @@
+<%--
+    Shared leaderboard body for the overall (master) and league-scoped pages.
+    The including page declares the c/fn taglibs and sets, before including:
+      lbTitle       heading text
+      lbEyebrow     eyebrow text
+      lbScope       'MASTER' or 'LEAGUE' (drives the active scope button)
+      lbOverallHref / lbLeagueHref   scope-toggle link targets
+    plus the servlet-supplied ${leaderboard} list. The signed-in user's own row
+    is found by matching entry.owner to the session username, so no separate
+    ranking fetch is needed on either scope.
+--%>
+<main class="catalog-main">
+    <div class="catalog-content">
+
+        <header class="catalog-header">
+            <div>
+                <p class="catalog-eyebrow">${fn:escapeXml(lbEyebrow)}</p>
+                <h1 class="brand-font">${fn:escapeXml(lbTitle)}</h1>
+            </div>
+            <div class="lb-scope" role="group" aria-label="Leaderboard scope">
+                <a class="${lbScope == 'MASTER' ? 'is-active' : ''}" href="${lbOverallHref}">Overall</a>
+                <a class="${lbScope == 'LEAGUE' ? 'is-active' : ''}" href="${lbLeagueHref}">My league</a>
+            </div>
+        </header>
+
+        <c:if test="${not empty error}">
+            <p class="lb-alert" role="alert"><c:out value="${error}" /></p>
+        </c:if>
+
+        <c:choose>
+            <c:when test="${empty leaderboard}">
+                <p class="lb-empty">No leaderboard entries found.</p>
+            </c:when>
+
+            <c:otherwise>
+                <%-- Locate the signed-in user's row (by owner username) for the strip
+                     and the row highlight. --%>
+                <c:set var="youOwner" value="${sessionScope.username}" />
+
+                <%-- ---------- Podium (2nd · 1st · 3rd) ---------- --%>
+                <section class="lb-podium">
+                    <c:forEach var="slot" items="${[1, 0, 2]}">
+                        <c:if test="${fn:length(leaderboard) > slot}">
+                            <c:set var="entry" value="${leaderboard[slot]}" />
+                            <c:set var="teamParts" value="${fn:split(entry.teamName, ' ')}" />
+                            <div class="lb-pod lb-pod-${entry.rank}">
+                                <span class="lb-medal lb-medal-${entry.rank}">${entry.rank}</span>
+                                <span class="lb-crest" aria-hidden="true"><c:if test="${fn:length(teamParts) > 0}">${fn:toUpperCase(fn:substring(teamParts[0], 0, 1))}<c:if test="${fn:length(teamParts) > 1}">${fn:toUpperCase(fn:substring(teamParts[fn:length(teamParts) - 1], 0, 1))}</c:if></c:if></span>
+                                <p class="lb-pod-team" title="${fn:escapeXml(entry.teamName)}">${fn:escapeXml(entry.teamName)}</p>
+                                <p class="lb-pod-owner">@${fn:escapeXml(entry.owner)}</p>
+                                <div class="lb-pod-figures">
+                                    <span class="lb-pod-fig"><span class="lb-fig-label">Pts</span><span class="lb-fig-value is-gold">${entry.leaguePoints}</span></span>
+                                    <span class="lb-pod-fig"><span class="lb-fig-label">Fantasy</span><span class="lb-fig-value">${entry.totalFantasyPoints}</span></span>
+                                </div>
+                            </div>
+                        </c:if>
+                    </c:forEach>
+                </section>
+
+                <%-- ---------- Your-team strip ---------- --%>
+                <c:forEach var="entry" items="${leaderboard}">
+                    <c:if test="${not empty youOwner and entry.owner == youOwner}">
+                        <c:set var="yc" value="${empty entry.rankMovement ? 0 : entry.rankMovement}" />
+                        <c:set var="teamParts" value="${fn:split(entry.teamName, ' ')}" />
+                        <section class="lb-you">
+                            <div>
+                                <span class="lb-you-tag">Your team</span>
+                                <div class="lb-you-rank">#${entry.rank}</div>
+                            </div>
+                            <div class="lb-you-id">
+                                <span class="lb-avatar" aria-hidden="true"><c:if test="${fn:length(teamParts) > 0}">${fn:toUpperCase(fn:substring(teamParts[0], 0, 1))}<c:if test="${fn:length(teamParts) > 1}">${fn:toUpperCase(fn:substring(teamParts[fn:length(teamParts) - 1], 0, 1))}</c:if></c:if></span>
+                                <div style="min-width:0">
+                                    <p class="lb-you-team" title="${fn:escapeXml(entry.teamName)}">${fn:escapeXml(entry.teamName)}</p>
+                                    <p class="lb-you-owner">
+                                        @${fn:escapeXml(entry.owner)}
+                                        <c:choose>
+                                            <c:when test="${yc > 0}"><span class="lb-move lb-move-up">&uarr; ${yc}</span></c:when>
+                                            <c:when test="${yc < 0}"><span class="lb-move lb-move-down">&darr; ${-yc}</span></c:when>
+                                            <c:otherwise><span class="lb-move">no change</span></c:otherwise>
+                                        </c:choose>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="lb-you-stats">
+                                <span class="lb-you-stat"><span class="lb-fig-label">P&ndash;W&ndash;D&ndash;L</span><span class="lb-you-stat-value">${entry.matchesPlayed}&ndash;${entry.matchesWon}&ndash;${entry.matchesDrawn}&ndash;${entry.matchesLost}</span></span>
+                                <span class="lb-you-stat"><span class="lb-fig-label">Diff</span><span class="lb-you-stat-value ${entry.scoreDifference > 0 ? 'lb-diff-pos' : (entry.scoreDifference < 0 ? 'lb-diff-neg' : '')}">${entry.scoreDifference > 0 ? '+' : ''}${entry.scoreDifference}</span></span>
+                                <span class="lb-you-stat"><span class="lb-fig-label">League pts</span><span class="lb-you-stat-value is-gold">${entry.leaguePoints}</span></span>
+                                <span class="lb-you-stat"><span class="lb-fig-label">Fantasy pts</span><span class="lb-you-stat-value">${entry.totalFantasyPoints}</span></span>
+                            </div>
+                        </section>
+                    </c:if>
+                </c:forEach>
+
+                <%-- ---------- Full standings ---------- --%>
+                <div class="lb-table-wrap">
+                    <table class="lb-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>+/&ndash;</th>
+                                <th class="lb-col-team">Team</th>
+                                <th>Pld</th>
+                                <th>W</th>
+                                <th>D</th>
+                                <th>L</th>
+                                <th>PF</th>
+                                <th>PA</th>
+                                <th>Diff</th>
+                                <th>League Pts</th>
+                                <th>Fantasy Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="entry" items="${leaderboard}">
+                                <c:set var="mv" value="${empty entry.rankMovement ? 0 : entry.rankMovement}" />
+                                <c:set var="teamParts" value="${fn:split(entry.teamName, ' ')}" />
+                                <tr class="${not empty youOwner and entry.owner == youOwner ? 'is-you' : ''}">
+                                    <td class="lb-col-rank">${entry.rank}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${mv > 0}"><span class="lb-move lb-move-up">&uarr; ${mv}</span></c:when>
+                                            <c:when test="${mv < 0}"><span class="lb-move lb-move-down">&darr; ${-mv}</span></c:when>
+                                            <c:otherwise><span class="lb-move">&ndash;</span></c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td class="lb-col-team">
+                                        <span class="lb-team-cell">
+                                            <span class="lb-avatar" aria-hidden="true"><c:if test="${fn:length(teamParts) > 0}">${fn:toUpperCase(fn:substring(teamParts[0], 0, 1))}<c:if test="${fn:length(teamParts) > 1}">${fn:toUpperCase(fn:substring(teamParts[fn:length(teamParts) - 1], 0, 1))}</c:if></c:if></span>
+                                            <span style="min-width:0">
+                                                <span class="lb-team-name">${fn:escapeXml(entry.teamName)}</span>
+                                                <span class="lb-team-owner"> @${fn:escapeXml(entry.owner)}</span>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td>${entry.matchesPlayed}</td>
+                                    <td><span class="lb-count lb-count-w">${entry.matchesWon}</span></td>
+                                    <td><span class="lb-count lb-count-d">${entry.matchesDrawn}</span></td>
+                                    <td><span class="lb-count lb-count-l">${entry.matchesLost}</span></td>
+                                    <td>${entry.pointsFor}</td>
+                                    <td>${entry.pointsAgainst}</td>
+                                    <td class="${entry.scoreDifference > 0 ? 'lb-diff-pos' : (entry.scoreDifference < 0 ? 'lb-diff-neg' : '')}">${entry.scoreDifference > 0 ? '+' : ''}${entry.scoreDifference}</td>
+                                    <td class="lb-league-pts">${entry.leaguePoints}</td>
+                                    <td class="lb-fantasy-pts">${entry.totalFantasyPoints}</td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </c:otherwise>
+        </c:choose>
+
+    </div>
+</main>

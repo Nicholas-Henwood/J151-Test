@@ -1,0 +1,265 @@
+/* ============================================================================
+   TryTons — Club detail page (Green-Gold redesign)
+   Club hero (crest + venue + status), derived stat strip and the club's player
+   roster. Loads on top of theme.css (palette tokens, fonts, .brand-font),
+   sidebar.css (shared left nav) and catalog.css (main column, table shell,
+   avatar, position pill, value + form cells).
+   ========================================================================== */
+
+.cl-page .catalog-main {
+    padding: 28px 40px 48px;
+}
+
+/* ---------- Back link -------------------------------------------------------------- */
+.cl-back {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--silver-dim);
+    font-size: .84rem;
+    border-bottom: none;
+}
+
+.cl-back:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+}
+
+.cl-alert {
+    margin-bottom: 18px;
+    border: 1px solid var(--line);
+    border-left: 3px solid #c0524a;
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
+}
+
+/* ---------- Hero ------------------------------------------------------------------- */
+.cl-hero {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background-color: #091810;
+    background-image: linear-gradient(120deg, rgba(6, 15, 10, .95) 30%, rgba(6, 15, 10, .82) 65%, rgba(6, 15, 10, .6) 100%),
+                      url("../images/Stadium%20hero.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Soft gold glow, top-right. */
+.cl-hero::before {
+    content: "";
+    position: absolute;
+    top: -170px;
+    right: -90px;
+    width: 440px;
+    height: 440px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201, 162, 39, .2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.cl-hero-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 28px 30px;
+}
+
+.cl-crest {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: linear-gradient(155deg, #1c3527, #0d1c13);
+    color: var(--gold-bright);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.cl-identity {
+    flex: 1;
+    min-width: 0;
+}
+
+.cl-eyebrow {
+    margin: 0 0 .3rem;
+    color: var(--gold-bright);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.cl-name-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.cl-name {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.cl-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .25rem .6rem;
+    border-radius: 6px;
+    font-size: .74rem;
+    font-weight: 600;
+}
+
+.cl-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.cl-status-active { background: rgba(95, 174, 122, .14); color: #8fd0a5; }
+.cl-status-inactive { background: rgba(192, 82, 74, .14); color: #e08279; }
+
+.cl-meta {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.cl-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--silver);
+    font-size: .85rem;
+}
+
+.cl-meta-item svg {
+    color: var(--gold);
+    flex-shrink: 0;
+}
+
+/* ---------- Stat strip ------------------------------------------------------------- */
+.cl-stats {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    background: rgba(9, 24, 16, .5);
+}
+
+.cl-stat {
+    flex: 1;
+    min-width: 120px;
+    padding: 16px 30px;
+}
+
+.cl-stat + .cl-stat {
+    border-left: 1px solid var(--line);
+}
+
+.cl-stat-label {
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.cl-stat-value {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cl-stat-value.is-gold {
+    color: var(--gold-bright);
+}
+
+/* ---------- Roster ----------------------------------------------------------------- */
+.cl-roster-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 30px 0 14px;
+}
+
+.cl-roster-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    white-space: nowrap;
+}
+
+.cl-roster-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+}
+
+.cl-roster-count {
+    color: var(--silver-dim);
+    font-size: .8rem;
+    white-space: nowrap;
+}
+
+/* Player · Position · Value · Form */
+.cl-page .crow {
+    grid-template-columns: minmax(0, 1.7fr) .9fr .8fr .9fr;
+}
+
+.cl-empty {
+    padding: 34px 24px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+    text-align: center;
+    color: var(--silver-dim);
+    font-size: .88rem;
+}
+
+/* ---------- Narrow screens --------------------------------------------------------- */
+@media (max-width: 760px) {
+    .cl-page .catalog-main {
+        padding: 24px 16px 32px;
+    }
+
+    .cl-name {
+        font-size: 1.5rem;
+    }
+
+    .cl-page .crow {
+        grid-template-columns: minmax(0, 1.6fr) .9fr;
+    }
+
+    /* Value and form drop; player + position matter most on a phone. */
+    .cl-page .crow > :nth-child(3),
+    .cl-page .crow > :nth-child(4) {
+        display: none;
+    }
+}

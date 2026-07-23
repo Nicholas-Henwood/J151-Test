@@ -1,0 +1,389 @@
+/* ============================================================================
+   TryTons — Catalog page chrome (Green-Gold redesign)
+
+   Shared by the browse-a-list pages (players, clubs, ...): photo-backed main
+   column, page header with a live count, filter toolbar and the card-framed
+   grid table. Loads on top of theme.css (palette tokens, fonts, .brand-font)
+   and sidebar.css (the shared left nav).
+
+   Each page adds its own small stylesheet for the bits that genuinely differ:
+   the backdrop photo, the row grid-template-columns, and any column-specific
+   cell styling. Row markup is driven by catalog-filter.js.
+   ========================================================================== */
+
+body.catalog-page {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    background: #08120d;
+    color: var(--silver);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* ---------- Main column + full-bleed photo layer ----------------------------- */
+.catalog-main {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    padding: 32px 40px 48px;
+}
+
+/* Photo sits at z-index 0 under a heavy dark-green wash so it reads as faint
+   texture rather than a picture. Each page supplies its own background-image;
+   all content lives in .catalog-content above it. */
+.catalog-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-size: cover;
+    background-position: center;
+}
+
+.catalog-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* ---------- Page header ------------------------------------------------------ */
+.catalog-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.catalog-eyebrow {
+    margin: 0 0 .5rem;
+    color: var(--gold-bright);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+}
+
+.catalog-header h1 {
+    margin: 0;
+    color: var(--silver-bright);
+    font-size: 1.9rem;
+    font-weight: 600;
+}
+
+.catalog-count {
+    margin: 0;
+    color: var(--silver-dim);
+    font-size: .85rem;
+}
+
+.catalog-error {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 2px solid #c0524a;
+    padding: .65rem .9rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
+}
+
+/* ---------- Filter toolbar ---------------------------------------------------- */
+/* Every control is 44px with border-box sizing so the row aligns exactly. */
+.catalog-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0 18px;
+}
+
+.search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 220px;
+    max-width: 360px;
+    height: 44px;
+    box-sizing: border-box;
+    padding: 0 .8rem;
+    background: #091810;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    transition: border-color .15s ease;
+}
+
+.search-wrap:focus-within {
+    border-color: var(--gold);
+}
+
+.search-wrap svg {
+    color: var(--silver-dim);
+    flex-shrink: 0;
+}
+
+.search-wrap input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    border-radius: 0;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .88rem;
+}
+
+.search-wrap input:focus {
+    box-shadow: none;
+}
+
+.search-wrap input::placeholder {
+    color: #5c6e64;
+}
+
+.sel {
+    height: 44px;
+    box-sizing: border-box;
+    padding: 0 .8rem;
+    background: #091810;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--silver);
+    font-family: inherit;
+    font-size: .88rem;
+    cursor: pointer;
+    transition: border-color .15s ease;
+}
+
+.sel:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: none;
+}
+
+/* Gold-bordered variant marks the controls that *filter* the list, as opposed
+   to the neutral sort control that only reorders it. */
+.sel-filter {
+    border-color: var(--gold-deep);
+    color: var(--gold-bright);
+}
+
+.sel-filter:hover {
+    border-color: var(--gold);
+}
+
+.sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.sort-label {
+    color: var(--silver-dim);
+    font-size: .78rem;
+}
+
+/* ---------- Table ------------------------------------------------------------- */
+.ctable {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #091810;
+}
+
+/* Pages set grid-template-columns; everything else about the row is shared. */
+.crow {
+    display: grid;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 20px;
+}
+
+/* `display: grid` above outranks the UA's [hidden] rule, so catalog-filter.js
+   could not hide filtered-out rows without this. */
+.crow[hidden] {
+    display: none;
+}
+
+.chead {
+    background: rgba(255, 255, 255, .015);
+    border-bottom: 1px solid var(--line);
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.cbody .crow {
+    border-top: 1px solid rgba(44, 68, 55, .55);
+    transition: background .15s ease;
+}
+
+.cbody .crow:first-child {
+    border-top: none;
+}
+
+.cbody .crow:hover {
+    background: rgba(201, 162, 39, .05);
+}
+
+/* A row that is itself a link (e.g. clubs → club detail). theme.css underlines
+   and recolours every <a>; undo that so the row still reads as a table row. */
+a.crow-link {
+    color: inherit;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+a.crow-link:hover {
+    color: inherit;
+}
+
+/* ---------- Shared cells ------------------------------------------------------- */
+/* Avatar + name, always the first column. */
+.c-name {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+}
+
+.c-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: linear-gradient(155deg, #1c3527, #0d1c13);
+    color: var(--silver-bright);
+    font-size: .78rem;
+    font-weight: 600;
+}
+
+.c-name-text {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Plain truncating text cell. */
+.c-text {
+    color: var(--silver);
+    font-size: .85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Value cell + form trend chip. Shared by the players and club rosters. */
+.p-value {
+    color: var(--silver-bright);
+    font-size: .92rem;
+    font-weight: 600;
+}
+
+.form-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--silver);
+}
+
+.form-up { color: #5fae7a; }
+.form-down { color: #c0524a; }
+
+/* Status dot + label. The dot takes the status colour; the halo is that same
+   hue at 15% alpha, so it has to be spelled out per state rather than ridden
+   off currentColor. */
+.avail {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--silver);
+    font-size: .82rem;
+}
+
+.avail::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.avail-ok { color: #5fae7a; }
+.avail-warn { color: var(--gold); }
+.avail-out { color: #c0524a; }
+
+.avail-ok::before { box-shadow: 0 0 0 3px rgba(95, 174, 122, .15); }
+.avail-warn::before { box-shadow: 0 0 0 3px rgba(201, 162, 39, .15); }
+.avail-out::before { box-shadow: 0 0 0 3px rgba(192, 82, 74, .15); }
+
+/* ---------- Empty state -------------------------------------------------------- */
+.catalog-empty {
+    margin: 0;
+    padding: 40px 0;
+    text-align: center;
+    color: var(--silver-dim);
+    font-size: .88rem;
+}
+
+/* ---------- Narrow screens ------------------------------------------------------ */
+@media (max-width: 1040px) {
+    .crow {
+        padding: 13px 16px;
+    }
+}
+
+@media (max-width: 900px) {
+    body.catalog-page {
+        flex-direction: column;
+    }
+
+    .catalog-main {
+        padding: 24px 16px 32px;
+    }
+
+    .catalog-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .sort-wrap {
+        margin-left: 0;
+    }
+}
+/* ---------- Position pill ------------------------------------------------------ */
+.pos-pill {
+    display: inline-block;
+    max-width: 100%;
+    border-radius: 6px;
+    padding: .2rem .5rem;
+    font-size: .72rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pos-fwd {
+    background: rgba(201, 162, 39, .14);
+    color: var(--gold-bright);
+}
+
+.pos-back {
+    background: rgba(199, 209, 201, .1);
+    color: var(--silver);
+}
+

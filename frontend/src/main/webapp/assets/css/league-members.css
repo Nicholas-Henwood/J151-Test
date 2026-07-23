@@ -1,0 +1,415 @@
+/* ============================================================================
+   TryTons — League members page (Green-Gold redesign)
+   League header (identity, capacity, invite code) and a members list with
+   manager-only remove controls. Loads on top of theme.css (palette tokens,
+   fonts, .brand-font), sidebar.css (shared left nav) and catalog.css (main
+   column, page header).
+   ========================================================================== */
+
+.lm-page .catalog-main {
+    padding: 28px 40px 48px;
+}
+
+/* ---------- Back link + banners ---------------------------------------------------- */
+.lm-back {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--silver-dim);
+    font-size: .84rem;
+    border-bottom: none;
+}
+
+.lm-back:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+}
+
+.lm-alert {
+    margin-bottom: 18px;
+    border: 1px solid var(--line);
+    border-left: 3px solid #c0524a;
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
+}
+
+.lm-success {
+    border-left-color: #5fae7a;
+}
+
+/* ---------- League header ---------------------------------------------------------- */
+.panel {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+    overflow: hidden;
+}
+
+.lm-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 22px 24px;
+}
+
+.lm-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(201, 162, 39, .14);
+    color: var(--gold);
+}
+
+.lm-identity {
+    flex: 1;
+    min-width: 0;
+}
+
+.lm-eyebrow {
+    margin: 0 0 .3rem;
+    color: var(--gold-bright);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.lm-name-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.lm-name {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.lm-type {
+    padding: .2rem .55rem;
+    border-radius: 6px;
+    font-size: .72rem;
+    font-weight: 600;
+}
+
+.lm-type-public { background: rgba(95, 174, 122, .14); color: #8fd0a5; }
+.lm-type-private { background: rgba(201, 162, 39, .15); color: var(--gold-bright); }
+
+.lm-managed {
+    margin: .4rem 0 0;
+    color: var(--silver-dim);
+    font-size: .82rem;
+}
+
+/* ---------- Invite code ------------------------------------------------------------ */
+.lm-invite {
+    text-align: right;
+}
+
+.lm-invite-label {
+    display: block;
+    margin-bottom: .35rem;
+    color: var(--silver-dim);
+    font-size: .62rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.lm-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: .4rem .6rem;
+    border: 1px dashed var(--gold-deep);
+    border-radius: 9px;
+    background: #0c1c13;
+}
+
+.lm-code-value {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--gold-bright);
+}
+
+.lm-copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: rgba(201, 162, 39, .14);
+    color: var(--gold-bright);
+    cursor: pointer;
+    transition: background .15s ease;
+}
+
+.lm-copy:hover {
+    background: rgba(201, 162, 39, .28);
+    filter: none;
+}
+
+.lm-copy.is-copied {
+    background: rgba(95, 174, 122, .2);
+    color: #8fd0a5;
+}
+
+/* ---------- Stat strip ------------------------------------------------------------- */
+.lm-stats {
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    background: rgba(9, 24, 16, .5);
+}
+
+.lm-stat {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 24px;
+}
+
+.lm-stat + .lm-stat {
+    border-left: 1px solid var(--line);
+}
+
+.lm-stat-label {
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--silver-dim);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.lm-stat-value {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.lm-stat-value.is-gold {
+    color: var(--gold-bright);
+}
+
+/* ---------- Members list ----------------------------------------------------------- */
+.lm-list-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 30px 0 14px;
+}
+
+.lm-list-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    white-space: nowrap;
+}
+
+.lm-list-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+}
+
+.lm-list-count {
+    color: var(--silver-dim);
+    font-size: .8rem;
+    white-space: nowrap;
+}
+
+.lm-table {
+    padding: 6px 8px;
+}
+
+.lm-row {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 2fr) minmax(0, 1.7fr) 104px 92px 84px;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 16px;
+    border-radius: 10px;
+}
+
+.lm-thead {
+    color: var(--silver-dim);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.lm-body .lm-row {
+    border-top: 1px solid rgba(44, 68, 55, .55);
+    transition: background .15s ease;
+}
+
+.lm-body .lm-row:hover {
+    background: rgba(201, 162, 39, .05);
+}
+
+.lm-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: linear-gradient(155deg, #1c3527, #0d1c13);
+    color: var(--silver-bright);
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+.lm-manager {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+/* Name truncates first; the badge never collapses behind it. */
+.lm-manager-name {
+    min-width: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lm-badge {
+    flex-shrink: 0;
+    padding: .1rem .4rem;
+    border-radius: 5px;
+    background: rgba(201, 162, 39, .15);
+    color: var(--gold-bright);
+    font-size: .66rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.lm-team {
+    min-width: 0;
+    color: var(--silver);
+    font-size: .87rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lm-joined {
+    color: var(--silver-dim);
+    font-size: .8rem;
+    white-space: nowrap;
+}
+
+.lm-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .76rem;
+    font-weight: 600;
+}
+
+.lm-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.lm-status-active { color: #8fd0a5; }
+.lm-status-left { color: var(--silver-dim); }
+
+.lm-remove-form {
+    margin: 0;
+    justify-self: end;
+}
+
+.lm-remove {
+    padding: .35rem .7rem;
+    border: 1px solid rgba(192, 82, 74, .5);
+    border-radius: 8px;
+    background: none;
+    color: #e08279;
+    font-family: inherit;
+    font-size: .76rem;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.lm-remove:hover {
+    background: rgba(192, 82, 74, .12);
+    border-color: #c0524a;
+    filter: none;
+}
+
+/* ---------- Empty / no-league states ----------------------------------------------- */
+.lm-empty {
+    padding: 40px 24px;
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.lm-empty h2 {
+    margin: 0 0 .4rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.lm-empty p {
+    margin: 0;
+    color: var(--silver-dim);
+    font-size: .85rem;
+}
+
+/* ---------- Narrow screens --------------------------------------------------------- */
+@media (max-width: 860px) {
+    .lm-page .catalog-main {
+        padding: 24px 16px 32px;
+    }
+
+    .lm-invite {
+        text-align: left;
+        width: 100%;
+    }
+
+    .lm-row {
+        grid-template-columns: 44px minmax(0, 1.6fr) 84px;
+    }
+
+    /* Team, joined and status fold away; manager + action are what matter on a phone. */
+    .lm-row > :nth-child(3),
+    .lm-row > :nth-child(4),
+    .lm-row > :nth-child(5) {
+        display: none;
+    }
+}

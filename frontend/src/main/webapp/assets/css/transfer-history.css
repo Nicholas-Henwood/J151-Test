@@ -1,0 +1,355 @@
+/* ============================================================================
+   TryTons — Transfer history page (Green-Gold redesign)
+   Summary stat bar and a swap-card timeline. Loads on top of theme.css (palette
+   tokens, fonts, .brand-font), sidebar.css (shared left nav) and catalog.css
+   (main column, page header).
+   ========================================================================== */
+
+.th-page .catalog-main {
+    padding: 28px 40px 48px;
+}
+
+.th-page .catalog-content {
+    max-width: 1000px;
+}
+
+/* ---------- Back link + header ----------------------------------------------------- */
+.th-back {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--silver-dim);
+    font-size: .84rem;
+    border-bottom: none;
+}
+
+.th-back:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+}
+
+.th-intro {
+    margin: .5rem 0 0;
+    max-width: 620px;
+    color: var(--silver);
+    font-size: .9rem;
+}
+
+.th-alert {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 3px solid #c0524a;
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
+}
+
+/* ---------- Summary stat bar ------------------------------------------------------- */
+.th-stats {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 22px 0 8px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #091810;
+}
+
+.th-stat {
+    flex: 1;
+    min-width: 130px;
+    padding: 16px 22px;
+}
+
+.th-stat + .th-stat {
+    border-left: 1px solid var(--line);
+}
+
+.th-stat-label {
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--silver-dim);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.th-stat-value {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.th-stat-value.is-gold { color: var(--gold-bright); }
+.th-stat-value.is-red { color: #e08279; }
+.th-stat-value.is-green { color: #8fd0a5; }
+
+/* ---------- Timeline --------------------------------------------------------------- */
+.th-timeline {
+    position: relative;
+    margin-top: 26px;
+    padding-left: 110px;
+}
+
+/* The vertical rule the node dots sit on. */
+.th-timeline::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 110px;
+    width: 2px;
+    background: var(--line);
+}
+
+.th-entry {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.th-entry:last-child {
+    margin-bottom: 0;
+}
+
+/* Date/time column, left of the rule. */
+.th-when {
+    position: absolute;
+    left: -110px;
+    top: 2px;
+    width: 96px;
+    text-align: right;
+    color: var(--silver-dim);
+    font-size: .74rem;
+    line-height: 1.4;
+}
+
+/* Gold node dot on the rule. */
+.th-node {
+    position: absolute;
+    left: -14px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 3px solid #08120d;
+    box-shadow: 0 0 0 1px var(--gold-deep);
+}
+
+/* ---------- Swap card -------------------------------------------------------------- */
+.swap {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+    overflow: hidden;
+    transition: border-color .2s ease;
+}
+
+.swap:hover {
+    border-color: var(--gold);
+}
+
+.swap-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+}
+
+.swap-side {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+}
+
+.swap-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    font-size: .76rem;
+    font-weight: 600;
+}
+
+.swap-avatar-out {
+    background: rgba(192, 82, 74, .12);
+    border-color: rgba(192, 82, 74, .4);
+    color: #e08279;
+}
+
+.swap-avatar-in {
+    background: rgba(201, 162, 39, .12);
+    border-color: var(--gold-deep);
+    color: var(--gold-bright);
+}
+
+.swap-info {
+    min-width: 0;
+}
+
+.swap-tag {
+    display: block;
+    font-size: .62rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.swap-tag-out { color: #e08279; }
+.swap-tag-in { color: var(--gold-bright); }
+
+.swap-name {
+    margin: .1rem 0 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.swap-value {
+    margin: .05rem 0 0;
+    color: var(--silver-dim);
+    font-size: .76rem;
+}
+
+.swap-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+}
+
+/* ---------- Meta row --------------------------------------------------------------- */
+.swap-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 11px 18px;
+    border-top: 1px solid var(--line);
+    background: rgba(255, 255, 255, .015);
+}
+
+.swap-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .78rem;
+}
+
+.swap-meta-label {
+    color: var(--silver-dim);
+}
+
+.swap-diff {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 600;
+}
+
+.swap-diff.is-red { color: #e08279; }
+.swap-diff.is-green { color: #8fd0a5; }
+.swap-diff.is-zero { color: var(--silver); }
+
+.swap-penalty-red { color: #e08279; font-weight: 600; }
+.swap-penalty-none { color: var(--silver-dim); }
+
+/* Status badge. */
+.swap-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .2rem .5rem;
+    border-radius: 6px;
+    font-size: .72rem;
+    font-weight: 600;
+}
+
+.swap-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.swap-status-confirmed { background: rgba(95, 174, 122, .14); color: #8fd0a5; }
+.swap-status-pending { background: rgba(224, 165, 74, .14); color: #e0a54a; }
+.swap-status-reverted { background: rgba(192, 82, 74, .14); color: #e08279; }
+
+/* ---------- Empty state ------------------------------------------------------------ */
+.th-empty {
+    margin-top: 24px;
+    padding: 48px 24px;
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.th-empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    background: #0c1c13;
+    color: var(--gold);
+}
+
+.th-empty h2 {
+    margin: 0 0 .4rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.th-empty p {
+    margin: 0;
+    color: var(--silver-dim);
+    font-size: .85rem;
+}
+
+/* ---------- Narrow screens --------------------------------------------------------- */
+@media (max-width: 720px) {
+    .th-page .catalog-main {
+        padding: 24px 16px 32px;
+    }
+
+    /* Drop the left date column; show the date inside the card meta instead. */
+    .th-timeline {
+        padding-left: 22px;
+    }
+
+    .th-timeline::before {
+        left: 22px;
+    }
+
+    .th-when {
+        position: static;
+        width: auto;
+        text-align: left;
+        margin-bottom: 6px;
+    }
+
+    .th-node {
+        left: -22px;
+    }
+
+    .swap-meta {
+        justify-content: flex-start;
+    }
+}

@@ -1,0 +1,218 @@
+/* ============================================================================
+   TryTons — Left sidebar navigation (Green-Gold design system)
+   Styles /WEB-INF/jspf/sidebar.jspf. Shared by every page built on the sidebar
+   layout (dashboard, players, ...), so it lives on its own rather than inside
+   any one page's stylesheet. Loads on top of theme.css.
+
+   Host pages own their own body layout — they must set `display: flex` on
+   <body> for the sidebar to sit beside the main column.
+   ========================================================================== */
+
+/* theme.css underlines every <a> via `border-bottom`. Reset it only on the
+   sidebar links that need it — deliberately NOT via a blanket `a` selector,
+   which would outrank page components' own borders and erase their bottom edge. */
+.sidebar-brand,
+.sidebar-link,
+.sidebar-user-caption {
+    border-bottom: none;
+}
+
+.app-sidebar {
+    width: 236px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 14px 16px;
+    background: linear-gradient(180deg, #091810 0%, #091810 62%, rgba(201, 162, 39, .22) 100%);
+    border-right: 1px solid var(--line);
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 6px;
+    margin-bottom: 26px;
+}
+
+.sidebar-brand-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: linear-gradient(155deg, var(--gold-bright), var(--gold-deep));
+    color: #141f0e;
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+    flex-shrink: 0;
+}
+
+.sidebar-brand-word {
+    color: var(--silver-bright);
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    border-radius: 8px;
+    border-left: 2px solid transparent;
+    color: var(--silver-dim);
+    font-size: .86rem;
+    font-weight: 500;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.sidebar-link svg {
+    flex-shrink: 0;
+}
+
+.sidebar-link:hover {
+    background: rgba(255, 255, 255, .045);
+    color: var(--silver-bright);
+}
+
+.sidebar-link.is-active {
+    background: rgba(201, 162, 39, .1);
+    color: var(--gold-bright);
+    border-left-color: var(--gold);
+}
+
+.sidebar-section-label {
+    margin: 18px 0 6px;
+    padding: 0 14px;
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+/* ---------- Footer / user cluster -------------------------------------------- */
+.sidebar-footer {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+}
+
+.sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 6px;
+    margin-bottom: 12px;
+}
+
+.sidebar-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--line);
+    color: var(--silver-bright);
+    font-size: .8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.sidebar-user-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.sidebar-username {
+    color: var(--silver-bright);
+    font-size: .85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-user-caption {
+    color: var(--silver-dim);
+    font-size: .72rem;
+}
+
+.sidebar-user-caption:hover {
+    color: var(--gold-bright);
+}
+
+/* Override theme.css's default gold <button> for this bordered variant. */
+#navLogoutForm {
+    margin: 0;
+}
+
+#navLogoutForm button {
+    width: 100%;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--silver);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font: inherit;
+    font-size: .82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease;
+}
+
+#navLogoutForm button:hover {
+    border-color: var(--gold);
+    color: var(--gold-bright);
+    filter: none;
+}
+
+/* ---------- Narrow screens: sidebar becomes a wrapping top strip -------------- */
+@media (max-width: 900px) {
+    .app-sidebar {
+        width: 100%;
+        /* Without this the 14px side padding is added to the 100%, pushing the
+           sidebar 28px past the viewport and scrolling the whole page sideways. */
+        box-sizing: border-box;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .sidebar-section-label {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+/* ---------- Unread badge on the Notifications item ---------------------------- */
+/* Rendered by sidebar.jspf when a page supplies a sidebarUnreadCount attribute.
+   Lives here rather than in notifications.css so it is styled on every page that
+   opts in, not just the notifications page itself. */
+.sidebar-badge {
+    margin-left: auto;
+    padding: .05rem .4rem;
+    border-radius: 999px;
+    background: var(--gold);
+    color: #141f0e;
+    font-size: .68rem;
+    font-weight: 700;
+}

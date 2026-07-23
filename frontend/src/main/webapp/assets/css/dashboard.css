@@ -1,0 +1,194 @@
+/* ============================================================================
+   TryTons — Dashboard (Green-Gold redesign)
+   Photo-backed hero + card grid. Loads on top of theme.css (palette tokens,
+   fonts, .brand-font, .btn-gold) and sidebar.css (the shared left nav).
+   ========================================================================== */
+
+body.dashboard {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    background: #08120d;
+    color: var(--silver);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* ---------- Main column ------------------------------------------------------ */
+.dashboard-main {
+    flex: 1;
+    min-width: 0;
+    padding: 32px 40px 48px;
+}
+
+/* ---------- Hero banner ------------------------------------------------------ */
+.dashboard-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    margin-bottom: 32px;
+    background-image: linear-gradient(115deg, rgba(6, 15, 10, .94) 20%, rgba(6, 15, 10, .75) 60%, rgba(6, 15, 10, .5) 100%),
+                      url("../images/Stadium%20hero.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.dashboard-hero-content {
+    max-width: 520px;
+    padding: 36px 40px;
+}
+
+.dashboard-hero-eyebrow {
+    margin: 0 0 .5rem;
+    color: var(--gold-bright);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+}
+
+.dashboard-hero h1 {
+    margin: 0 0 .5rem;
+    color: var(--silver-bright);
+    font-size: 1.9rem;
+    font-weight: 600;
+}
+
+.dashboard-hero-sub {
+    margin: 0 0 1.25rem;
+    color: var(--silver);
+    font-size: .9rem;
+}
+
+.dashboard-hero .btn-gold {
+    display: inline-block;
+    width: auto;
+    text-decoration: none;
+}
+
+/* ---------- Card grid --------------------------------------------------------- */
+.dashboard-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+@media (min-width: 1180px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.dashboard-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 150px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: #091810;
+    background-size: cover;
+    background-position: center;
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.dashboard-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px -18px rgba(0, 0, 0, .9);
+}
+
+.dashboard-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: rgba(201, 162, 39, .16);
+    color: var(--gold);
+    margin-bottom: auto;
+}
+
+.dashboard-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 14px 0 4px;
+    color: var(--silver-bright);
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.dashboard-card-arrow {
+    color: var(--gold);
+    opacity: .5;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.dashboard-card:hover .dashboard-card-arrow {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+.dashboard-card-desc {
+    margin: 0;
+    color: var(--silver-dim);
+    font-size: .85rem;
+}
+
+/* Per-card photo, layered under a heavy overlay so it reads as texture. */
+.card-create-team {
+    background-image: linear-gradient(180deg, rgba(8, 18, 13, .88) 0%, rgba(8, 18, 13, .97) 82%),
+                      url("../images/Create%20Team.jpg");
+}
+
+.card-leagues {
+    background-image: linear-gradient(180deg, rgba(8, 18, 13, .88) 0%, rgba(8, 18, 13, .97) 82%),
+                      url("../images/Leagues.jpg");
+}
+
+.card-fixtures {
+    background-image: linear-gradient(180deg, rgba(8, 18, 13, .88) 0%, rgba(8, 18, 13, .97) 82%),
+                      url("../images/Fixtures.jpg");
+}
+
+.card-transfers {
+    background-image: linear-gradient(180deg, rgba(8, 18, 13, .88) 0%, rgba(8, 18, 13, .97) 82%),
+                      url("../images/Transfers.jpg");
+}
+
+.card-notifications {
+    background-image: linear-gradient(180deg, rgba(8, 18, 13, .88) 0%, rgba(8, 18, 13, .97) 82%),
+                      url("../images/Notifications.jpg");
+}
+
+.card-profile {
+    background-image: linear-gradient(180deg, rgba(8, 18, 13, .88) 0%, rgba(8, 18, 13, .97) 82%),
+                      url("../images/Profile.jpg");
+}
+
+/* ---------- Narrow screens ----------------------------------------------------- */
+@media (max-width: 900px) {
+    body.dashboard {
+        flex-direction: column;
+    }
+
+    .dashboard-main {
+        padding: 24px 16px 32px;
+    }
+
+    .dashboard-hero-content {
+        padding: 28px 22px;
+    }
+
+    .dashboard-hero h1 {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,343 @@
+/* ============================================================================
+   TryTons — History page (Green-Gold redesign)
+   Summary stat cards, a points-per-round bar chart and a round-by-round
+   breakdown. Loads on top of theme.css (palette tokens, fonts, .brand-font),
+   sidebar.css (shared left nav) and catalog.css (main column, page header).
+   ========================================================================== */
+
+.hs-intro {
+    margin: .5rem 0 0;
+    max-width: 620px;
+    color: var(--silver);
+    font-size: .9rem;
+}
+
+/* ---------- Alerts ---------------------------------------------------------------- */
+.hs-alert {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 3px solid #c0524a;
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
+}
+
+/* ---------- Summary cards ---------------------------------------------------------- */
+.hs-stats {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    margin: 24px 0 26px;
+}
+
+.stat-card {
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+}
+
+/* The headline figure gets the gold treatment. */
+.stat-card-accent {
+    border-color: var(--gold-deep);
+    background: linear-gradient(140deg, rgba(201, 162, 39, .16), rgba(9, 24, 16, .6));
+}
+
+.stat-label {
+    display: block;
+    margin-bottom: .5rem;
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    display: block;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    line-height: 1.1;
+}
+
+.stat-card-accent .stat-value {
+    color: var(--gold-bright);
+}
+
+/* "Not available" should not shout as loudly as a real number. */
+.stat-value.is-muted {
+    color: var(--silver-dim);
+    font-size: 1.05rem;
+    font-family: "Inter", system-ui, sans-serif;
+    font-weight: 500;
+}
+
+/* ---------- Panels ------------------------------------------------------------------ */
+.panel {
+    padding: 22px 24px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+}
+
+.panel + .panel {
+    margin-top: 22px;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.panel-heading {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+/* ---------- Chart legend -------------------------------------------------------------- */
+.hs-legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.hs-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--silver-dim);
+    font-size: .76rem;
+}
+
+.hs-legend i {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.hs-swatch-win { background: linear-gradient(180deg, #8fd0a5, #5fae7a); }
+.hs-swatch-draw { background: linear-gradient(180deg, #c7d1c9, #7f9187); }
+.hs-swatch-loss { background: linear-gradient(180deg, #e08279, #c0524a); }
+
+/* ---------- Chart ------------------------------------------------------------------------ */
+.hs-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 190px;
+    overflow-x: auto;
+}
+
+.hs-col {
+    flex: 1;
+    min-width: 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    gap: 6px;
+}
+
+.hs-col-value {
+    flex-shrink: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--silver);
+}
+
+/* The bar needs its own track. As a direct flex child of .hs-col it was subject
+   to flex-shrink, which compressed tall bars more than short ones and threw the
+   proportions out — 18 of 37 rendered at 62% rather than 49%. This wrapper takes
+   the leftover height, and the bar's percentage resolves against it. */
+.hs-barwrap {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    display: flex;
+    align-items: flex-end;
+}
+
+/* The bar itself; its inline height is the share of the best round. */
+.hs-bar {
+    width: 100%;
+    min-height: 3px;
+    flex-shrink: 0;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(180deg, #c7d1c9, #7f9187);
+    transition: filter .15s ease;
+}
+
+.hs-col:hover .hs-bar {
+    filter: brightness(1.15);
+}
+
+.hs-col-label {
+    flex-shrink: 0;
+}
+
+.hs-bar-win { background: linear-gradient(180deg, #8fd0a5, #5fae7a); }
+.hs-bar-draw { background: linear-gradient(180deg, #c7d1c9, #7f9187); }
+.hs-bar-loss { background: linear-gradient(180deg, #e08279, #c0524a); }
+
+.hs-col-label {
+    color: var(--silver-dim);
+    font-size: .72rem;
+}
+
+/* ---------- Round-by-round breakdown ------------------------------------------------------- */
+.hs-table {
+    display: grid;
+    grid-template-columns: 96px 1fr auto auto;
+    align-items: center;
+    gap: 14px;
+}
+
+.hs-thead {
+    display: contents;
+}
+
+.hs-thead span {
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.hrow {
+    display: contents;
+}
+
+.hrow > * {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(44, 68, 55, .55);
+}
+
+.hrow:last-child > * {
+    border-bottom: none;
+}
+
+.round-chip {
+    justify-self: start;
+    padding: .25rem .6rem;
+    border-radius: 8px;
+    background: #0c1c13;
+    color: var(--silver-bright);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+/* The chip is inline, so the row's vertical padding has to move to a wrapper. */
+.hrow .hs-cell-round {
+    display: flex;
+    align-items: center;
+}
+
+.hs-fixture {
+    color: var(--silver);
+    font-size: .87rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-bottom-color: rgba(44, 68, 55, .55);
+}
+
+a.hs-fixture-link {
+    color: var(--silver);
+    border-bottom: none;
+}
+
+a.hs-fixture-link:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+}
+
+.hs-points {
+    justify-self: end;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+}
+
+.hs-result {
+    justify-self: end;
+}
+
+.result-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .2rem .55rem;
+    border-radius: 6px;
+    font-size: .74rem;
+    font-weight: 600;
+}
+
+.result-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.result-win { background: rgba(95, 174, 122, .14); color: #8fd0a5; }
+.result-draw { background: rgba(199, 209, 201, .1); color: var(--silver); }
+.result-loss { background: rgba(192, 82, 74, .14); color: #e08279; }
+
+/* ---------- Empty cards ---------------------------------------------------------------------- */
+.hs-empty {
+    padding: 34px 24px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+    text-align: center;
+}
+
+.hs-empty h2 {
+    margin: 0 0 .4rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.hs-empty p {
+    margin: 0;
+    color: var(--silver-dim);
+    font-size: .85rem;
+}
+
+/* ---------- Narrow screens ---------------------------------------------------------------------- */
+@media (max-width: 700px) {
+    .hs-table {
+        grid-template-columns: 70px 1fr auto;
+    }
+
+    /* Points fold into the result column's row; the fixture name matters more. */
+    .hs-thead span:nth-child(3),
+    .hrow > :nth-child(3) {
+        display: none;
+    }
+
+    .panel {
+        padding: 18px 16px;
+    }
+}

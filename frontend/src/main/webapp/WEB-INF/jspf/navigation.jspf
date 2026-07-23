@@ -1,0 +1,111 @@
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<style>
+    /* Page transition, paired with page-transitions.js below. Lives here
+       (rather than only in theme.css) so it works on every page that
+       includes this fragment, including ones with their own dedicated CSS
+       file instead of theme.css. */
+    body {
+        animation: page-fade-in 0.25s ease;
+    }
+
+    @keyframes page-fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    body.page-fade-out {
+        opacity: 0;
+        transition: opacity 0.15s ease;
+    }
+
+    #mainNav {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 18px;
+        background: #132a1f;
+        border-bottom: 1px solid #2c4437;
+        padding: 14px 24px;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        font-size: 0.85rem;
+    }
+
+    #mainNav a {
+        color: #c7d1c9;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        padding-bottom: 2px;
+        white-space: nowrap;
+    }
+
+    #mainNav a:hover {
+        color: #e8c765;
+        border-bottom-color: #8a6a15;
+    }
+
+    #mainNav #navWelcome {
+        margin-left: auto;
+        color: #7f9187;
+        font-size: 0.82rem;
+    }
+
+    #mainNav #navLogoutForm {
+        margin: 0 0 0 8px;
+    }
+
+    #mainNav #navLogoutForm button {
+        background: none;
+        border: 1px solid #2c4437;
+        color: #c7d1c9;
+        border-radius: 6px;
+        padding: 4px 10px;
+        font: inherit;
+        font-size: 0.82rem;
+        cursor: pointer;
+    }
+
+    #mainNav #navLogoutForm button:hover {
+        border-color: #c9a227;
+        color: #e8c765;
+    }
+
+    #mainNav #navLoginLink,
+    #mainNav #navRegisterLink {
+        margin-left: 4px;
+    }
+</style>
+<nav id="mainNav">
+    <a href="${pageContext.request.contextPath}/dashboard" id="navHomeLink">Home</a>
+    <a href="${pageContext.request.contextPath}/players?submit=players" id="navPlayersLink">Players</a>
+    <a href="${pageContext.request.contextPath}/clubs?submit=clubs" id="navClubsLink">Clubs</a>
+    <a href="${pageContext.request.contextPath}/leagues" id="navLeaguesLink">Leagues</a>
+    <a href="${pageContext.request.contextPath}/create-team" id="navCreateTeamLink">Create Team</a>
+    <a href="${pageContext.request.contextPath}/transfers" id="navTransfersLink">Transfers</a>
+    <a href="${pageContext.request.contextPath}/fixtures?submit=fixtures" id="navFixturesLink">Fixtures</a>
+    <c:if test="${sessionScope.role == 'ADMINISTRATOR'}">
+    <a href="${pageContext.request.contextPath}/admin/match-results" id="navMatchResultsLink">Match Results</a>
+    </c:if>
+    <a href="${pageContext.request.contextPath}/history" id="navHistoryLink">History</a>
+    <a href="${pageContext.request.contextPath}/notifications" id="navNotificationsLink">Notifications</a>
+    <a href="${pageContext.request.contextPath}/profile" id="navProfileLink">Profile</a>
+    <c:if test="${sessionScope.role == 'ADMINISTRATOR'}">
+    <a href="${pageContext.request.contextPath}/admin/scoring-rules" id="navAdminScoringRulesLink">Admin: Scoring Rules</a>
+    <a href="${pageContext.request.contextPath}/admin/simulation" id="navAdminSimulationLink">Admin: Simulation</a>
+    <a href="${pageContext.request.contextPath}/admin/fixtures" id="navAdminFixturesLink">Admin: Fixtures</a>
+    </c:if>
+
+    <c:choose>
+        <c:when test="${not empty sessionScope.username}">
+            <span id="navWelcome">Welcome, ${fn:escapeXml(sessionScope.username)}</span>
+            <form action="${pageContext.request.contextPath}/logout" method="post" id="navLogoutForm">
+                <button type="submit" name="submit" value="logout">Log out</button>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <a href="${pageContext.request.contextPath}/login" id="navLoginLink">Login</a>
+            <a href="${pageContext.request.contextPath}/register" id="navRegisterLink">Register</a>
+        </c:otherwise>
+    </c:choose>
+</nav>
+<script src="${pageContext.request.contextPath}/assets/js/page-transitions.js"></script>

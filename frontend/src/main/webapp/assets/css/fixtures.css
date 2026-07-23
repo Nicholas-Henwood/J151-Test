@@ -1,0 +1,419 @@
+/* ============================================================================
+   TryTons — Fixtures page (Green-Gold redesign)
+   Featured next-fixture hero, status filter pills, round-grouped matchup cards.
+   Loads on top of theme.css (palette tokens, fonts, .brand-font), sidebar.css
+   (shared left nav) and catalog.css (main column, page header, empty state).
+   ========================================================================== */
+
+/* ---------- Featured hero ------------------------------------------------------- */
+.fx-hero {
+    position: relative;
+    overflow: hidden;
+    margin: 24px 0 0;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background-color: #091810;
+    background-image: linear-gradient(180deg, rgba(6, 15, 10, .82), rgba(6, 15, 10, .9)),
+                      url("../images/Fixtures.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Soft gold glow near the top. */
+.fx-hero::before {
+    content: "";
+    position: absolute;
+    top: -190px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 480px;
+    height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201, 162, 39, .18) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.fx-hero-inner {
+    position: relative;
+    padding: 22px 26px 26px;
+}
+
+.fx-hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.fx-hero-eyebrow {
+    margin: 0;
+    color: var(--gold-bright);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.fx-matchup {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 18px;
+    max-width: 720px;
+    margin: 24px auto 0;
+}
+
+.fx-side {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.fx-side-home {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.fx-side-away {
+    justify-content: flex-start;
+}
+
+.fx-team-name {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* The signed-in manager's own team, so they can find themselves at a glance. */
+.fx-team-name.is-mine {
+    color: var(--gold-bright);
+}
+
+.fx-team-side {
+    display: block;
+    margin-top: .15rem;
+    color: var(--silver-dim);
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.fx-crest {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: linear-gradient(155deg, #1c3527, #0d1c13);
+    color: var(--silver-bright);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.fx-kick {
+    text-align: center;
+    min-width: 120px;
+}
+
+.fx-kick-label {
+    display: block;
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.fx-kick-time {
+    display: block;
+    margin-top: .25rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.fx-kick-date {
+    display: block;
+    margin-top: .1rem;
+    color: var(--silver-dim);
+    font-size: .8rem;
+}
+
+.fx-hero-cta {
+    display: block;
+    width: max-content;
+    margin: 24px auto 0;
+    padding: .7rem 1.2rem;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+/* ---------- Status pills --------------------------------------------------------- */
+.fx-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .22rem .55rem;
+    border-radius: 6px;
+    font-size: .72rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.fx-pill-upcoming { background: rgba(199, 209, 201, .1); color: var(--silver); }
+.fx-pill-locked,
+.fx-pill-simulating { background: rgba(201, 162, 39, .14); color: var(--gold-bright); }
+.fx-pill-completed { background: rgba(95, 174, 122, .14); color: #8fd0a5; }
+.fx-pill-cancelled { background: rgba(192, 82, 74, .14); color: #e08279; }
+.fx-pill-processed { background: rgba(95, 174, 122, .1); color: #8fd0a5; }
+
+/* Simulating carries a pulsing dot: the round is being run right now. */
+.fx-pill-simulating::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: fx-pulse 1s ease-in-out infinite;
+}
+
+@keyframes fx-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .25; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fx-pill-simulating::before { animation: none; }
+}
+
+/* ---------- Filter pills ---------------------------------------------------------- */
+.fx-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 26px 0 20px;
+}
+
+.tab {
+    padding: .45rem .85rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #091810;
+    color: var(--silver);
+    font-family: inherit;
+    font-size: .82rem;
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+
+.tab:hover {
+    border-color: var(--gold-deep);
+    color: var(--silver-bright);
+    filter: none;
+}
+
+.tab.is-active {
+    background: rgba(201, 162, 39, .12);
+    border-color: var(--gold);
+    color: var(--gold-bright);
+}
+
+/* ---------- Round groups ------------------------------------------------------------ */
+.fx-group {
+    margin-bottom: 26px;
+}
+
+.fx-group[hidden] {
+    display: none;
+}
+
+.fx-group-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.fx-group-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    white-space: nowrap;
+}
+
+.fx-group-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+}
+
+.fx-group-date {
+    color: var(--silver-dim);
+    font-size: .8rem;
+    white-space: nowrap;
+}
+
+.fx-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ---------- Fixture card -------------------------------------------------------------- */
+.fx-card {
+    display: grid;
+    grid-template-columns: 1fr 96px 1fr 168px;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.fx-card[hidden] {
+    display: none;
+}
+
+.fx-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -18px rgba(0, 0, 0, .9);
+}
+
+/* Left accent by status. The hover rule above sets all four borders, so these
+   are repeated there to keep the accent through a hover. */
+.fx-card-locked,
+.fx-card-simulating { border-left-color: var(--gold); }
+.fx-card-completed { border-left-color: #5fae7a; }
+.fx-card-cancelled { border-left-color: #c0524a; opacity: .72; }
+.fx-card-processed { border-left-color: #5fae7a; }
+
+.fx-card:hover.fx-card-locked,
+.fx-card:hover.fx-card-simulating { border-left-color: var(--gold); }
+.fx-card:hover.fx-card-completed,
+.fx-card:hover.fx-card-processed { border-left-color: #5fae7a; }
+.fx-card:hover.fx-card-cancelled { border-left-color: #c0524a; }
+
+.fx-card .fx-crest {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: .85rem;
+}
+
+.fx-card .fx-team-name {
+    font-size: .95rem;
+}
+
+/* ---------- Card centre box ------------------------------------------------------------- */
+.fx-centre {
+    text-align: center;
+}
+
+.fx-score {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    white-space: nowrap;
+}
+
+/* Winner gold, loser dim; a draw leaves both bright. */
+.fx-score .is-winner { color: var(--gold-bright); }
+.fx-score .is-loser { color: var(--silver-dim); }
+
+.fx-vs {
+    display: block;
+    color: var(--silver-dim);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+}
+
+.fx-centre-time {
+    display: block;
+    margin-top: .2rem;
+    color: var(--silver);
+    font-size: .85rem;
+}
+
+.fx-centre-dash {
+    color: var(--silver-dim);
+    font-size: 1.2rem;
+}
+
+/* ---------- Card meta column -------------------------------------------------------------- */
+.fx-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    text-align: right;
+}
+
+.fx-meta-when {
+    color: var(--silver-dim);
+    font-size: .76rem;
+}
+
+.fx-view {
+    color: var(--gold-bright);
+    font-size: .8rem;
+    font-weight: 500;
+    border-bottom: none;
+}
+
+.fx-view:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+}
+
+/* ---------- Narrow screens ------------------------------------------------------------------ */
+@media (max-width: 900px) {
+    .fx-card {
+        grid-template-columns: 1fr 76px 1fr;
+        row-gap: 12px;
+    }
+
+    /* Meta drops to a full-width row beneath the matchup. */
+    .fx-meta {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .fx-matchup {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        text-align: center;
+    }
+
+    .fx-side-home,
+    .fx-side-away {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .fx-card .fx-team-name {
+        font-size: .85rem;
+    }
+}

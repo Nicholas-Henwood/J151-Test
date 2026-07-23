@@ -1,0 +1,186 @@
+/* ============================================================================
+   TryTons — Fantasy Rugby | Admin System Reports
+   Vanilla CSS. Shares the palette, type, radii and spacing tokens used by the
+   other admin CRUD screens so this page sits alongside the rest of the admin
+   area. Targets only the markup in admin-reports.jsp.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+:root {
+    --navy: #eef3ef;
+    --navy-700: #eef3ef;
+    --teal: #c9a227;
+    --teal-600: #8a6a15;
+    --bg: #0c1712;
+    --surface: #132a1f;
+
+    --ink: #c7d1c9;
+    --ink-muted: #7f9187;
+
+    --danger: #e0847a;
+    --danger-bg: rgba(192, 82, 74, 0.12);
+    --danger-border: #c0524a;
+    --success: #6fcf8e;
+    --success-bg: rgba(21, 128, 61, 0.14);
+    --success-border: #2f6b45;
+
+    --border: #2c4437;
+    --field-bg: #0f2118;
+
+    --radius-card: 12px;
+    --radius-field: 8px;
+
+    --sp-2: 8px;
+    --sp-3: 12px;
+    --sp-4: 16px;
+    --sp-5: 20px;
+    --sp-6: 24px;
+    --sp-8: 32px;
+}
+
+body.admin-reports {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+}
+
+#adminReports {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--sp-8) var(--sp-5) var(--sp-8);
+}
+
+#adminReports h1 {
+    color: var(--navy-700);
+    margin-bottom: var(--sp-6);
+}
+
+#adminReports h2 {
+    color: var(--navy);
+    margin-top: 0;
+}
+
+/* ---------- Feedback ------------------------------------------------------- */
+.success-message,
+.error-message {
+    border-radius: var(--radius-field);
+    padding: var(--sp-3) var(--sp-4);
+    margin: var(--sp-3) 0;
+    font-weight: 500;
+}
+
+.success-message {
+    color: var(--success);
+    background: var(--success-bg);
+    border: 1px solid var(--success-border);
+}
+
+.error-message {
+    color: var(--danger);
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+}
+
+/* ---------- Sections -------------------------------------------------------- */
+#adminReports section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: var(--sp-5);
+    margin-bottom: var(--sp-5);
+}
+
+/* ---------- Form fields ------------------------------------------------------ */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-4);
+}
+
+.field label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+#adminReports input[type="text"],
+#adminReports select,
+#adminReports textarea {
+    padding: var(--sp-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-field);
+    background: var(--field-bg);
+    font: inherit;
+    color: inherit;
+}
+
+#adminReports textarea {
+    resize: vertical;
+    min-height: 5rem;
+}
+
+#adminReports input:focus,
+#adminReports select:focus,
+#adminReports textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18);
+}
+
+#adminReports small {
+    color: var(--ink-muted);
+    font-size: 0.8rem;
+}
+
+#adminReports button {
+    background: var(--teal);
+    color: #141f0e;
+    border: none;
+    border-radius: var(--radius-field);
+    padding: var(--sp-3) var(--sp-5);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+#adminReports button:hover {
+    background: var(--teal-600);
+}
+
+/* ---------- Tables --------------------------------------------------------- */
+#reportsTable,
+#logsTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#reportsTable th,
+#reportsTable td,
+#logsTable th,
+#logsTable td {
+    text-align: left;
+    padding: var(--sp-2) var(--sp-3);
+    border-bottom: 1px solid var(--border);
+}
+
+#reportsTable th,
+#logsTable th {
+    color: var(--ink-muted);
+    font-weight: 600;
+}
+
+@media (max-width: 640px) {
+    #adminReports {
+        padding: var(--sp-6) var(--sp-3) var(--sp-6);
+    }
+
+    #reportsTable,
+    #logsTable {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}

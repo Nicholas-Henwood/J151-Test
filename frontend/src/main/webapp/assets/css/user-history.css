@@ -1,0 +1,166 @@
+/* User points history page - Fantasy TryTons */
+
+.user-history-page {
+    --trytons-navy: #0c1712;
+    --trytons-panel: #132a1f;
+    --trytons-gold: #c9a227;
+    --trytons-cream: #eef3ef;
+    --trytons-muted: #7f9187;
+    --trytons-line: rgba(44, 68, 55, 0.5);
+    --trytons-win: #3fb27f;
+    --trytons-draw: #7f9187;
+    --trytons-loss: #e0596b;
+
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    color: var(--trytons-cream);
+}
+
+.user-history-hero {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    padding: 2.25rem;
+    border: 1px solid rgba(201, 162, 39, 0.34);
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--trytons-navy), var(--trytons-panel));
+    box-shadow: 0 16px 32px rgba(12, 23, 18, 0.2);
+}
+
+.user-history-eyebrow {
+    margin: 0 0 0.5rem;
+    color: var(--trytons-gold);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.user-history-page h1,
+.user-history-page h2,
+.user-history-page h3 {
+    margin-top: 0;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.user-history-page h1 {
+    margin-bottom: 0.75rem;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+}
+
+.user-history-description {
+    max-width: 44rem;
+    margin: 0;
+    color: var(--trytons-muted);
+    font-size: 1.02rem;
+    line-height: 1.65;
+}
+
+.user-history-summary,
+.user-history-breakdown {
+    margin-bottom: 2rem;
+    padding: 1.75rem;
+    border: 1px solid var(--trytons-line);
+    border-radius: 14px;
+    background: var(--trytons-panel);
+}
+
+.user-history-summary h2,
+.user-history-breakdown h2 {
+    margin-bottom: 1.25rem;
+    font-size: 1.4rem;
+}
+
+.user-history-summary-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.user-history-summary-card {
+    display: flex;
+    flex: 1 1 200px;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1.25rem;
+    border: 1px solid var(--trytons-line);
+    border-radius: 12px;
+    background: var(--trytons-navy);
+}
+
+.user-history-summary-label {
+    color: var(--trytons-muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.user-history-summary-value {
+    color: var(--trytons-gold);
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.user-history-table-wrap {
+    overflow-x: auto;
+}
+
+.user-history-table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-history-table-wrap th,
+.user-history-table-wrap td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--trytons-line);
+    text-align: left;
+}
+
+.user-history-table-wrap th {
+    color: var(--trytons-muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.user-history-badge {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.user-history-badge-win {
+    background: rgba(63, 178, 127, 0.18);
+    color: var(--trytons-win);
+}
+
+.user-history-badge-draw {
+    background: rgba(127, 145, 135, 0.18);
+    color: var(--trytons-draw);
+}
+
+.user-history-badge-loss {
+    background: rgba(224, 89, 107, 0.18);
+    color: var(--trytons-loss);
+}
+
+.user-history-empty {
+    padding: 1.5rem;
+    border: 1px dashed var(--trytons-line);
+    border-radius: 12px;
+    color: var(--trytons-muted);
+    text-align: center;
+}
+
+.error-message.user-history-error {
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(224, 89, 107, 0.4);
+    border-radius: 10px;
+    background: rgba(224, 89, 107, 0.12);
+    color: var(--trytons-loss);
+}

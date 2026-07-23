@@ -1,0 +1,263 @@
+/* ============================================================================
+   TryTons — Create Team page (Green-Gold redesign)
+   Player pool on the left, sticky squad summary on the right. Loads on top of
+   theme.css (palette tokens, fonts, .brand-font, .btn-gold), sidebar.css (the
+   shared left nav) and catalog.css (main column, header, table shell, avatar).
+   ========================================================================== */
+
+.ct-page .catalog-backdrop {
+    background-image: linear-gradient(160deg, rgba(8, 18, 13, .96) 0%, rgba(8, 18, 13, .9) 45%, rgba(8, 18, 13, .97) 100%),
+                      url("../images/Stadium%20hero.jpg");
+}
+
+/* ---------- Two-column layout ---------------------------------------------------- */
+/* The search toolbar sits above this grid rather than inside the left column, so
+   both columns start on the same line and the summary lines up with the table.
+   The toolbar's own bottom margin provides the spacing, hence no margin-top. */
+.ct-layout {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    align-items: start;
+}
+
+@media (max-width: 1100px) {
+    .ct-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ---------- Budget note beside the search box -------------------------------------- */
+/* Pushed to the far end of the toolbar, opposite the search field. */
+.ct-budget-note {
+    margin: 0 0 0 auto;
+    color: var(--silver-dim);
+    font-size: .85rem;
+}
+
+.ct-budget-note strong {
+    color: var(--gold-bright);
+    font-weight: 600;
+}
+
+/* ---------- Player pool ----------------------------------------------------------- */
+/* Select · Name · Club · Position · Value · Status */
+.ct-page .crow {
+    grid-template-columns: 34px minmax(0, 1.6fr) 1.1fr .9fr .8fr .9fr;
+}
+
+.ct-check {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--gold);
+    cursor: pointer;
+}
+
+.ct-check:disabled {
+    cursor: not-allowed;
+    opacity: .4;
+}
+
+/* A row whose player is picked, so the choice stays obvious while scrolling. */
+.cbody .crow.is-picked {
+    background: rgba(201, 162, 39, .08);
+}
+
+.ct-value {
+    color: var(--silver-bright);
+    font-size: .92rem;
+    font-weight: 600;
+}
+
+/* ---------- Squad summary ---------------------------------------------------------- */
+.ct-summary {
+    position: sticky;
+    top: 24px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+}
+
+.ct-summary h2 {
+    margin: 0 0 .25rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+/* The squad rule, sitting with the numbers it constrains rather than in the
+   page header. */
+.ct-summary-sub {
+    margin: 0 0 16px;
+    color: var(--silver-dim);
+    font-size: .78rem;
+}
+
+.ct-stat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    border-top: 1px solid rgba(44, 68, 55, .55);
+    font-size: .85rem;
+}
+
+.ct-stat:first-of-type {
+    border-top: none;
+}
+
+.ct-stat-label {
+    color: var(--silver-dim);
+}
+
+.ct-stat-value {
+    color: var(--silver-bright);
+    font-weight: 600;
+}
+
+.ct-stat-value.is-gold {
+    color: var(--gold-bright);
+}
+
+/* Set by create-team.js when the picked squad costs more than the budget. */
+.ct-stat-value.over {
+    color: #c0524a;
+}
+
+/* ---------- Selected list ---------------------------------------------------------- */
+.ct-selected {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.ct-selected li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, .03);
+    color: var(--silver);
+    font-size: .82rem;
+}
+
+/* The remove button create-team.js appends to each chip. */
+.ct-selected li button {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    border-radius: 5px;
+    background: none;
+    color: var(--silver-dim);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.ct-selected li button:hover {
+    background: rgba(192, 82, 74, .15);
+    color: #c0524a;
+    filter: none;
+}
+
+.ct-empty-pick {
+    margin: 14px 0 0;
+    color: var(--silver-dim);
+    font-size: .82rem;
+}
+
+/* ---------- Team name + submit ------------------------------------------------------ */
+.ct-field {
+    margin-top: 18px;
+}
+
+.ct-label {
+    display: block;
+    margin-bottom: .45rem;
+    color: var(--silver-dim);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.ct-input {
+    width: 100%;
+    height: 44px;
+    box-sizing: border-box;
+    padding: 0 .8rem;
+    background: #08120d;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .88rem;
+}
+
+.ct-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: none;
+}
+
+.ct-submit {
+    width: 100%;
+    margin-top: 14px;
+    padding: .8rem 1rem;
+}
+
+.ct-footnote {
+    margin: 12px 0 0;
+    color: var(--silver-dim);
+    font-size: .75rem;
+    line-height: 1.5;
+}
+
+/* ---------- Feedback ---------------------------------------------------------------- */
+.ct-alert {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--gold);
+    padding: .65rem .9rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
+}
+
+.ct-alert-error { border-left-color: #c0524a; }
+.ct-alert-success { border-left-color: #5fae7a; }
+
+.ct-alert ul {
+    margin: .35rem 0 0;
+    padding-left: 1.1rem;
+}
+
+/* ---------- Narrow screens ----------------------------------------------------------- */
+@media (max-width: 900px) {
+    .ct-summary {
+        position: static;
+    }
+
+    .ct-page .crow {
+        grid-template-columns: 34px minmax(0, 1.6fr) .9fr;
+    }
+
+    /* Club, value and status go; the pick and the name are what matter. */
+    .ct-page .crow > :nth-child(3),
+    .ct-page .crow > :nth-child(5) {
+        display: none;
+    }
+}

@@ -1,0 +1,53 @@
+# Maven build output
+target/
+
+# Compiled Java files
+*.class
+
+# Node / Tailwind dependencies
+node_modules/
+
+# Tailwind generated output
+# Only ignore this if every developer will build it locally.
+# If your lecturer/demo needs it already compiled, do NOT ignore output.css.
+# src/main/webapp/assets/css/output.css
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# NetBeans files
+nbproject/private/
+build/
+dist/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment/config files
+.env
+*.env
+frontend.properties
+frontend-local.properties
+
+# GlassFish / Payara generated files
+*.war
+*.ear
+generated/
+
+# Serena MCP (local code-navigation cache/config)
+.serena/

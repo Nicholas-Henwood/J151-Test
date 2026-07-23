@@ -1,0 +1,565 @@
+/* ============================================================================
+   TryTons — My Team page (Green-Gold redesign)
+   Starting XV in formation on a pitch, a bench strip and a click-to-inspect
+   detail panel. Loads on top of theme.css (palette tokens, fonts, .brand-font,
+   .btn-gold), sidebar.css (shared left nav) and catalog.css (main column, page
+   header). The pitch and bench nodes are built by my-team.js.
+   ========================================================================== */
+
+/* ---------- Header ----------------------------------------------------------------- */
+.mt-header-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.mt-valid-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: .25rem .6rem;
+    border-radius: 6px;
+    font-size: .74rem;
+    font-weight: 600;
+}
+
+.mt-valid-pill::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.mt-valid-ok { background: rgba(95, 174, 122, .14); color: #8fd0a5; }
+.mt-valid-bad { background: rgba(192, 82, 74, .14); color: #e08279; }
+
+.mt-subline {
+    margin: .4rem 0 0;
+    color: var(--silver-dim);
+    font-size: .85rem;
+}
+
+.mt-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.mt-ghost {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: none;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .85rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color .15s ease, color .15s ease;
+}
+
+.mt-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold-bright);
+}
+
+.mt-actions .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 1rem;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+.mt-alert {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 3px solid #c0524a;
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
+}
+
+/* ---------- Stat bar --------------------------------------------------------------- */
+.mt-stats {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 22px 0;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+    overflow: hidden;
+}
+
+.mt-stat {
+    flex: 1;
+    min-width: 120px;
+    padding: 16px 20px;
+}
+
+.mt-stat + .mt-stat {
+    border-left: 1px solid var(--line);
+}
+
+.mt-stat-label {
+    display: block;
+    margin-bottom: .3rem;
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.mt-stat-value {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.mt-stat-value.is-gold {
+    color: var(--gold-bright);
+}
+
+/* ---------- Two-column body -------------------------------------------------------- */
+.mt-body {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    align-items: start;
+}
+
+@media (max-width: 1040px) {
+    .mt-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- Pitch ------------------------------------------------------------------- */
+.mt-pitch {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    min-height: 440px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    /* Vertical mow-stripes. */
+    background:
+        repeating-linear-gradient(90deg, #123524 0 8%, #0e2a1c 8% 16%);
+}
+
+/* Faint pitch markings: halfway, 22m lines, try lines, centre circle, try zones. */
+.mt-pitch::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        /* centre circle */
+        radial-gradient(circle at 50% 50%, transparent 46px, rgba(255, 255, 255, .16) 47px, rgba(255, 255, 255, .16) 48px, transparent 49px),
+        /* halfway line */
+        linear-gradient(rgba(255, 255, 255, .22), rgba(255, 255, 255, .22)) 0 50% / 100% 2px no-repeat,
+        /* 22m lines */
+        linear-gradient(rgba(255, 255, 255, .14), rgba(255, 255, 255, .14)) 0 22% / 100% 1px no-repeat,
+        linear-gradient(rgba(255, 255, 255, .14), rgba(255, 255, 255, .14)) 0 78% / 100% 1px no-repeat,
+        /* try lines */
+        linear-gradient(rgba(255, 255, 255, .25), rgba(255, 255, 255, .25)) 0 8% / 100% 2px no-repeat,
+        linear-gradient(rgba(255, 255, 255, .25), rgba(255, 255, 255, .25)) 0 92% / 100% 2px no-repeat;
+}
+
+/* Gold-tinted try zones top and bottom. */
+.mt-pitch::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(rgba(201, 162, 39, .1), transparent) 0 0 / 100% 8% no-repeat,
+        linear-gradient(transparent, rgba(201, 162, 39, .1)) 0 100% / 100% 8% no-repeat;
+}
+
+/* ---------- Player node on the pitch ------------------------------------------------ */
+.mt-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    width: 92px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.mt-jersey {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, .35);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #141f0e;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.mt-jersey-fwd { background: linear-gradient(155deg, var(--gold-bright), var(--gold-deep)); }
+.mt-jersey-back { background: linear-gradient(155deg, #dfe6e0, #9aa8a0); }
+
+.mt-node:hover .mt-jersey {
+    transform: scale(1.1);
+}
+
+.mt-node.is-selected .mt-jersey {
+    box-shadow: 0 0 0 3px var(--gold), 0 0 0 5px rgba(201, 162, 39, .3);
+}
+
+/* Captain / vice corner badge. */
+.mt-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .62rem;
+    font-weight: 700;
+    color: #141f0e;
+    border: 1px solid rgba(0, 0, 0, .3);
+}
+
+.mt-badge-c { background: var(--gold-bright); }
+.mt-badge-v { background: #dfe6e0; }
+
+.mt-node-name {
+    font-size: .72rem;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .9);
+    white-space: nowrap;
+}
+
+.mt-node-pts {
+    font-size: .66rem;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .9);
+}
+
+/* ---------- Bench ------------------------------------------------------------------- */
+.mt-bench-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 22px 0 12px;
+}
+
+.mt-bench-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    white-space: nowrap;
+}
+
+.mt-bench-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+}
+
+.mt-bench-count {
+    color: var(--silver-dim);
+    font-size: .8rem;
+    white-space: nowrap;
+}
+
+.mt-bench {
+    display: grid;
+    gap: 12px;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(180px, 1fr);
+    overflow-x: auto;
+    padding-bottom: 6px;
+}
+
+.mt-bench-card {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    align-items: center;
+    gap: 11px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #091810;
+    cursor: pointer;
+    transition: border-color .15s ease;
+}
+
+.mt-bench-card:hover,
+.mt-bench-card.is-selected {
+    border-color: var(--gold);
+}
+
+.mt-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: linear-gradient(155deg, #1c3527, #0d1c13);
+    color: var(--silver-bright);
+    font-size: .72rem;
+    font-weight: 600;
+}
+
+.mt-bench-name {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .86rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mt-bench-sub {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 3px;
+}
+
+.mt-bench-club {
+    color: var(--silver-dim);
+    font-size: .72rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mt-bench-pts {
+    margin-left: auto;
+    color: var(--gold-bright);
+    font-size: .74rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ---------- Position pill (shared look with the catalog pos-pill) ------------------- */
+.mt-pos {
+    flex-shrink: 0;
+    padding: .12rem .45rem;
+    border-radius: 6px;
+    font-size: .68rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.mt-pos-fwd { background: rgba(201, 162, 39, .14); color: var(--gold-bright); }
+.mt-pos-back { background: rgba(199, 209, 201, .1); color: var(--silver); }
+
+/* ---------- Detail panel ------------------------------------------------------------ */
+.mt-detail {
+    position: sticky;
+    top: 24px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+}
+
+.mt-detail-empty {
+    color: var(--silver-dim);
+    font-size: .86rem;
+    text-align: center;
+    padding: 30px 0;
+}
+
+.mt-detail-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mt-detail-head .mt-avatar {
+    width: 46px;
+    height: 46px;
+    font-size: .9rem;
+}
+
+.mt-detail-name {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mt-detail-club {
+    margin: .1rem 0 0;
+    color: var(--silver-dim);
+    font-size: .78rem;
+}
+
+.mt-detail-tags {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+.mt-role {
+    color: var(--silver-dim);
+    font-size: .74rem;
+}
+
+.mt-cap {
+    padding: .12rem .45rem;
+    border-radius: 6px;
+    font-size: .68rem;
+    font-weight: 600;
+    background: rgba(201, 162, 39, .15);
+    color: var(--gold-bright);
+}
+
+.mt-detail-chips {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.mt-chip {
+    padding: 10px;
+    border-radius: 10px;
+    background: #0c1c13;
+    text-align: center;
+}
+
+.mt-chip-label {
+    display: block;
+    margin-bottom: .2rem;
+    color: var(--silver-dim);
+    font-size: .62rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.mt-chip-value {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.mt-chip-value.is-gold { color: var(--gold-bright); }
+
+/* ---------- Rating bars ------------------------------------------------------------- */
+.mt-ratings-label {
+    margin: 0 0 12px;
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.mt-rating {
+    display: grid;
+    grid-template-columns: 84px 1fr 30px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 9px;
+}
+
+.mt-rating-name {
+    color: var(--silver);
+    font-size: .78rem;
+}
+
+.mt-rating-track {
+    height: 6px;
+    border-radius: 3px;
+    background: #0c1c13;
+    overflow: hidden;
+}
+
+.mt-rating-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold-bright));
+}
+
+.mt-rating-value {
+    text-align: right;
+    color: var(--silver-bright);
+    font-size: .76rem;
+    font-weight: 600;
+}
+
+/* ---------- Empty squad ------------------------------------------------------------- */
+.mt-empty {
+    padding: 48px 24px;
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.mt-empty h2 {
+    margin: 0 0 .4rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.mt-empty p {
+    margin: 0 0 16px;
+    color: var(--silver-dim);
+    font-size: .85rem;
+}
+
+/* ---------- Narrow screens ---------------------------------------------------------- */
+@media (max-width: 640px) {
+    .mt-node {
+        width: 68px;
+    }
+
+    .mt-jersey {
+        width: 40px;
+        height: 40px;
+        font-size: .9rem;
+    }
+
+    .mt-node-name {
+        font-size: .64rem;
+    }
+}
