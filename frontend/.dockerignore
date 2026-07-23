@@ -1,0 +1,21 @@
+# Build output
+target/
+
+# Version control / IDE
+.git/
+.idea/
+*.iml
+nb-configuration.xml
+nbactions.xml
+
+# Node / Tailwind (not needed at build time; pages use committed CSS)
+node_modules/
+
+# Secrets / local config
+.env
+*.env
+frontend.properties
+frontend-local.properties
+
+# Docs
+*.md
