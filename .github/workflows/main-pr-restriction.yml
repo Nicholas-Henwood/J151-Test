@@ -1,0 +1,22 @@
+name: Restrict PR source branch
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  restrict-source-branch:
+    name: restrict-source-branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Only allow develop into main
+        run: |
+          echo "Target branch: ${{ github.base_ref }}"
+          echo "Source branch: ${{ github.head_ref }}"
+
+          if [ "${{ github.base_ref }}" = "main" ] && [ "${{ github.head_ref }}" != "dev" ]; then
+            echo "Only PRs from 'dev' may merge into 'main'."
+            exit 1
+          fi

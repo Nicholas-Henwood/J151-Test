@@ -1,0 +1,43 @@
+target/
+*.war
+*.ear
+*.jar
+
+# NetBeans
+nbproject/private/
+build/
+dist/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+*.env
+application.properties
+database.properties
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+env
+
+# Serena MCP (local code-navigation cache/config)
+.serena/

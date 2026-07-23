@@ -1,0 +1,15 @@
+package com.vzap.trytons.enums;
+
+public enum NotificationType {
+    CHAT_MESSAGE,
+    LEADERBOARD_CHANGE,
+    POINTS_UPDATE,
+    MATCHUP_RESULT,
+    SIMULATED_RESULT,
+    PLAYER_AVAILABILITY,
+    TRANSFER_DEADLINE,
+    ROUND_LOCK,
+    LEAGUE_INVITATION,
+    REPORT_UPDATE,
+    SYSTEM
+}

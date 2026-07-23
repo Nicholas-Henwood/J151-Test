@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TryTons Backend</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #35143f, #6f2f68);
+            color: #222;
+        }
+
+        main {
+            width: 100%;
+            max-width: 760px;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 2.4rem;
+            color: #35143f;
+        }
+
+        .status {
+            display: inline-block;
+            margin-bottom: 24px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #e9f8ee;
+            color: #176b35;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .intro {
+            margin: 0 0 28px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        h2 {
+            margin: 0 0 14px;
+            font-size: 1.2rem;
+            color: #35143f;
+        }
+
+        .endpoint-list {
+            display: grid;
+            gap: 12px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .endpoint-list a {
+            display: block;
+            padding: 16px 18px;
+            border: 1px solid #e2d7e5;
+            border-radius: 10px;
+            background: #faf7fb;
+            color: #57255d;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.15s ease,
+                        background 0.15s ease,
+                        border-color 0.15s ease;
+        }
+
+        .endpoint-list a:hover {
+            transform: translateY(-2px);
+            background: #f1e8f3;
+            border-color: #8d5a91;
+        }
+
+        .endpoint-path {
+            display: block;
+            margin-top: 5px;
+            color: #777;
+            font-family: Consolas, monospace;
+            font-size: 0.85rem;
+            font-weight: normal;
+        }
+
+        .notice {
+            margin-top: 28px;
+            padding: 16px;
+            border-left: 4px solid #6f2f68;
+            border-radius: 6px;
+            background: #f7f1f8;
+            color: #4f4052;
+            line-height: 1.5;
+        }
+
+        footer {
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding: 28px 22px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<main>
+    <div class="status">Backend deployed successfully</div>
+
+    <h1>TryTons Backend</h1>
+
+    <p class="intro">
+        The Fantasy TryTons League REST backend is running and available for
+        runtime testing.
+    </p>
+
+    <h2>Available endpoints</h2>
+
+    <ul class="endpoint-list">
+        <li>
+            <a href="api/test/database">
+                Database health check
+                <span class="endpoint-path">GET /api/test/database</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="api/player">
+                Players API
+                <span class="endpoint-path">GET /api/player</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="api/club">
+                Clubs API
+                <span class="endpoint-path">GET /api/club</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="api/position">
+                Positions API
+                <span class="endpoint-path">GET /api/position</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="notice">
+        Authentication login and registration use POST requests and should be
+        tested through the frontend or Postman.
+        <br><br>
+        The database health check is restricted to authenticated administrators.
+    </div>
+
+    <footer>
+        Fantasy TryTons League · GlassFish Backend
+    </footer>
+</main>
+</body>
+</html>
