@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class FantasyTeamServiceImpl implements FantasyTeamService {
-    private static final BigDecimal INITIAL_BUDGET = new BigDecimal("196.00");
+    private static final BigDecimal INITIAL_BUDGET = new BigDecimal("250.00");
 
     @Inject
     private FantasyTeamDAO fantasyTeamDAO;

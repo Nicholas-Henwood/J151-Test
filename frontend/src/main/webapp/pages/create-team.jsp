@@ -39,7 +39,7 @@
             // rule in SquadValidationServiceImpl is 20 players, not 15.
             Object budget = request.getAttribute("budget");
             if (budget == null) {
-                budget = "196";
+                budget = "250";
             }
             Object squadSize = request.getAttribute("squadSize");
             if (squadSize == null) {
