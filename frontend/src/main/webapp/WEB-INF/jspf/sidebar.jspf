@@ -13,7 +13,14 @@
         <span class="sidebar-brand-word brand-font">TryTons</span>
     </a>
 
+    <%-- Admins manage the game rather than play it, so the player-facing tabs
+         (Home, My Team, Clubs, Create Team, Transfers, Fixtures, History) are
+         hidden for them. Admins keep Players, Leagues, Leaderboards,
+         Notifications and Profile, plus the Administration section below. --%>
+    <c:set var="isAdmin" value="${sessionScope.role == 'ADMINISTRATOR'}" scope="page" />
+
     <nav class="sidebar-nav">
+        <c:if test="${not isAdmin}">
         <a class="sidebar-link ${activeNav == 'home' ? 'is-active' : ''}" href="${pageContext.request.contextPath}/dashboard">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
             <span>Home</span>
@@ -22,14 +29,17 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="9" ry="5.5" transform="rotate(45 12 12)"/><path d="M9 15l6-6"/><path d="M10.5 13.5l1-1"/><path d="M12.5 11.5l1-1"/></svg>
             <span>My Team</span>
         </a>
+        </c:if>
         <a class="sidebar-link ${activeNav == 'players' ? 'is-active' : ''}" href="${pageContext.request.contextPath}/players?submit=players">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <span>Players</span>
         </a>
+        <c:if test="${not isAdmin}">
         <a class="sidebar-link ${activeNav == 'clubs' ? 'is-active' : ''}" href="${pageContext.request.contextPath}/clubs?submit=clubs">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M10 21v-5h4v5"/></svg>
             <span>Clubs</span>
         </a>
+        </c:if>
         <a class="sidebar-link ${activeNav == 'leagues' ? 'is-active' : ''}" href="${pageContext.request.contextPath}/leagues">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3"/><path d="M7 5H4v2a3 3 0 0 0 3 3"/></svg>
             <span>Leagues</span>
@@ -38,6 +48,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg>
             <span>Leaderboards</span>
         </a>
+        <c:if test="${not isAdmin}">
         <a class="sidebar-link ${activeNav == 'create-team' ? 'is-active' : ''}" href="${pageContext.request.contextPath}/create-team">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6"/><path d="M22 11h-6"/></svg>
             <span>Create Team</span>
@@ -54,6 +65,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
             <span>History</span>
         </a>
+        </c:if>
         <a class="sidebar-link ${activeNav == 'notifications' ? 'is-active' : ''}" href="${pageContext.request.contextPath}/notifications">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
             <span>Notifications</span>
@@ -83,9 +95,17 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg>
                 <span>Simulation</span>
             </a>
+            <a class="sidebar-link ${activeNav == 'admin-users' ? 'is-active' : ''}" href="${pageContext.request.contextPath}/admin/users">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Users</span>
+            </a>
+            <a class="sidebar-link ${activeNav == 'admin-reports' ? 'is-active' : ''}" href="${pageContext.request.contextPath}/admin/reports">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 17v-4"/><path d="M12 17v-6"/><path d="M15 17v-2"/></svg>
+                <span>Reports</span>
+            </a>
             <a class="sidebar-link ${activeNav == 'admin-fixtures' ? 'is-active' : ''}" href="${pageContext.request.contextPath}/admin/fixtures">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="M9 15l2 2 4-4"/></svg>
-                <span>Admin: Fixtures</span>
+                <span>Fixtures</span>
             </a>
         </c:if>
     </nav>
@@ -97,6 +117,9 @@
                     <span class="sidebar-avatar">${fn:toUpperCase(fn:substring(sessionScope.username, 0, 1))}</span>
                     <span class="sidebar-user-text">
                         <span class="sidebar-username">${fn:escapeXml(sessionScope.username)}</span>
+                        <c:if test="${sessionScope.role == 'ADMINISTRATOR'}">
+                            <span class="sidebar-role">Administrator</span>
+                        </c:if>
                         <a class="sidebar-user-caption" href="${pageContext.request.contextPath}/profile">View profile</a>
                     </span>
                 </div>
@@ -111,4 +134,7 @@
         </c:choose>
     </div>
 </aside>
+<%-- System-wide success/error/info feedback host. Renders any pending flash
+     toast and loads toast.js for client-triggered toasts. --%>
+<%@ include file="/WEB-INF/jspf/toast.jspf" %>
 <script src="${pageContext.request.contextPath}/assets/js/page-transitions.js"></script>

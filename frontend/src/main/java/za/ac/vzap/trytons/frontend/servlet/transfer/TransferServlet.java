@@ -113,6 +113,7 @@ public class TransferServlet extends AbstractServlet {
                 Optional<TransferResponse> transferResponse = transferRestClient.executeTransfer(transferRequest);
 
                 if (transferResponse.isPresent()) {
+                    flashSuccess(request, "Transfer completed");
                     String teamId = getTeamId(request);
                     String roundId = getRoundId(request);
                     String redirectUrl = request.getContextPath() + "/transfers?transferred=1"

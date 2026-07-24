@@ -140,15 +140,6 @@ public class SimulationSettingServiceImpl implements SimulationSettingService {
         validateWeight(request.getTeamBalanceWeight());
         validateWeight(request.getRandomVariationWeight());
 
-        BigDecimal totalWeight = request.getPlayerAbilityWeight()
-                        .add(request.getPlayerFormWeight())
-                        .add(request.getTeamBalanceWeight())
-                        .add(request.getRandomVariationWeight());
-
-        if (totalWeight.compareTo(new BigDecimal("100.00")) != 0) {
-            throw new ValidationException("Simulation weights must total 100.");
-        }
-
         if (request.getRequireAdminApproval() == null || request.getAllowResimulation() == null || request.getIsActive() == null) {
             throw new ValidationException("All simulation setting options are required.");
         }
@@ -167,13 +158,11 @@ public class SimulationSettingServiceImpl implements SimulationSettingService {
     }
 
     private void validateWeight(BigDecimal weight) {
-
-        if (weight.compareTo(BigDecimal.ZERO) < 0) {
-            throw new ValidationException("Simulation weights may not be negative.");
+        if (weight.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ValidationException("A simulation weight must be greater than zero.");
         }
-
-        if (weight.compareTo(new BigDecimal("100.00")) > 0) {
-            throw new ValidationException("A simulation weight may not exceed 100.");
+        if (weight.compareTo(new BigDecimal("100.00")) >= 0) {
+            throw new ValidationException("A simulation weight must be less than 100.");
         }
     }
 

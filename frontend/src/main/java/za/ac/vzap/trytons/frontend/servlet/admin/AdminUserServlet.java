@@ -59,6 +59,7 @@ public class AdminUserServlet extends AbstractServlet {
             if (searchTerm != null && !searchTerm.isBlank()) {
                 redirect += "?searchTerm=" + URLEncoder.encode(searchTerm, StandardCharsets.UTF_8);
             }
+            flashSuccess(request, isActive.get() ? "User activated" : "User deactivated");
             response.sendRedirect(redirect);
             return;
         }

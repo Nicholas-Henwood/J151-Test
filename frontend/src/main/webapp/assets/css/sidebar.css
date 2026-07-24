@@ -146,6 +146,21 @@
     text-overflow: ellipsis;
 }
 
+/* Role label in the user cluster; only rendered for administrators. */
+.sidebar-role {
+    display: inline-block;
+    align-self: flex-start;
+    margin: 2px 0 1px;
+    padding: .1rem .4rem;
+    border-radius: 999px;
+    background: rgba(201, 162, 39, .14);
+    color: var(--gold-bright);
+    font-size: .6rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
 .sidebar-user-caption {
     color: var(--silver-dim);
     font-size: .72rem;

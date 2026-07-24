@@ -297,9 +297,17 @@
     display: grid;
     gap: 12px;
     grid-auto-flow: column;
-    grid-auto-columns: minmax(180px, 1fr);
+    grid-auto-columns: minmax(210px, 1fr);
     overflow-x: auto;
     padding-bottom: 6px;
+}
+
+/* The name/details column (the unnamed span next to the avatar) must be a block
+   with min-width:0 so its children clip to the card instead of spilling out. */
+.mt-bench-card > span:not(.mt-avatar) {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .mt-bench-card {
@@ -336,6 +344,7 @@
 }
 
 .mt-bench-name {
+    display: block;
     font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: .86rem;
     font-weight: 600;
@@ -349,10 +358,15 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    min-width: 0;
     margin-top: 3px;
 }
 
+/* Club takes the leftover room and ellipsizes; the position pill and points
+   keep their size, so nothing is pushed out of the card. */
 .mt-bench-club {
+    flex: 1;
+    min-width: 0;
     color: var(--silver-dim);
     font-size: .72rem;
     overflow: hidden;
@@ -361,7 +375,7 @@
 }
 
 .mt-bench-pts {
-    margin-left: auto;
+    flex-shrink: 0;
     color: var(--gold-bright);
     font-size: .74rem;
     font-weight: 600;
@@ -513,6 +527,8 @@
 }
 
 .mt-rating-fill {
+    /* Block so the inline width:{n}% renders — an inline span ignores it. */
+    display: block;
     height: 100%;
     border-radius: 3px;
     background: linear-gradient(90deg, var(--gold-deep), var(--gold-bright));

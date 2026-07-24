@@ -78,10 +78,14 @@ public class APIClient {
     public<T> Optional<T> put(String path, Object body, Class<T> responseType) {
         try (Client client = ClientBuilder.newClient().register(JacksonFeature.class).register(ObjectMapperProvider.class)) {
             WebTarget target = client.target(APIConfig.getBaseUrl() + path);
-            try (Response response = request(target).put(Entity.json(body))) {
+            // JAX-RS rejects a null entity on PUT ("Entity must not be null for http
+            // method PUT"). Some endpoints carry everything in the path/query and take
+            // no body, so a null body is legitimate — send an empty JSON entity for them.
+            Object payload = (body == null) ? java.util.Map.of() : body;
+            try (Response response = request(target).put(Entity.json(payload))) {
                 return handle(response, responseType);
             }
-        } catch (ProcessingException e) {
+        } catch (Exception e) {
             LOG.log(Level.SEVERE, "PUT " + path + " failed", e);
             apiCallStatus.recordNetworkFailure();
             return Optional.empty();

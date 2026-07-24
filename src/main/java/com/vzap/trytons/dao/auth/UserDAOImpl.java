@@ -171,19 +171,22 @@ public class UserDAOImpl extends BaseDAO implements UserDAO {
     @Override
     public List<User> searchUsers(String searchTerm) {
 
-        String query = "SELECT * FROM user WHERE username LIKE ? OR email LIKE ?";
-
         List<User> searchResults = new ArrayList<>();
 
-        if (searchTerm == null || searchTerm.isBlank()){
-            return searchResults;
-        } // I'm returning an empty list here if the searchTerm is null or blank
+        // A blank/null term means "no filter" — list every user (e.g. the initial
+        // Users tab load). A term filters by username or email.
+        boolean hasTerm = searchTerm != null && !searchTerm.isBlank();
+        String query = hasTerm
+                ? "SELECT * FROM user WHERE username LIKE ? OR email LIKE ? ORDER BY username"
+                : "SELECT * FROM user ORDER BY username";
 
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
-            ps.setString(1, "%" + searchTerm + "%");
-            ps.setString(2, "%" + searchTerm + "%");
+            if (hasTerm) {
+                ps.setString(1, "%" + searchTerm + "%");
+                ps.setString(2, "%" + searchTerm + "%");
+            }
 
             try(ResultSet rs = ps.executeQuery()){
                 while (rs.next()){

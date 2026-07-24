@@ -20,7 +20,10 @@ public class RegisteredUserDAOImpl extends BaseDAO implements RegisteredUserDAO 
 
     @Override
     public Optional<RegisteredUser> getRegisteredUserById(UUID userId) {
-        String query = "SELECT u.*, ru.registrationStatus FROM user u JOIN registeredUser ru ON u.userId = ru.userId WHERE u.userId = ?";
+        // LEFT JOIN: administrators exist in `user` but have no `registeredUser` row
+        // (that table holds player registration data), so an inner join hid their
+        // profile entirely and returned "User not found".
+        String query = "SELECT u.*, ru.registrationStatus FROM user u LEFT JOIN registeredUser ru ON u.userId = ru.userId WHERE u.userId = ?";
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, userId.toString());
 
@@ -37,7 +40,8 @@ public class RegisteredUserDAOImpl extends BaseDAO implements RegisteredUserDAO 
                             .profilePic(rs.getString("profilePic"))
                             .registrationDate(rs.getTimestamp("registrationDate") != null ? rs.getTimestamp("registrationDate").toLocalDateTime() : null)
                             .lastLoginAt(rs.getTimestamp("last_login_at") != null ? rs.getTimestamp("last_login_at").toLocalDateTime() : null)
-                            .registrationStatus(RegistrationStatus.valueOf(rs.getString("registrationStatus")))
+                            .registrationStatus(rs.getString("registrationStatus") != null
+                                    ? RegistrationStatus.valueOf(rs.getString("registrationStatus")) : null)
                             .build();
 
                     return Optional.of(ru);

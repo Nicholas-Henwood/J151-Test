@@ -1,209 +1,306 @@
 /* ============================================================================
-   TryTons — Fantasy Rugby | Admin Match Result Capture (W3-FE-ADMINMATCHRESULT-01C)
-   Vanilla CSS. Selectors target the bare JSP markup, sharing the palette,
-   type, radii and spacing tokens used by the create-team screen so the admin
-   capture page sits alongside the rest of the app. No fantasy-point styling —
-   points are system-calculated and never captured here.
+   TryTons — Admin: Match Result Capture (Green-Gold redesign)
+   Fixture selector, captured-result summary, score form with a live winner
+   preview, and the per-player statistics form. Loads on top of theme.css
+   (palette tokens, fonts, .brand-font, .btn-gold), sidebar.css (shared left
+   nav, including the admin-only Administration section) and catalog.css
+   (main column, page header). No fantasy-point styling — points are
+   system-calculated and are never captured here.
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
-
-:root {
-  --navy: #eef3ef;
-  --navy-700: #eef3ef;
-  --teal: #c9a227;
-  --teal-600: #8a6a15;
-  --bg: #0c1712;
-  --surface: #132a1f;
-
-  --ink: #c7d1c9;
-  --ink-muted: #7f9187;
-
-  --danger: #e0847a;
-  --danger-bg: rgba(192, 82, 74, 0.12);
-  --danger-border: #c0524a;
-  --success: #6fcf8e;
-  --success-bg: rgba(21, 128, 61, 0.14);
-  --success-border: #2f6b45;
-
-  --border: #2c4437;
-  --field-bg: #0f2118;
-
-  --radius-card: 12px;
-  --radius-field: 8px;
-
-  --sp-2: 8px;
-  --sp-3: 12px;
-  --sp-4: 16px;
-  --sp-5: 20px;
-  --sp-6: 24px;
-  --sp-8: 32px;
+.amr-page .catalog-main {
+    padding: 32px 40px 48px;
 }
 
-body.admin-match-results {
-  margin: 0;
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
-  color: var(--ink);
-  background: var(--bg);
+.amr-page .catalog-content {
+    max-width: 1040px;
 }
 
-#adminMatchResults {
-  max-width: 880px;
-  margin: 0 auto;
-  padding: var(--sp-8) var(--sp-5) var(--sp-8);
+.amr-intro {
+    margin: .6rem 0 0;
+    max-width: 720px;
+    color: var(--silver);
+    font-size: .9rem;
+    line-height: 1.6;
 }
 
-#adminMatchResults h1 {
-  color: var(--navy-700);
-  margin-bottom: var(--sp-2);
+/* ---------- Feedback ---------------------------------------------------------------- */
+.amr-alert {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
 }
 
-#adminMatchResults h2 {
-  color: var(--navy);
-  margin-top: 0;
+.amr-alert-success { border-left-color: #5fae7a; }
+.amr-alert-error { border-left-color: #c0524a; }
+
+/* An alert inside a panel sits above the form it relates to. */
+.amr-panel .amr-alert { margin: 0 0 16px; }
+
+/* ---------- Panels ------------------------------------------------------------------ */
+.amr-panel {
+    margin-top: 20px;
+    padding: 20px 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
 }
 
-.page-intro {
-  color: var(--ink-muted);
-  margin-bottom: var(--sp-6);
+.amr-panel-title {
+    margin: 0 0 16px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
 }
 
-/* ---------- Feedback ------------------------------------------------------- */
-.success-message,
-.error-message {
-  border-radius: var(--radius-field);
-  padding: var(--sp-3) var(--sp-4);
-  margin: var(--sp-3) 0;
-  font-weight: 500;
+.amr-empty {
+    margin: 0;
+    color: var(--silver-dim);
+    font-size: .88rem;
 }
 
-.success-message {
-  color: var(--success);
-  background: var(--success-bg);
-  border: 1px solid var(--success-border);
+/* ---------- Fields ------------------------------------------------------------------ */
+.amr-field { min-width: 0; }
+
+.amr-label {
+    display: block;
+    margin-bottom: .45rem;
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
 }
 
-.error-message {
-  color: var(--danger);
-  background: var(--danger-bg);
-  border: 1px solid var(--danger-border);
+.amr-input,
+.amr-select {
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 .8rem;
+    background: #0c1c13;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .88rem;
+    transition: border-color .15s ease;
 }
 
-/* ---------- Cards / sections ---------------------------------------------- */
-#adminMatchResults section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: var(--sp-5);
-  margin-bottom: var(--sp-5);
+.amr-input:focus,
+.amr-select:focus {
+    outline: none;
+    border-color: var(--gold);
 }
 
-.hint {
-  color: var(--ink-muted);
-  font-size: 0.9rem;
+.amr-input::placeholder { color: #5c6e64; }
+
+/* Native select with a custom caret so it matches the inputs. */
+.amr-select-wrap { position: relative; }
+
+.amr-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2.2rem;
+    cursor: pointer;
 }
 
-#selectPrompt {
-  color: var(--ink-muted);
+.amr-select-caret {
+    position: absolute;
+    top: 50%;
+    right: .8rem;
+    transform: translateY(-50%);
+    color: var(--silver-dim);
+    pointer-events: none;
 }
 
-/* ---------- Fields --------------------------------------------------------- */
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-  margin-bottom: var(--sp-4);
+.amr-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
 }
 
-.field label {
-  font-weight: 600;
-  font-size: 0.9rem;
+.amr-field + .amr-field,
+.amr-row-2 + .amr-field,
+.amr-preview + .amr-field {
+    margin-top: 16px;
 }
 
-#adminMatchResults input[type="text"],
-#adminMatchResults input[type="number"],
-#adminMatchResults select {
-  padding: var(--sp-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-field);
-  background: var(--field-bg);
-  font: inherit;
-  color: inherit;
+.amr-submit {
+    width: 100%;
+    margin-top: 20px;
+    padding: .8rem 1rem;
 }
 
-#adminMatchResults input:focus,
-#adminMatchResults select:focus {
-  outline: none;
-  border-color: var(--teal);
-  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18);
+/* ---------- Fixture selector -------------------------------------------------------- */
+.amr-fixture-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
 }
 
-/* ---------- Statistics grid ------------------------------------------------ */
-#statCounts {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-field);
-  padding: var(--sp-4);
-  margin-bottom: var(--sp-4);
+.amr-field-grow { flex: 1; min-width: 240px; }
+
+.amr-load {
+    flex-shrink: 0;
+    height: 42px;
+    padding: 0 1.2rem;
+    white-space: nowrap;
 }
 
-#statCounts legend {
-  font-weight: 600;
-  padding: 0 var(--sp-2);
+/* ---------- "Choose a fixture" prompt ------------------------------------------------ */
+.amr-prompt {
+    margin-top: 20px;
+    padding: 44px 24px;
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    text-align: center;
 }
 
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--sp-3) var(--sp-4);
+.amr-prompt-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    background: #0c1c13;
+    color: var(--gold);
 }
 
-.stat-grid .field {
-  margin-bottom: 0;
+.amr-prompt p {
+    margin: 0;
+    color: var(--silver-dim);
+    font-size: .9rem;
 }
 
-/* ---------- Tables --------------------------------------------------------- */
-#existingResultTable {
-  border-collapse: collapse;
-  width: 100%;
+/* ---------- Two-column capture grid -------------------------------------------------- */
+.amr-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
 }
 
-#existingResultTable th,
-#existingResultTable td {
-  text-align: left;
-  padding: var(--sp-2) var(--sp-3);
-  border-bottom: 1px solid var(--border);
+.amr-col { min-width: 0; }
+
+/* ---------- Currently captured result ------------------------------------------------ */
+.amr-kv { margin: 0; }
+
+.amr-kv-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-top: 1px solid rgba(44, 68, 55, .55);
+    font-size: .86rem;
 }
 
-#existingResultTable th {
-  color: var(--ink-muted);
-  font-weight: 600;
-  width: 40%;
+.amr-kv-row:first-child { border-top: none; }
+
+.amr-kv dt { color: var(--silver-dim); }
+
+.amr-kv dd {
+    margin: 0;
+    color: var(--silver-bright);
+    text-align: right;
 }
 
-/* ---------- Buttons -------------------------------------------------------- */
-#adminMatchResults button {
-  background: var(--teal);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-field);
-  padding: var(--sp-3) var(--sp-5);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s ease;
+.amr-kv-num {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
 }
 
-#adminMatchResults button:hover {
-  background: var(--teal-600);
+/* Yes / No badges */
+.amr-flag {
+    display: inline-block;
+    padding: .16rem .5rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 600;
 }
 
-#fixtureSelectForm {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: var(--sp-3);
+.amr-flag.is-yes { background: rgba(95, 174, 122, .16); color: #8fd0a5; }
+.amr-flag.is-no { background: rgba(255, 255, 255, .04); color: var(--silver-dim); }
+
+.amr-hint {
+    margin: 14px 0 0;
+    color: var(--silver-dim);
+    font-size: .76rem;
 }
 
-#fixtureSelectForm select {
-  min-width: 260px;
+/* ---------- Live score preview -------------------------------------------------------- */
+.amr-preview {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #0c1c13;
+}
+
+.amr-preview[hidden] { display: none; }
+
+.amr-preview-score {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.amr-preview-outcome {
+    color: var(--silver);
+    font-size: .84rem;
+}
+
+/* ---------- Player statistics fieldset ------------------------------------------------ */
+.amr-fieldset {
+    margin: 18px 0 0;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.amr-legend {
+    padding: 0 .45rem;
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.amr-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.amr-stat-grid .amr-field + .amr-field { margin-top: 0; }
+
+/* ---------- Narrow screens ------------------------------------------------------------ */
+@media (max-width: 1000px) {
+    .amr-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 620px) {
+    .amr-page .catalog-main { padding: 24px 16px 32px; }
+    .amr-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .amr-row-2 { grid-template-columns: 1fr; }
+    .amr-load { width: 100%; }
 }

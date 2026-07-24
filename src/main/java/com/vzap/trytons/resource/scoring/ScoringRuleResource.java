@@ -40,6 +40,17 @@ public class ScoringRuleResource {
                 .build();
     }
 
+    @GET
+    @Path("/lock-status")
+    public Response seasonLockStatus(@QueryParam("season") String season, @Context ContainerRequestContext requestContext) {
+        UUID actorUserId = currentUserId(requestContext);
+
+        boolean locked = scoringRuleService.isSeasonLocked(actorUserId, season);
+
+        return Response.ok(locked)
+                .build();
+    }
+
     @POST
     public Response saveRule(@Valid ScoringRuleRequestDTO request, @Context ContainerRequestContext requestContext) {
         UUID actorUserId = currentUserId(requestContext);

@@ -229,7 +229,9 @@ CREATE TABLE `fantasyTeam`
     `teamId`          VARCHAR(36)    NOT NULL,
     `owner_user_id`   VARCHAR(36)    NOT NULL,
     `teamName`        VARCHAR(100)   NOT NULL,
-    `remainingBudget` DECIMAL(10, 2) NOT NULL DEFAULT 100.00,
+    -- Millions of rands, matching player.value. Keep in step with
+    -- FantasyTeamServiceImpl.INITIAL_BUDGET.
+    `remainingBudget` DECIMAL(10, 2) NOT NULL DEFAULT 196.00,
     `creationDate`    DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `isValid`         BOOLEAN        NOT NULL DEFAULT FALSE,
 

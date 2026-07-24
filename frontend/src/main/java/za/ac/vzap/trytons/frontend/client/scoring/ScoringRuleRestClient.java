@@ -37,6 +37,21 @@ public class ScoringRuleRestClient {
         return response.map(rules -> new ArrayList<>(Arrays.asList(rules)));
     }
 
+    public boolean isSeasonLocked(String season) {
+        if (isBlank(season)) {
+            return false;
+        }
+
+        String path = SCORING_RULES_PATH + "/lock-status?season=" + encode(season);
+        Optional<Boolean> locked = apiClient.get(path, Boolean.class);
+        if (locked.isEmpty()) {
+            // Fail open: the database triggers remain the authoritative guard, and a save
+            // against a locked season still returns a clear conflict message.
+            LOG.log(Level.WARNING, "Unable to determine season lock status for {0}.", season);
+        }
+        return locked.orElse(false);
+    }
+
     public Optional<ScoringRuleResponse> saveScoringRule(ScoringRuleRequest request) {
         if (request == null) {
             LOG.log(Level.WARNING, "Scoring rule request is required to save a scoring rule.");

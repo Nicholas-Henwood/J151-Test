@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface FantasyTeamService {
     FantasyTeamResponseDTO createTeam(UUID registeredUserId, FantasyTeamRequestDTO fantasyTeamDTO);
+    FantasyTeamResponseDTO getOwnTeam(UUID registeredUserId);
     ViewOpponentTeamDTO viewOpponentTeam(UUID teamId);
     ViewOwnTeamDTO viewOwnTeam(UUID registeredUserId, UUID teamId);
     FantasyTeamResponseDTO updateTeam(UUID registeredId, UUID teamId, FantasyTeamRequestDTO fantasyTeamDTO);

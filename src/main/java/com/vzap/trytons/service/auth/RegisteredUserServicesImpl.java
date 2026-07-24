@@ -101,6 +101,12 @@ public class RegisteredUserServicesImpl implements RegisteredUserServices {
             throw new BusinessRuleException("The current password is incorrect.");
         }
 
+        // Reject a new password that matches the current one — checked against the
+        // stored hash so it holds regardless of what was typed in the current field.
+        if (PasswordUtil.verifyPassword(request.getNewPassword(), user.getPasswordHash())) {
+            throw new BusinessRuleException("Your new password must be different from your current password.");
+        }
+
         String newHash = PasswordUtil.hashPassword(request.getNewPassword());
         if (!userDAO.updatePasswordHash(actorUserId, newHash)) {
             throw new DataAccessException("Failed to update password.", null);

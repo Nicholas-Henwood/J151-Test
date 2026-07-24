@@ -130,11 +130,12 @@
                         <c:set var="awayParts" value="${fn:split(fixture.teamBName, ' ')}" />
 
                         <article class="fx-card fx-card-${fn:toLowerCase(status)}" data-fixture-status="${status}">
-                            <div class="fx-side fx-side-home">
-                                <p class="fx-team-name ${not empty myTeamId and myTeamId == fixture.teamAId ? 'is-mine' : ''}"
-                                   title="${fn:escapeXml(fixture.teamAName)}">${fn:escapeXml(fixture.teamAName)}</p>
+                            <a class="fx-side fx-side-home fx-side-link"
+                               href="${pageContext.request.contextPath}/fantasy-team/opponent?teamId=${fixture.teamAId}&amp;fixtureId=${fixture.fixtureId}"
+                               title="View ${fn:escapeXml(fixture.teamAName)}">
+                                <p class="fx-team-name ${not empty myTeamId and myTeamId == fixture.teamAId ? 'is-mine' : ''}">${fn:escapeXml(fixture.teamAName)}</p>
                                 <span class="fx-crest" aria-hidden="true"><c:if test="${fn:length(homeParts) > 0}">${fn:toUpperCase(fn:substring(homeParts[0], 0, 1))}<c:if test="${fn:length(homeParts) > 1}">${fn:toUpperCase(fn:substring(homeParts[fn:length(homeParts) - 1], 0, 1))}</c:if></c:if></span>
-                            </div>
+                            </a>
 
                             <div class="fx-centre">
                                 <c:choose>
@@ -155,11 +156,12 @@
                                 </c:choose>
                             </div>
 
-                            <div class="fx-side fx-side-away">
+                            <a class="fx-side fx-side-away fx-side-link"
+                               href="${pageContext.request.contextPath}/fantasy-team/opponent?teamId=${fixture.teamBId}&amp;fixtureId=${fixture.fixtureId}"
+                               title="View ${fn:escapeXml(fixture.teamBName)}">
                                 <span class="fx-crest" aria-hidden="true"><c:if test="${fn:length(awayParts) > 0}">${fn:toUpperCase(fn:substring(awayParts[0], 0, 1))}<c:if test="${fn:length(awayParts) > 1}">${fn:toUpperCase(fn:substring(awayParts[fn:length(awayParts) - 1], 0, 1))}</c:if></c:if></span>
-                                <p class="fx-team-name ${not empty myTeamId and myTeamId == fixture.teamBId ? 'is-mine' : ''}"
-                                   title="${fn:escapeXml(fixture.teamBName)}">${fn:escapeXml(fixture.teamBName)}</p>
-                            </div>
+                                <p class="fx-team-name ${not empty myTeamId and myTeamId == fixture.teamBId ? 'is-mine' : ''}">${fn:escapeXml(fixture.teamBName)}</p>
+                            </a>
 
                             <div class="fx-meta">
                                 <span class="fx-pill fx-pill-${fn:toLowerCase(status)}">${fn:escapeXml(status)}</span>

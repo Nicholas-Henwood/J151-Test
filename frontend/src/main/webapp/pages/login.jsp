@@ -60,9 +60,8 @@
                     </div>
 
                     <div class="mb-2">
-                        <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <div class="mb-2">
                             <label for="password" class="field-label mb-0">Password</label>
-                            <a href="#" class="forgot-link">Forgot password?</a>
                         </div>
                         <div class="field-row">
                             <span class="field-icon" aria-hidden="true">

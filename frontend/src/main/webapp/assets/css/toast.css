@@ -1,0 +1,89 @@
+/* ============================================================================
+   TryTons — Toast feedback (Green-Gold design system).
+   Self-contained so it works on both layout families: sidebar pages (which
+   load theme.css) and navigation.jspf pages (which do not). Every design token
+   therefore carries a literal fallback, so the toast looks right even where the
+   theme variables are absent. Loaded by /WEB-INF/jspf/toast.jspf; driven by
+   toast.js.
+   ========================================================================== */
+.toast-stack {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(360px, calc(100vw - 32px));
+  pointer-events: none; /* only the toasts themselves are interactive */
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: .8rem .95rem;
+  border: 1px solid var(--line, #2c4437);
+  border-left: 3px solid var(--silver-dim, #7f9187);
+  border-radius: 11px;
+  background: #0c1c13;
+  color: var(--silver-bright, #eef3ef);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: .85rem;
+  line-height: 1.4;
+  box-shadow: 0 16px 40px -16px rgba(0, 0, 0, .85);
+  opacity: 0;
+  transform: translateX(16px);
+  pointer-events: auto;
+  transition: opacity .22s ease, transform .22s ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Leaving state — lets a dismissed toast fade before it is removed. */
+.toast.is-leaving {
+  opacity: 0;
+  transform: translateX(16px);
+}
+
+/* Per-type accent + leading glyph. The glyph is decorative; the text carries
+   the meaning and the live region announces it. */
+.toast::before {
+  flex: 0 0 auto;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.toast-success { border-left-color: #3fb46b; }
+.toast-success::before { content: "\2713"; color: #3fb46b; }   /* checkmark */
+
+.toast-error { border-left-color: #c0524a; }
+.toast-error::before { content: "\0021"; color: #d9736b; }     /* exclamation */
+
+.toast-info { border-left-color: var(--gold, #c9a227); }
+.toast-info::before { content: "\2139"; color: var(--gold-bright, #e8c765); } /* info */
+
+.toast-msg { flex: 1 1 auto; }
+
+.toast-close {
+  flex: 0 0 auto;
+  margin: -2px -4px 0 0;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--silver-dim, #7f9187);
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.toast-close:hover { color: var(--silver-bright, #eef3ef); }
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { transition: opacity .22s ease; transform: none; }
+  .toast.is-visible,
+  .toast.is-leaving { transform: none; }
+}

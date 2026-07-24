@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class FantasyTeamServiceImpl implements FantasyTeamService {
-    private static final BigDecimal INITIAL_BUDGET = BigDecimal.valueOf(100000000.00);
+    private static final BigDecimal INITIAL_BUDGET = new BigDecimal("196.00");
 
     @Inject
     private FantasyTeamDAO fantasyTeamDAO;
@@ -120,7 +120,7 @@ public class FantasyTeamServiceImpl implements FantasyTeamService {
         FantasyTeam fantasyTeam = mapRequestToFantasyTeam(request);
         fantasyTeam.setTeamId(UUID.randomUUID());
         fantasyTeam.setOwnerUserId(registeredUserId);
-        fantasyTeam.setRemainingBudget(INITIAL_BUDGET);
+        fantasyTeam.setRemainingBudget(remainingBudget);
         fantasyTeam.setCreationDate(LocalDateTime.now());
         fantasyTeam.setIsValid(true);
 
@@ -150,6 +150,22 @@ public class FantasyTeamServiceImpl implements FantasyTeamService {
                 .valid(fantasyTeam.getIsValid())
                 .selectedPlayers(selectedPlayers)
                 .build();
+    }
+
+    @Override
+    public FantasyTeamResponseDTO getOwnTeam(UUID registeredUserId) {
+        if (registeredUserId == null) {
+            throw new BadRequestException("Current user ID is required.");
+        }
+      
+        return fantasyTeamDAO.getTeamByOwner(registeredUserId)
+                .map(team -> FantasyTeamResponseDTO.builder()
+                        .teamId(team.getTeamId())
+                        .teamName(team.getTeamName())
+                        .managerId(team.getOwnerUserId())
+                        .remainingBudget(team.getRemainingBudget())
+                        .valid(team.getIsValid())
+                        .build()).orElse(null);
     }
 
     @Override

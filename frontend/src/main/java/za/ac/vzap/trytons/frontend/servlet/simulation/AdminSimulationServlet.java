@@ -5,6 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import za.ac.vzap.trytons.frontend.client.fixture.FixtureRestClient;
+import za.ac.vzap.trytons.frontend.client.fixture.FixtureResponse;
 import za.ac.vzap.trytons.frontend.client.simulation.ResimulationRequest;
 import za.ac.vzap.trytons.frontend.client.simulation.ResimulationResponse;
 import za.ac.vzap.trytons.frontend.client.simulation.ResimulationRestClient;
@@ -32,6 +34,11 @@ public class AdminSimulationServlet extends AbstractServlet {
     @Inject
     private ResimulationRestClient resimulationRestClient;
 
+    @Inject
+    private FixtureRestClient fixtureRestClient;
+
+    private enum Outcome { SUCCESS, FAILURE, HANDLED }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (!requireAdmin(request, response)) {
@@ -52,23 +59,31 @@ public class AdminSimulationServlet extends AbstractServlet {
         }
 
         String fixtureIdForReload = request.getParameter("fixtureId");
-        boolean success;
+        Outcome outcome;
         switch (action) {
-            case "saveSettings" -> success = saveSettings(request);
+            case "saveSettings" -> outcome = saveSettings(request, response);
             case "resimulate" -> {
-                success = resimulate(request);
+                outcome = resimulate(request, response);
                 fixtureIdForReload = request.getParameter("fixtureId");
             }
             default -> {
                 request.setAttribute("error", "Unknown simulation action requested");
-                success = false;
+                outcome = Outcome.FAILURE;
             }
         }
 
-        if (success) {
+        if (outcome == Outcome.HANDLED) {
+            return;
+        }
+
+        if (outcome == Outcome.SUCCESS) {
+            flashSuccess(request, "resimulate".equals(action) ? "Resimulation triggered" : "Simulation settings saved");
             String redirect = request.getContextPath() + "/admin/simulation";
             if (fixtureIdForReload != null && !fixtureIdForReload.isBlank()) {
                 redirect += "?fixtureId=" + URLEncoder.encode(fixtureIdForReload, StandardCharsets.UTF_8);
+            }
+            if ("resimulate".equals(action)) {
+                redirect += "#resimulationSection";
             }
             response.sendRedirect(redirect);
             return;
@@ -78,7 +93,7 @@ public class AdminSimulationServlet extends AbstractServlet {
         request.getRequestDispatcher(VIEW).forward(request, response);
     }
 
-    private boolean saveSettings(HttpServletRequest request) {
+    private Outcome saveSettings(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String season = request.getParameter("season");
         BigDecimal playerAbilityWeight = parseDecimal(request.getParameter("playerAbilityWeight"));
         BigDecimal playerFormWeight = parseDecimal(request.getParameter("playerFormWeight"));
@@ -88,13 +103,13 @@ public class AdminSimulationServlet extends AbstractServlet {
         if (season == null || season.isBlank() || playerAbilityWeight == null || playerFormWeight == null
                 || teamBalanceWeight == null || randomVariationWeight == null) {
             request.setAttribute("error", "Season and all four weights are required to save simulation settings");
-            return false;
+            return Outcome.FAILURE;
         }
 
         Integer maxResimulations = parseInt(request.getParameter("maxResimulations"));
         if (maxResimulations == null) {
             request.setAttribute("error", "Max resimulations must be a valid whole number");
-            return false;
+            return Outcome.FAILURE;
         }
 
         SimulationSettingRequest settingRequest = new SimulationSettingRequest();
@@ -114,19 +129,18 @@ public class AdminSimulationServlet extends AbstractServlet {
                 : simulationSettingRestClient.createSimulationSetting(settingRequest);
 
         if (saved.isPresent()) {
-            return true;
+            return Outcome.SUCCESS;
         }
-        request.setAttribute("error", "Simulation settings could not be saved");
-        return false;
+        return handleApiFailure(request, response, "Simulation settings could not be saved") ? Outcome.HANDLED : Outcome.FAILURE;
     }
 
-    private boolean resimulate(HttpServletRequest request) {
+    private Outcome resimulate(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Optional<UUID> fixtureId = parseUuid(request.getParameter("fixtureId"));
         String reason = request.getParameter("resimulationReason");
 
         if (fixtureId.isEmpty()) {
             request.setAttribute("error", "A valid fixture is required to trigger a resimulation");
-            return false;
+            return Outcome.FAILURE;
         }
 
         ResimulationRequest resimulationRequest = new ResimulationRequest();
@@ -135,10 +149,9 @@ public class AdminSimulationServlet extends AbstractServlet {
 
         Optional<ResimulationResponse> result = resimulationRestClient.resimulateFixture(resimulationRequest);
         if (result.isPresent()) {
-            return true;
+            return Outcome.SUCCESS;
         }
-        request.setAttribute("error", "Resimulation could not be triggered");
-        return false;
+        return handleApiFailure(request, response, "Resimulation could not be triggered") ? Outcome.HANDLED : Outcome.FAILURE;
     }
 
     private void loadPage(HttpServletRequest request, String fixtureIdParam) {
@@ -151,6 +164,9 @@ public class AdminSimulationServlet extends AbstractServlet {
 
         Optional<List<SimulationSettingResponse>> settings = simulationSettingRestClient.listSimulationSettings();
         request.setAttribute("simulationSettings", settings.orElse(List.of()));
+
+        Optional<List<FixtureResponse>> fixtures = fixtureRestClient.listFixtures(null);
+        request.setAttribute("fixtures", fixtures.orElse(List.of()));
 
         request.setAttribute("selectedFixtureId", fixtureIdParam);
         if (fixtureIdParam != null && !fixtureIdParam.isBlank()) {

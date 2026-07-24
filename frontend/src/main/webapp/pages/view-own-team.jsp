@@ -63,10 +63,8 @@
                         </c:if>
                     </div>
                     <div class="mt-actions">
-                        <%-- No opponent teamId is available on this page, so this points at the
-                             standings where opponents' teams are reachable. --%>
-                        <a class="mt-ghost" href="${pageContext.request.contextPath}/leaderboard">View opponents</a>
-                        <a class="btn-gold" href="${pageContext.request.contextPath}/fantasy-team/update?teamId=${team.teamId}">Update team</a>
+                        <%-- Changes to an existing squad are made through transfers. --%>
+                        <a class="btn-gold" href="${pageContext.request.contextPath}/transfers">Make a transfer</a>
                     </div>
                 </header>
 

@@ -1,233 +1,375 @@
 /* ============================================================================
-   TryTons — Fantasy Rugby | Admin Scoring Rule Management (E2E-12)
-   Vanilla CSS. Shares the palette, type, radii and spacing tokens used by the
-   other admin CRUD screens (admin-positions.css, admin-match-results.css) so
-   this page sits alongside the rest of the admin area. Targets only the
-   markup in admin-scoring-rules.jsp.
+   TryTons — Admin: Scoring Rule Management (Green-Gold redesign)
+   Season selector, a per-season rules table, and the create/edit panel. Loads
+   on top of theme.css (palette tokens, fonts, .brand-font, .btn-gold),
+   sidebar.css (shared left nav, including the admin-only Administration
+   section) and catalog.css (main column, page header).
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
-
-:root {
-    --navy: #eef3ef;
-    --navy-700: #eef3ef;
-    --teal: #c9a227;
-    --teal-600: #8a6a15;
-    --bg: #0c1712;
-    --surface: #132a1f;
-
-    --ink: #c7d1c9;
-    --ink-muted: #7f9187;
-
-    --danger: #e0847a;
-    --danger-bg: rgba(192, 82, 74, 0.12);
-    --danger-border: #c0524a;
-    --success: #6fcf8e;
-    --success-bg: rgba(21, 128, 61, 0.14);
-    --success-border: #2f6b45;
-
-    --border: #2c4437;
-    --field-bg: #0f2118;
-
-    --radius-card: 12px;
-    --radius-field: 8px;
-
-    --sp-2: 8px;
-    --sp-3: 12px;
-    --sp-4: 16px;
-    --sp-5: 20px;
-    --sp-6: 24px;
-    --sp-8: 32px;
+.asr-page .catalog-main {
+    padding: 32px 40px 48px;
 }
 
-body.admin-scoring-rules {
-    margin: 0;
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    background: var(--bg);
+.asr-intro {
+    margin: .6rem 0 0;
+    max-width: 700px;
+    color: var(--silver);
+    font-size: .9rem;
+    line-height: 1.6;
 }
 
-#adminScoringRules {
-    max-width: 880px;
-    margin: 0 auto;
-    padding: var(--sp-8) var(--sp-5) var(--sp-8);
+/* ---------- Feedback ---------------------------------------------------------------- */
+.asr-alert {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
 }
 
-#adminScoringRules h1 {
-    color: var(--navy-700);
-    margin-bottom: var(--sp-2);
-}
+.asr-alert-success { border-left-color: #5fae7a; }
+.asr-alert-error { border-left-color: #c0524a; }
 
-#adminScoringRules h2 {
-    color: var(--navy);
-    margin-top: 0;
-}
-
-.page-intro {
-    color: var(--ink-muted);
-    margin-bottom: var(--sp-6);
-}
-
-/* ---------- Feedback ------------------------------------------------------- */
-.success-message,
-.error-message {
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-4);
-    margin: var(--sp-3) 0;
-    font-weight: 500;
-}
-
-.success-message {
-    color: var(--success);
-    background: var(--success-bg);
-    border: 1px solid var(--success-border);
-}
-
-.error-message {
-    color: var(--danger);
-    background: var(--danger-bg);
-    border: 1px solid var(--danger-border);
-}
-
-/* ---------- Sections -------------------------------------------------------- */
-#adminScoringRules section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: var(--sp-5);
-    margin-bottom: var(--sp-5);
-}
-
-/* ---------- Fields ----------------------------------------------------------- */
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-    margin-bottom: var(--sp-4);
-}
-
-.field label {
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.field-checkbox label {
+/* ---------- Season-locked banner ---------------------------------------------------- */
+.asr-lock-banner {
     display: flex;
     align-items: center;
-    gap: var(--sp-2);
+    gap: 12px;
+    margin: 0 0 20px;
+    border: 1px solid rgba(192, 82, 74, .55);
+    border-left: 4px solid #c0524a;
+    border-radius: 12px;
+    padding: .9rem 1.1rem;
+    background: rgba(192, 82, 74, .1);
+    color: var(--silver-bright);
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+.asr-lock-banner strong { color: #f0b7b1; }
+
+.asr-lock-icon { font-size: 1.15rem; line-height: 1; }
+
+.asr-lock-note {
+    margin: 14px 0 0;
+    color: var(--silver-dim);
+    font-size: .8rem;
+    line-height: 1.5;
+}
+
+/* ---------- Locked / disabled form -------------------------------------------------- */
+/* The "no entry" cursor the brief asked for, on every frozen control. */
+.asr-fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+.asr-fieldset.is-locked { cursor: not-allowed; }
+
+.asr-input:disabled,
+.asr-check input[type="checkbox"]:disabled,
+.asr-submit:disabled {
+    cursor: not-allowed;
+}
+
+.asr-fieldset.is-locked .asr-input,
+.asr-fieldset.is-locked .asr-check,
+.asr-fieldset.is-locked .asr-check input[type="checkbox"] {
+    cursor: not-allowed;
+}
+
+.asr-fieldset.is-locked .asr-input {
+    opacity: .55;
+    background: #0a160f;
+}
+
+.asr-fieldset.is-locked .asr-check { opacity: .55; }
+
+.asr-submit:disabled {
+    opacity: .5;
+    filter: grayscale(35%);
+}
+
+.srtbl-locked {
+    color: var(--silver-dim);
+    font-size: .78rem;
     font-weight: 600;
-    font-size: 0.9rem;
+    cursor: not-allowed;
 }
 
-.field-checkbox input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--teal);
-    cursor: pointer;
+/* ---------- Panels ------------------------------------------------------------------ */
+.asr-panel {
+    padding: 20px 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
 }
 
-#adminScoringRules input[type="text"],
-#adminScoringRules input[type="number"],
-#adminScoringRules select {
-    padding: var(--sp-3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-field);
-    background: var(--field-bg);
-    font: inherit;
-    color: inherit;
+#seasonSelection { margin-top: 20px; }
+
+.asr-panel-title {
+    margin: 0 0 16px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
 }
 
-#adminScoringRules input:focus,
-#adminScoringRules select:focus {
-    outline: none;
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18);
+/* ---------- Fields ------------------------------------------------------------------ */
+.asr-field { min-width: 0; }
+
+.asr-field + .asr-field { margin-top: 16px; }
+
+.asr-label {
+    display: block;
+    margin-bottom: .45rem;
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
 }
 
-/* ---------- Tables ------------------------------------------------------------ */
-#scoringRulesTable {
-    border-collapse: collapse;
+.asr-input {
     width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 .8rem;
+    background: #0c1c13;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .88rem;
+    transition: border-color .15s ease;
 }
 
-#scoringRulesTable th,
-#scoringRulesTable td {
-    text-align: left;
-    padding: var(--sp-2) var(--sp-3);
-    border-bottom: 1px solid var(--border);
+.asr-input:focus {
+    outline: none;
+    border-color: var(--gold);
 }
 
-#scoringRulesTable th {
-    color: var(--ink-muted);
-    font-weight: 600;
+.asr-input::placeholder { color: #5c6e64; }
+
+/* ---------- Season selector ---------------------------------------------------------- */
+.asr-season-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
 }
 
-#scoringRulesTable td a {
-    color: var(--teal);
-    font-weight: 600;
-    text-decoration: none;
-}
+.asr-field-grow { flex: 1; min-width: 220px; max-width: 320px; }
 
-#scoringRulesTable td a:hover {
-    color: var(--teal-600);
-    text-decoration: underline;
-}
-
-#scoringRulesEmptyState {
-    color: var(--ink-muted);
-}
-
-/* ---------- Buttons / links --------------------------------------------------- */
-#adminScoringRules button {
-    background: var(--teal);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-5);
-    font: inherit;
+.asr-ghost {
+    flex-shrink: 0;
+    height: 42px;
+    padding: 0 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: border-color .15s ease, color .15s ease;
 }
 
-#adminScoringRules button:hover {
-    background: var(--teal-600);
+.asr-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold-bright);
+    filter: none;
 }
 
-#scoringRuleFormSection a {
+/* ---------- Two-column layout -------------------------------------------------------- */
+.asr-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 22px;
+    align-items: start;
+    margin-top: 22px;
+}
+
+/* ---------- Section header ----------------------------------------------------------- */
+.asr-section-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.asr-section-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    white-space: nowrap;
+}
+
+.asr-rule-line { flex: 1; height: 1px; background: var(--line); }
+
+.asr-count {
+    color: var(--silver-dim);
+    font-size: .78rem;
+    white-space: nowrap;
+}
+
+.asr-empty {
+    margin: 0;
+    padding: 34px 20px;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    text-align: center;
+    color: var(--silver-dim);
+    font-size: .88rem;
+}
+
+/* ---------- Rules table -------------------------------------------------------------- */
+.srtbl {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+    overflow: hidden;
+}
+
+.srtbl-scroll { overflow-x: auto; }
+
+.srtbl-head,
+.srtbl-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) 84px 92px 78px minmax(0, 1.4fr) 62px;
+    align-items: center;
+    gap: 12px;
+    min-width: 660px;
+    padding: 12px 18px;
+}
+
+.srtbl-head {
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, .015);
+}
+
+.srtbl-row {
+    border-top: 1px solid rgba(44, 68, 55, .5);
+    font-size: .86rem;
+    transition: background .15s ease;
+}
+
+.srtbl-row:first-of-type { border-top: none; }
+.srtbl-row:hover { background: rgba(201, 162, 39, .05); }
+
+.srtbl-c { text-align: center; }
+
+.srtbl-event {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Signed points: deductions read red, awards green. */
+.srtbl-pts {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.srtbl-pts.is-award { color: #8fd0a5; }
+.srtbl-pts.is-ded { color: #e08279; }
+
+.srtbl-desc {
+    color: var(--silver-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.srtbl-action { text-align: right; }
+
+.srtbl-edit {
+    color: var(--gold-bright);
+    font-size: .82rem;
+    font-weight: 600;
+    border-bottom: none;
+}
+
+.srtbl-edit:hover { text-decoration: underline; }
+
+/* Yes / No pills */
+.asr-flag {
     display: inline-block;
-    margin-left: var(--sp-4);
-    color: var(--ink-muted);
-    font-size: 0.9rem;
+    padding: .16rem .5rem;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 600;
 }
 
-#seasonSelectForm {
+.asr-flag.is-yes { background: rgba(95, 174, 122, .16); color: #8fd0a5; }
+.asr-flag.is-no { background: rgba(255, 255, 255, .04); color: var(--silver-dim); }
+
+/* ---------- Checkboxes ---------------------------------------------------------------- */
+.asr-checks {
     display: flex;
     flex-wrap: wrap;
-    align-items: end;
-    gap: var(--sp-3);
+    gap: 10px 22px;
+    margin-top: 18px;
 }
 
-/* ---------- Narrow screens ---------------------------------------------------- */
+.asr-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--silver);
+    font-size: .86rem;
+    cursor: pointer;
+}
+
+.asr-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--gold);
+    cursor: pointer;
+}
+
+/* ---------- Submit / cancel ------------------------------------------------------------ */
+.asr-submit {
+    width: 100%;
+    margin-top: 20px;
+    padding: .8rem 1rem;
+}
+
+.asr-cancel {
+    display: block;
+    margin-top: 12px;
+    text-align: center;
+    color: var(--silver-dim);
+    font-size: .82rem;
+    border-bottom: none;
+}
+
+.asr-cancel:hover { color: var(--gold-bright); text-decoration: underline; }
+
+/* ---------- Narrow screens -------------------------------------------------------------- */
+@media (max-width: 980px) {
+    .asr-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (max-width: 640px) {
-    #adminScoringRules {
-        padding: var(--sp-6) var(--sp-3) var(--sp-6);
-    }
-
-    #scoringRulesTable {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    #adminScoringRules button {
-        width: 100%;
-    }
-
-    #scoringRuleFormSection a {
-        display: block;
-        margin-left: 0;
-        margin-top: var(--sp-3);
-        text-align: center;
-    }
+    .asr-page .catalog-main { padding: 24px 16px 32px; }
+    .asr-ghost { width: 100%; }
+    .asr-field-grow { max-width: none; }
 }

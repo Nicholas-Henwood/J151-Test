@@ -1,0 +1,32 @@
+/* ============================================================================
+   TryTons — Opponent team page (Green-Gold redesign)
+   The same pitch / bench / detail view as My Team, framed for scouting. Loads
+   on top of my-team.css and reuses my-team.js; this file only varies what the
+   spec says differs: the jersey palette (silver/neutral, not the user's gold)
+   and the back link. Read-only — no edit controls are rendered.
+   ========================================================================== */
+
+/* Opponent jerseys are silver so they never read as the user's own gold team.
+   Backs are the lighter silver, forwards a darker silver-grey. Scoped to
+   .opp-page so it outranks my-team.css's gold-forward rule. */
+.opp-page .mt-jersey-fwd {
+    background: linear-gradient(155deg, #c7d1c9, #7f9187);
+}
+
+.opp-page .mt-jersey-back {
+    background: linear-gradient(155deg, #dfe6e0, #9aa8a0);
+}
+
+/* ---------- Back link -------------------------------------------------------------- */
+.opp-back {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--silver-dim);
+    font-size: .84rem;
+    border-bottom: none;
+}
+
+.opp-back:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+}

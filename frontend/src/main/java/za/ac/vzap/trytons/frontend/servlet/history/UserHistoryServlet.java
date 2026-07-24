@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import za.ac.vzap.trytons.frontend.servlet.shared.AbstractServlet;
 
 
@@ -71,15 +72,20 @@ public class UserHistoryServlet extends AbstractServlet {
     private void decorateHistory(HttpServletRequest request,
                                  List<WeeklyPerformanceResponse> rounds,
                                  int totals) {
-        Map<String, Integer> roundNumbers = new HashMap<>();
+        // Both maps are keyed by UUID, not by the id's string form: the page looks them
+        // up with ${map[round.roundId]}, and WeeklyPerformanceResponse exposes those ids
+        // as UUIDs. A String key never matches that lookup, which left every row falling
+        // back to the raw id.
+        Map<UUID, Integer> roundNumbers = new HashMap<>();
         roundRestClient.listRounds().orElse(List.of()).forEach(
-                round -> roundNumbers.put(String.valueOf(round.getRoundId()), round.getRoundNumber()));
+                round -> parseUuid(round.getRoundId())
+                        .ifPresent(roundId -> roundNumbers.put(roundId, round.getRoundNumber())));
         request.setAttribute("roundNumbersById", roundNumbers);
 
-        Map<String, String> fixtureLabels = new HashMap<>();
+        Map<UUID, String> fixtureLabels = new HashMap<>();
         fixtureRestClient.listFixtures(null).orElse(List.of()).forEach(fixture -> {
             if (fixture.getFixtureId() != null) {
-                fixtureLabels.put(fixture.getFixtureId().toString(),
+                fixtureLabels.put(fixture.getFixtureId(),
                         fixture.getTeamAName() + " vs " + fixture.getTeamBName());
             }
         });

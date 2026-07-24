@@ -5,6 +5,7 @@ import com.vzap.trytons.dao.catalog.PlayerDAO;
 import com.vzap.trytons.dao.catalog.PositionDAO;
 import com.vzap.trytons.dto.catalog.PlayerRequestDTO;
 import com.vzap.trytons.dto.catalog.PlayerResponseDTO;
+import com.vzap.trytons.enums.AvailabilityStatus;
 import com.vzap.trytons.exceptions.DataAccessException;
 import com.vzap.trytons.exceptions.ResourceNotFoundException;
 import com.vzap.trytons.exceptions.ValidationException;
@@ -63,7 +64,19 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<PlayerResponseDTO> searchPlayers(String playerName, UUID clubId, UUID positionId) {
-        List<Player> players = playerDAO.searchPlayers(playerName, clubId, positionId, null, null, null, null, null, null);
+        return searchPlayers(playerName, clubId, positionId, null);
+    }
+
+    @Override
+    public List<PlayerResponseDTO> searchPlayers(String playerName, UUID clubId, UUID positionId, Boolean availableOnly) {
+        // When availableOnly is requested (the team-selection pool), restrict to players
+        // that are both on the roster (isActive) and currently ACTIVE in the availability
+        // table — the same signal the squad validator enforces on submit, so the pool can
+        // never offer a player the backend will reject.
+        AvailabilityStatus status = Boolean.TRUE.equals(availableOnly) ? AvailabilityStatus.ACTIVE : null;
+        Boolean isActive = Boolean.TRUE.equals(availableOnly) ? Boolean.TRUE : null;
+
+        List<Player> players = playerDAO.searchPlayers(playerName, clubId, positionId, null, null, null, null, status, isActive);
         List<PlayerResponseDTO> responses = new ArrayList<>();
 
         for (Player player : players) {

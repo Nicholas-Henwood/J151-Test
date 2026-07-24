@@ -30,8 +30,25 @@
                 <p class="catalog-eyebrow">Fantasy TryTons League</p>
                 <h1 class="brand-font">Players</h1>
             </div>
-            <%-- catalog-filter.js keeps this in step with the filtered list. --%>
-            <p class="catalog-count" data-catalog-count>${fn:length(players)} players &middot; season 2025/26</p>
+            <div class="catalog-header-side">
+                <%-- catalog-filter.js keeps this in step with the filtered list. --%>
+                <p class="catalog-count" data-catalog-count>${fn:length(players)} players &middot; season 2025/26</p>
+
+                <%-- Admins can pull the live squad feed into the catalog on demand. The
+                     backend re-scrapes its source each call (~1 min), so this is a single
+                     deliberate refresh, never a poll. --%>
+                <c:if test="${sessionScope.role == 'ADMINISTRATOR'}">
+                    <form method="post"
+                          action="${pageContext.request.contextPath}/player/import"
+                          class="feed-refresh" data-feed-refresh>
+                        <button type="submit" name="submit" value="player/import" class="btn-gold feed-refresh-btn">
+                            <span class="btn-spinner" aria-hidden="true"></span>
+                            <span class="feed-refresh-label">Refresh from live feed</span>
+                        </button>
+                        <span class="feed-refresh-hint">Pulls the latest squads from the live source &middot; takes about a minute.</span>
+                    </form>
+                </c:if>
+            </div>
         </header>
 
         <c:if test="${not empty error}">
@@ -159,5 +176,22 @@
 </main>
 
 <script src="${pageContext.request.contextPath}/assets/js/catalog-filter.js"></script>
+<script>
+    // The live-feed refresh is a slow (~1 min) server round trip. On submit, lock the
+    // button and show the spinner so the admin gets feedback and cannot double-submit.
+    (function () {
+        var form = document.querySelector('[data-feed-refresh]');
+        if (!form) { return; }
+        form.addEventListener('submit', function () {
+            var button = form.querySelector('.feed-refresh-btn');
+            var label = form.querySelector('.feed-refresh-label');
+            if (button) {
+                button.classList.add('is-loading');
+                button.disabled = true;
+            }
+            if (label) { label.textContent = 'Refreshing…'; }
+        });
+    })();
+</script>
 </body>
 </html>

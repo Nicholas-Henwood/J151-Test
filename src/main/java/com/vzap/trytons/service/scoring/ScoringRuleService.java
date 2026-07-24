@@ -13,4 +13,10 @@ public interface ScoringRuleService {
     ScoringRuleResponseDTO saveRule(
             UUID actorUserId,
             ScoringRuleRequestDTO request);
+
+    /**
+     * Whether the season's scoring ruleset is locked (it already has results),
+     * independent of whether any rules currently exist for it.
+     */
+    boolean isSeasonLocked(UUID actorUserId, String season);
 }

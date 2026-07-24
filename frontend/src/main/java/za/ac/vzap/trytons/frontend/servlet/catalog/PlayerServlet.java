@@ -9,6 +9,7 @@ import za.ac.vzap.trytons.frontend.client.catalog.ClubResponse;
 import za.ac.vzap.trytons.frontend.client.catalog.ClubRestClient;
 import za.ac.vzap.trytons.frontend.client.catalog.PlayerAvailabilityRequest;
 import za.ac.vzap.trytons.frontend.client.catalog.PlayerAvailabilityResponse;
+import za.ac.vzap.trytons.frontend.client.catalog.PlayerImportSummaryResponse;
 import za.ac.vzap.trytons.frontend.client.catalog.PlayerRequest;
 import za.ac.vzap.trytons.frontend.client.catalog.PlayerResponse;
 import za.ac.vzap.trytons.frontend.client.catalog.PlayerRestClient;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 import za.ac.vzap.trytons.frontend.servlet.shared.AbstractServlet;
 
-@WebServlet(name ="PlayerServlet", urlPatterns = {"/players", "/player", "/player/create" , "/player/update", "/player/availability"} )
+@WebServlet(name ="PlayerServlet", urlPatterns = {"/players", "/player", "/player/create" , "/player/update", "/player/availability", "/player/import"} )
 public class PlayerServlet extends AbstractServlet {
     @Inject
     private PlayerRestClient playerRestClient;
@@ -36,6 +37,7 @@ public class PlayerServlet extends AbstractServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(!requireAuthenticated(request, response)) return;
         String servletPath = request.getServletPath();
         String submit = request.getParameter("submit");
         if (submit == null) {
@@ -135,6 +137,12 @@ public class PlayerServlet extends AbstractServlet {
         if (submit == null){
             submit = "";
         }
+        // The live-feed refresh mutates the catalog, so it follows POST-redirect-GET:
+        // handle it here and redirect (with a flash toast) rather than forwarding to a view.
+        if ("player/import".equals(submit) || "/player/import".equals(servletPath)) {
+            handleImportPlayers(request, response);
+            return;
+        }
         String destination;
         if ("player/create".equals(submit) || "/player/create".equals(servletPath)) {
             destination = handleCreatePlayer(request);
@@ -148,11 +156,29 @@ public class PlayerServlet extends AbstractServlet {
         request.getRequestDispatcher(destination).forward(request, response);
     }
 
+    private void handleImportPlayers(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Optional<PlayerImportSummaryResponse> summary = playerRestClient.importPlayers();
+        if (summary.isPresent()) {
+            PlayerImportSummaryResponse s = summary.get();
+            String message = String.format(
+                    "Player feed refreshed — %d fetched: %d new, %d updated, %d deactivated%s.",
+                    s.getFetched(), s.getInserted(), s.getUpdated(), s.getDeactivated(),
+                    s.getSkipped() > 0 ? (", " + s.getSkipped() + " skipped") : "");
+            flashSuccess(request, message);
+        } else if (!sessionExpiredRedirect(request, response)) {
+            flashError(request, apiCallStatus.getMessage("Unable to refresh players from the live feed"));
+        } else {
+            return; // session expired: sessionExpiredRedirect already redirected to login
+        }
+        redirectTo(response, request, "/players?submit=players");
+    }
+
     private String handleCreatePlayer(HttpServletRequest request) {
         PlayerRequest playerRequest = buildPlayerRequest(request);
         Optional<PlayerResponse> created = playerRestClient.createPlayer(playerRequest);
         if(created.isPresent()){
             request.setAttribute("player", created.get());
+            toastSuccess(request, "Player created");
             return "/pages/player.jsp";
         }
         request.setAttribute("error", "Unable to create player");
@@ -169,6 +195,7 @@ public class PlayerServlet extends AbstractServlet {
         Optional<PlayerResponse> updated = playerRestClient.updatePlayer(playerId.get(), playerRequest);
         if(updated.isPresent()){
             request.setAttribute("player", updated.get());
+            toastSuccess(request, "Player updated");
             return "/pages/player.jsp";
         }
         request.setAttribute("error", "Unable to update player");
@@ -189,7 +216,7 @@ public class PlayerServlet extends AbstractServlet {
 
         if (saved.isPresent()) {
             request.setAttribute("availability", saved.get());
-            request.setAttribute("availabilityMessage", "Availability updated.");
+            toastSuccess(request, "Availability updated");
         } else {
             request.setAttribute("error", "Unable to update player availability");
         }

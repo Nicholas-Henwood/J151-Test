@@ -9,6 +9,7 @@ import com.vzap.trytons.dto.league.JoinLeagueResponseDTO;
 import com.vzap.trytons.dto.league.LeagueMemberResponseDTO;
 import com.vzap.trytons.dto.league.LeagueRequestDTO;
 import com.vzap.trytons.dto.league.LeagueResponseDTO;
+import com.vzap.trytons.dto.publicpreview.PublicLeaguePreviewDTO;
 import com.vzap.trytons.enums.LeagueType;
 import com.vzap.trytons.exceptions.AuthorisationException;
 import com.vzap.trytons.exceptions.BusinessRuleException;
@@ -144,7 +145,48 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
+    public List<PublicLeaguePreviewDTO> getPublicLeaguePreviews(int limit) {
+        List<PublicLeaguePreviewDTO> previews = new ArrayList<>();
+        for (League league : leagueDAO.findAllLeagues()) {
+            if (league.getLeagueType() != LeagueType.PUBLIC) {
+                continue;
+            }
+            if (Boolean.FALSE.equals(league.getIsActive())) {
+                continue;
+            }
+            previews.add(PublicLeaguePreviewDTO.builder()
+                    .leagueName(league.getLeagueName())
+                    .description(league.getDescription())
+                    .maxMembers(league.getMaxMembers())
+                    .memberCount(membershipDAO.countActiveMembers(league.getLeagueId()))
+                    .build());
+            if (limit > 0 && previews.size() >= limit) {
+                break;
+            }
+        }
+        return previews;
+    }
+
+    @Override
     public JoinLeagueResponseDTO joinLeague(JoinLeagueRequestDTO request, UUID currentUserId) {
+        if (request == null) {
+            throw new ValidationException("Join-league request cannot be null.");
+        }
+        if (currentUserId == null) {
+            throw new ValidationException("Current user ID is required.");
+        }
+
+        if (request.getLeagueId() == null
+                && request.getLeagueCode() != null && !request.getLeagueCode().isBlank()) {
+            leagueDAO.findLeagueByLeagueCode(request.getLeagueCode().trim())
+                    .ifPresent(found -> request.setLeagueId(found.getLeagueId()));
+        }
+      
+        if (request.getTeamId() == null) {
+            fantasyTeamDAO.getTeamByOwner(currentUserId)
+                    .ifPresent(team -> request.setTeamId(team.getTeamId()));
+        }
+
         validateJoinLeagueRequest(request, currentUserId);
 
         League league = requireLeague(request.getLeagueId());
@@ -287,11 +329,11 @@ public class LeagueServiceImpl implements LeagueService {
         }
 
         if (request.getLeagueId() == null) {
-            throw new ValidationException("League ID is required.");
+            throw new ValidationException("That league could not be found. Check the join code and try again.");
         }
 
         if (request.getTeamId() == null) {
-            throw new ValidationException("Team ID is required.");
+            throw new ValidationException("You need a fantasy team before you can join a league.");
         }
     }
 

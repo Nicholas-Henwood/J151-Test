@@ -1,247 +1,436 @@
 /* ============================================================================
-   TryTons — Fantasy Rugby | Admin Simulation Settings & Controlled
-   Resimulation (E2E-14). Vanilla CSS. Shares the palette, type, radii and
-   spacing tokens used by the other admin CRUD screens so this page sits
-   alongside the rest of the admin area. Targets only the markup in
-   admin-simulation.jsp.
+   TryTons — Admin: Simulation Settings (Green-Gold redesign)
+   Active-settings summary, an all-settings table with the settings form, and
+   the controlled-resimulation section. Loads on top of theme.css (palette
+   tokens, fonts, .brand-font, .btn-gold), sidebar.css (shared left nav,
+   including the admin-only Administration section) and catalog.css (main
+   column, page header).
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
-
-:root {
-    --navy: #eef3ef;
-    --navy-700: #eef3ef;
-    --teal: #c9a227;
-    --teal-600: #8a6a15;
-    --bg: #0c1712;
-    --surface: #132a1f;
-
-    --ink: #c7d1c9;
-    --ink-muted: #7f9187;
-
-    --danger: #e0847a;
-    --danger-bg: rgba(192, 82, 74, 0.12);
-    --danger-border: #c0524a;
-    --success: #6fcf8e;
-    --success-bg: rgba(21, 128, 61, 0.14);
-    --success-border: #2f6b45;
-
-    --border: #2c4437;
-    --field-bg: #0f2118;
-
-    --radius-card: 12px;
-    --radius-field: 8px;
-
-    --sp-2: 8px;
-    --sp-3: 12px;
-    --sp-4: 16px;
-    --sp-5: 20px;
-    --sp-6: 24px;
-    --sp-8: 32px;
+.asim-page .catalog-main {
+    padding: 32px 40px 48px;
 }
 
-body.admin-simulation {
-    margin: 0;
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    background: var(--bg);
+.asim-page .catalog-content {
+    max-width: 1080px;
 }
 
-#adminSimulation {
-    max-width: 880px;
-    margin: 0 auto;
-    padding: var(--sp-8) var(--sp-5) var(--sp-8);
+.asim-intro {
+    margin: .6rem 0 0;
+    max-width: 740px;
+    color: var(--silver);
+    font-size: .9rem;
+    line-height: 1.6;
 }
 
-#adminSimulation h1 {
-    color: var(--navy-700);
-    margin-bottom: var(--sp-2);
+/* ---------- Feedback ---------------------------------------------------------------- */
+.asim-alert {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
 }
 
-#adminSimulation h2 {
-    color: var(--navy);
-    margin-top: 0;
-}
+.asim-alert-success { border-left-color: #5fae7a; }
+.asim-alert-error { border-left-color: #c0524a; }
 
-.page-intro {
-    color: var(--ink-muted);
-    margin-bottom: var(--sp-6);
-}
+/* ---------- Section headers ---------------------------------------------------------- */
+#activeSettingSection { margin-top: 24px; }
+#resimulationSection { margin-top: 30px; }
 
-.hint {
-    color: var(--ink-muted);
-    font-size: 0.9rem;
-}
-
-/* ---------- Feedback ------------------------------------------------------- */
-.success-message,
-.error-message {
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-4);
-    margin: var(--sp-3) 0;
-    font-weight: 500;
-}
-
-.success-message {
-    color: var(--success);
-    background: var(--success-bg);
-    border: 1px solid var(--success-border);
-}
-
-.error-message {
-    color: var(--danger);
-    background: var(--danger-bg);
-    border: 1px solid var(--danger-border);
-}
-
-/* ---------- Sections -------------------------------------------------------- */
-#adminSimulation section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: var(--sp-5);
-    margin-bottom: var(--sp-5);
-}
-
-/* ---------- Fields ----------------------------------------------------------- */
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-    margin-bottom: var(--sp-4);
-}
-
-.field label {
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.field-checkbox label {
+.asim-section-head {
     display: flex;
     align-items: center;
-    gap: var(--sp-2);
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.asim-section-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
     font-weight: 600;
-    font-size: 0.9rem;
+    color: var(--silver-bright);
+    white-space: nowrap;
 }
 
-.field-checkbox input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--teal);
-    cursor: pointer;
+.asim-rule-line { flex: 1; height: 1px; background: var(--line); }
+
+.asim-count {
+    color: var(--silver-dim);
+    font-size: .78rem;
+    white-space: nowrap;
 }
 
-#adminSimulation input[type="text"],
-#adminSimulation input[type="number"],
-#adminSimulation select {
-    padding: var(--sp-3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-field);
-    background: var(--field-bg);
-    font: inherit;
-    color: inherit;
+.asim-empty {
+    margin: 0;
+    padding: 30px 20px;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    text-align: center;
+    color: var(--silver-dim);
+    font-size: .88rem;
 }
 
-#adminSimulation input:focus,
-#adminSimulation select:focus {
-    outline: none;
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18);
+.asim-empty-sm {
+    margin-top: 16px;
+    padding: 20px 16px;
+    font-size: .82rem;
 }
 
-/* ---------- Tables ------------------------------------------------------------ */
-#activeSettingTable,
-#allSettingsTable,
-#resimulationsTable {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: var(--sp-4);
+/* ---------- Active settings cell grid ------------------------------------------------ */
+.asim-cells {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+    overflow: hidden;
 }
 
-#activeSettingTable th,
-#activeSettingTable td,
-#allSettingsTable th,
-#allSettingsTable td,
-#resimulationsTable th,
-#resimulationsTable td {
-    text-align: left;
-    padding: var(--sp-2) var(--sp-3);
-    border-bottom: 1px solid var(--border);
+/* Hairlines between cells rather than gaps, so the grid reads as one surface. */
+.asim-cell {
+    padding: 14px 18px;
+    border-left: 1px solid var(--line);
+    border-top: 1px solid var(--line);
 }
 
-#activeSettingTable th {
-    color: var(--ink-muted);
+.asim-cell-label {
+    display: block;
+    margin-bottom: .35rem;
+    color: var(--silver-dim);
+    font-size: .64rem;
     font-weight: 600;
-    width: 40%;
+    letter-spacing: .1em;
+    text-transform: uppercase;
 }
 
-#allSettingsTable th,
-#resimulationsTable th {
-    color: var(--ink-muted);
+.asim-cell-value {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    font-variant-numeric: tabular-nums;
+}
+
+.asim-cell-value.is-gold { color: var(--gold-bright); }
+
+/* ---------- Yes / No pills ------------------------------------------------------------ */
+.asim-flag {
+    display: inline-block;
+    padding: .16rem .5rem;
+    border-radius: 999px;
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: .7rem;
     font-weight: 600;
 }
 
-#allSettingsTable td a {
-    color: var(--teal);
+.asim-flag.is-yes { background: rgba(95, 174, 122, .16); color: #8fd0a5; }
+.asim-flag.is-no { background: rgba(255, 255, 255, .04); color: var(--silver-dim); }
+
+/* ---------- Two-column rows ------------------------------------------------------------ */
+.asim-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 22px;
+    align-items: start;
+    margin-top: 26px;
+}
+
+.asim-grid-even {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    margin-top: 18px;
+}
+
+/* ---------- Panels --------------------------------------------------------------------- */
+.asim-panel {
+    padding: 20px 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+}
+
+.asim-panel-title {
+    margin: 0 0 16px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
     font-weight: 600;
-    text-decoration: none;
+    color: var(--silver-bright);
 }
 
-#allSettingsTable td a:hover {
-    color: var(--teal-600);
-    text-decoration: underline;
-}
-
-#activeSettingEmptyState,
-#allSettingsEmptyState,
-#resimulationsEmptyState {
-    color: var(--ink-muted);
-}
-
-/* ---------- Buttons -------------------------------------------------------- */
-#adminSimulation button {
-    background: var(--teal);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-5);
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s ease;
-}
-
-#adminSimulation button:hover {
-    background: var(--teal-600);
-}
-
-#resimulationHistoryForm {
+.asim-panel-head {
     display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+/* An author rule's `display: flex` above beats the browser's default
+   `[hidden] { display: none }` (UA styles always lose to author styles,
+   regardless of specificity), so the hidden panel head must be told to
+   collapse explicitly or both Create and Update heads render at once. */
+.asim-panel-head[hidden] { display: none; }
+
+.asim-panel-head .asim-panel-title { margin-bottom: 0; }
+
+.asim-form-reset {
+    display: inline-flex;
+    height: auto;
+    padding: 6px 12px;
+    font-size: .8rem;
+}
+
+/* ---------- All-settings table ---------------------------------------------------------- */
+.stbl2 {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+    overflow: hidden;
+}
+
+.stbl2-head,
+.stbl2-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 90px 70px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+}
+
+.stbl2-head {
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, .015);
+}
+
+.stbl2-row {
+    border-top: 1px solid rgba(44, 68, 55, .5);
+    font-size: .87rem;
+    transition: background .15s ease;
+}
+
+.stbl2-row:first-of-type { border-top: none; }
+.stbl2-row:hover { background: rgba(201, 162, 39, .05); }
+
+.stbl2-c { text-align: center; }
+
+.stbl2-season {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.stbl2-action { text-align: right; }
+
+.stbl2-edit {
+    color: var(--gold-bright);
+    font-size: .82rem;
+    font-weight: 600;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+.stbl2-edit:hover { text-decoration: underline; }
+
+/* ---------- Fields ---------------------------------------------------------------------- */
+.asim-field { min-width: 0; }
+
+.asim-field + .asim-field,
+.asim-row-2 + .asim-field,
+.asim-field + .asim-row-2 {
+    margin-top: 16px;
+}
+
+.asim-label {
+    display: block;
+    margin-bottom: .45rem;
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.asim-input {
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 .8rem;
+    background: #0c1c13;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .88rem;
+    transition: border-color .15s ease;
+}
+
+.asim-input:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.asim-input::placeholder { color: #5c6e64; }
+
+/* The four weights sit in a 2x2 grid. */
+.asim-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.asim-row-2 .asim-field + .asim-field { margin-top: 0; }
+
+/* ---------- Checkboxes -------------------------------------------------------------------- */
+.asim-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.asim-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--silver);
+    font-size: .86rem;
+    cursor: pointer;
+}
+
+.asim-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--gold);
+    cursor: pointer;
+}
+
+.asim-submit {
+    width: 100%;
+    margin-top: 20px;
+    padding: .8rem 1rem;
+}
+
+/* ---------- Inline lookup form ------------------------------------------------------------ */
+.asim-inline-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
     flex-wrap: wrap;
-    align-items: end;
-    gap: var(--sp-3);
-    margin-bottom: var(--sp-4);
 }
 
-#resimulationTriggerForm {
-    margin-top: var(--sp-4);
+.asim-field-grow { flex: 1; min-width: 180px; }
+
+.asim-ghost {
+    flex-shrink: 0;
+    height: 42px;
+    padding: 0 1.05rem;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease;
 }
 
-/* ---------- Narrow screens ---------------------------------------------------- */
+.asim-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold-bright);
+    filter: none;
+}
+
+/* ---------- Stub note ---------------------------------------------------------------------- */
+.asim-stub {
+    margin: 0 0 4px;
+    border: 1px solid var(--line);
+    border-left: 3px solid #e0a54a;
+    border-radius: 10px;
+    padding: .75rem 1rem;
+    background: rgba(224, 165, 74, .05);
+    color: var(--silver);
+    font-size: .84rem;
+    line-height: 1.55;
+}
+
+/* ---------- Resimulation history table ------------------------------------------------------ */
+.rtbl {
+    margin-top: 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.rtbl-scroll { overflow-x: auto; }
+
+.rtbl-head,
+.rtbl-row {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1.3fr) 78px 84px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    min-width: 480px;
+    padding: 10px 14px;
+}
+
+.rtbl-head {
+    color: var(--silver-dim);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, .015);
+}
+
+.rtbl-row {
+    border-top: 1px solid rgba(44, 68, 55, .5);
+    font-size: .82rem;
+}
+
+.rtbl-row:first-of-type { border-top: none; }
+
+.rtbl-c { text-align: center; }
+
+.rtbl-run {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 600;
+    color: var(--gold-bright);
+    font-variant-numeric: tabular-nums;
+}
+
+.rtbl-reason,
+.rtbl-when {
+    color: var(--silver);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rtbl-when { color: var(--silver-dim); }
+
+/* ---------- Narrow screens ------------------------------------------------------------------- */
+@media (max-width: 1000px) {
+    .asim-grid,
+    .asim-grid-even { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (max-width: 640px) {
-    #adminSimulation {
-        padding: var(--sp-6) var(--sp-3) var(--sp-6);
-    }
-
-    #activeSettingTable,
-    #allSettingsTable,
-    #resimulationsTable {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    #adminSimulation button {
-        width: 100%;
-    }
+    .asim-page .catalog-main { padding: 24px 16px 32px; }
+    .asim-row-2 { grid-template-columns: 1fr; }
+    .asim-ghost { width: 100%; }
 }

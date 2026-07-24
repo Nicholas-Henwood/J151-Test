@@ -21,12 +21,22 @@ public class PlayerRestClient {
     private final String CREATE_PLAYER = "/player";
     private final String UPDATE_PLAYER ="/player";
     private final String PLAYER_AVAILABILITY ="/player";
+    private final String IMPORT_PLAYERS ="/player/import";
 
     private static final Logger LOG = Logger.getLogger(PlayerRestClient.class.getName());
     @Inject
     private APIClient apiClient;
 
     public Optional<List<PlayerResponse>> listPlayers(String search , UUID clubId , UUID positionId) {
+        return listPlayers(search, clubId, positionId, false);
+    }
+
+    /**
+     * When availableOnly is true, only players currently available for selection are
+     * returned — used by the create-team pool so it never offers a player the squad
+     * validator would reject on submit.
+     */
+    public Optional<List<PlayerResponse>> listPlayers(String search , UUID clubId , UUID positionId, boolean availableOnly) {
         StringBuilder path = new StringBuilder(LIST_PLAYERS);
         List<String> params = new ArrayList<>();
         if (search != null && !search.isBlank()) {
@@ -37,6 +47,9 @@ public class PlayerRestClient {
         }
         if (positionId != null) {
             params.add("positionId=" + encode(positionId.toString()));
+        }
+        if (availableOnly) {
+            params.add("available=true");
         }
         if (!params.isEmpty()) {
             path.append("?").append(String.join("&", params));
@@ -70,6 +83,21 @@ public class PlayerRestClient {
         Optional<PlayerResponse> response = apiClient.put(path,request,PlayerResponse.class);
         if(response.isEmpty()){
             LOG.log(Level.SEVERE, "Unable to update player");
+        }
+        return response;
+    }
+
+    /**
+     * Triggers a live-feed refresh of the player catalog. The backend re-scrapes its
+     * source on every call and takes about a minute, so this is a single deliberate
+     * request, never a poll. The endpoint takes no body, so an empty JSON object is
+     * sent (JAX-RS rejects a null POST entity).
+     */
+    public Optional<PlayerImportSummaryResponse> importPlayers() {
+        Optional<PlayerImportSummaryResponse> response =
+                apiClient.post(IMPORT_PLAYERS, java.util.Map.of(), PlayerImportSummaryResponse.class);
+        if (response.isEmpty()) {
+            LOG.log(Level.SEVERE, "Unable to import players from live feed");
         }
         return response;
     }

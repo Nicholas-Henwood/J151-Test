@@ -80,6 +80,31 @@
     justify-content: flex-start;
 }
 
+/* Team sides on the list cards link to that team's (opponent) squad view.
+   Reset the theme's anchor underline; the crest lifts on hover to signal it. */
+a.fx-side-link {
+    text-decoration: none;
+    border-bottom: none;
+    color: inherit;
+    border-radius: 10px;
+    padding: 4px 6px;
+    margin: -4px -6px;
+    transition: background .18s ease;
+}
+
+a.fx-side-link:hover {
+    background: rgba(201, 162, 39, .07);
+}
+
+a.fx-side-link:hover .fx-team-name {
+    color: var(--gold-bright);
+}
+
+a.fx-side-link:hover .fx-crest {
+    border-color: var(--gold-deep);
+    color: var(--gold-bright);
+}
+
 .fx-team-name {
     margin: 0;
     font-family: "Space Grotesk", system-ui, sans-serif;

@@ -12,6 +12,8 @@ import za.ac.vzap.trytons.frontend.client.results.MatchResultRequest;
 import za.ac.vzap.trytons.frontend.client.results.MatchResultResponse;
 import za.ac.vzap.trytons.frontend.client.results.PlayerStatisticsRequest;
 import za.ac.vzap.trytons.frontend.client.results.PlayerStatisticsResponse;
+import za.ac.vzap.trytons.frontend.client.fantasyteam.FantasyTeamRestClient;
+import za.ac.vzap.trytons.frontend.client.fantasyteam.ViewOpponentTeamResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,6 +31,9 @@ public class AdminMatchResultServlet extends AbstractServlet {
 
     @Inject
     private FixtureRestClient fixtureRestClient;
+
+    @Inject
+    private FantasyTeamRestClient fantasyTeamRestClient;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -56,6 +61,7 @@ public class AdminMatchResultServlet extends AbstractServlet {
         }
 
         if (request.getAttribute("success") != null) {
+            flashSuccess(request, (String) request.getAttribute("success"));
             String fixtureId = request.getParameter("fixtureId");
             String redirectUrl = request.getContextPath() + "/admin/match-results"
                     + (fixtureId != null && !fixtureId.isBlank() ? "?fixtureId=" + fixtureId : "");
@@ -176,6 +182,27 @@ public class AdminMatchResultServlet extends AbstractServlet {
         if (fixtureId != null && !fixtureId.isBlank() && request.getAttribute("matchResult") == null) {
             Optional<MatchResultResponse> matchResult = adminMatchResultRestClient.getMatchResult(fixtureId);
             matchResult.ifPresent(result -> request.setAttribute("matchResult", result));
+        }
+
+        // Admins have no visibility into raw team/player UUIDs, so the statistics
+        // form offers the two fixture sides by name and each side's players by
+        // name instead of asking for IDs to be typed in directly. A fixture's
+        // team_a_id/team_b_id are fantasy team ids (leagueMembership.teamId), not
+        // club ids, so each side's roster comes from that fantasy team's squad,
+        // not from filtering the player catalogue by club.
+        if (fixtureId != null && !fixtureId.isBlank()) {
+            Optional<FixtureResponse> fixture = fixtureRestClient.getFixture(fixtureId);
+            if (fixture.isPresent()) {
+                request.setAttribute("selectedFixture", fixture.get());
+                request.setAttribute("teamAPlayers",
+                        fantasyTeamRestClient.viewOpponentTeam(fixture.get().getTeamAId())
+                                .map(ViewOpponentTeamResponse::getPlayers).orElse(List.of()));
+                request.setAttribute("teamBPlayers",
+                        fantasyTeamRestClient.viewOpponentTeam(fixture.get().getTeamBId())
+                                .map(ViewOpponentTeamResponse::getPlayers).orElse(List.of()));
+            } else {
+                request.setAttribute("fixturesError", "Unable to load the selected fixture's teams and players");
+            }
         }
     }
 

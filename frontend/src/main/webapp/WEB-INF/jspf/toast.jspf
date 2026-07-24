@@ -1,0 +1,44 @@
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%--
+    System-wide toast feedback host (Green-Gold design system).
+
+    Included from both layout partials (sidebar.jspf and navigation.jspf), so
+    every page gets it with no per-page work. Self-contained: it links its own
+    toast.css (which carries token fallbacks for pages that don't load
+    theme.css) and toast.js.
+
+    Two message sources, both rendered as a toast the browser animates in:
+      * Session flash — set by AbstractServlet.flashSuccess/flashError before a
+        POST-redirect-GET, and consumed here so a refresh cannot re-show it.
+      * Request attribute (toastMessage/toastType) — set by AbstractServlet
+        .toastSuccess/... on handlers that forward instead of redirecting.
+
+    Pages can also raise toasts from client JS via
+    window.TrytonsToast.show(message, type).
+--%>
+<c:set var="flashMessage" value="${sessionScope['flash.message']}" scope="page" />
+<c:set var="flashType" value="${sessionScope['flash.type']}" scope="page" />
+<%
+    // Consume-once: clear the flash so a reload or back-navigation cannot
+    // resurrect it. The values were already captured into page scope above.
+    session.removeAttribute("flash.message");
+    session.removeAttribute("flash.type");
+%>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/toast.css">
+<div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false">
+    <c:if test="${not empty flashMessage}">
+        <c:set var="flashKind" value="${empty flashType ? 'success' : flashType}" scope="page" />
+        <div class="toast toast-${flashKind}" role="${flashKind == 'error' ? 'alert' : 'status'}" data-toast>
+            <span class="toast-msg"><c:out value="${flashMessage}" /></span>
+            <button type="button" class="toast-close" aria-label="Dismiss">&times;</button>
+        </div>
+    </c:if>
+    <c:if test="${not empty toastMessage}">
+        <c:set var="reqKind" value="${empty toastType ? 'success' : toastType}" scope="page" />
+        <div class="toast toast-${reqKind}" role="${reqKind == 'error' ? 'alert' : 'status'}" data-toast>
+            <span class="toast-msg"><c:out value="${toastMessage}" /></span>
+            <button type="button" class="toast-close" aria-label="Dismiss">&times;</button>
+        </div>
+    </c:if>
+</div>
+<script src="${pageContext.request.contextPath}/assets/js/toast.js"></script>

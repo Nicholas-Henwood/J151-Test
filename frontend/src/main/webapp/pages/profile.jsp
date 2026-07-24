@@ -44,7 +44,6 @@
                 <c:set var="uname" value="${empty profile.username ? '' : profile.username}" />
                 <c:set var="nameParts" value="${fn:split(uname, ' ')}" />
                 <c:set var="initials"><c:if test="${fn:length(nameParts) > 0}">${fn:toUpperCase(fn:substring(nameParts[0], 0, 1))}<c:if test="${fn:length(nameParts) > 1}">${fn:toUpperCase(fn:substring(nameParts[fn:length(nameParts) - 1], 0, 1))}</c:if></c:if></c:set>
-                <c:set var="isAdmin" value="${profile.role == 'ADMINISTRATOR'}" />
 
                 <%-- ---------- Profile hero ---------- --%>
                 <section class="pf-hero">
@@ -70,7 +69,6 @@
                         </div>
 
                         <div class="pf-pills">
-                            <span class="pf-pill ${isAdmin ? 'pf-pill-gold' : 'pf-pill-silver'}">${fn:escapeXml(profile.role)}</span>
                             <c:choose>
                                 <c:when test="${profile.isActive}">
                                     <span class="pf-pill pf-pill-active">Active</span>
@@ -83,10 +81,6 @@
                     </div>
 
                     <div class="pf-facts">
-                        <div class="pf-fact">
-                            <span class="pf-fact-label">Registration</span>
-                            <span class="pf-fact-value">${empty profile.registrationStatus ? '—' : fn:escapeXml(profile.registrationStatus)}</span>
-                        </div>
                         <div class="pf-fact">
                             <span class="pf-fact-label">Member since</span>
                             <span class="pf-fact-value">${empty registrationDateLabel ? '—' : registrationDateLabel}</span>
@@ -111,9 +105,6 @@
                             <dt>Username</dt>
                             <dd>${fn:escapeXml(uname)}</dd>
 
-                            <dt>Role</dt>
-                            <dd>${fn:escapeXml(profile.role)}</dd>
-
                             <dt>Account status</dt>
                             <dd>
                                 <c:choose>
@@ -121,9 +112,6 @@
                                     <c:otherwise><span class="pf-pill pf-pill-inactive">Inactive</span></c:otherwise>
                                 </c:choose>
                             </dd>
-
-                            <dt>Registration status</dt>
-                            <dd>${empty profile.registrationStatus ? '—' : fn:escapeXml(profile.registrationStatus)}</dd>
 
                             <dt>Registered on</dt>
                             <dd>${empty registrationDateLabel ? '—' : registrationDateLabel}</dd>
@@ -158,15 +146,6 @@
                                     </span>
                                     <input class="field-input" type="email" id="email" name="email"
                                            value="${fn:escapeXml(profile.email)}" autocomplete="email">
-                                </div>
-
-                                <label class="field-label" for="profilePic">Profile picture URL</label>
-                                <div class="field-row">
-                                    <span class="field-icon">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                                    </span>
-                                    <input class="field-input" type="url" id="profilePic" name="profilePic"
-                                           value="${fn:escapeXml(profile.profilePic)}" placeholder="https://…">
                                 </div>
 
                                 <button type="submit" class="btn-gold pf-save">Save changes</button>

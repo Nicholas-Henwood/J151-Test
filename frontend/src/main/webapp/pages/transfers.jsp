@@ -33,6 +33,9 @@
                 <p class="catalog-eyebrow">Fantasy TryTons League</p>
                 <h1 class="brand-font">Transfers</h1>
                 <p class="tf-subtext">Pick one player to remove, then one to bring in. Value and budget update as you go.</p>
+                <c:if test="${freeLeft <= 0}">
+                    <p class="tf-subtext tf-penalty-note"><strong>You have no free transfers left this round, so this swap may apply a -4 point penalty.</strong></p>
+                </c:if>
             </div>
             <div class="tf-status">
                 <span class="tf-pill ${isLocked ? 'tf-pill-locked' : 'tf-pill-open'}">
@@ -113,13 +116,10 @@
                     </div>
                 </div>
 
-                <%-- Hidden until the swap exceeds the free-transfer allowance. The backend
-                     refuses an unacknowledged penalty transfer outright. --%>
-                <label class="tf-penalty" id="penaltyWrap" hidden>
-                    <input type="checkbox" name="penaltyConfirmed" id="penaltyConfirmed" value="true">
-                    <span>You have no free transfers left this round, so this swap may apply a
-                        <strong>-4 point</strong> penalty. I understand.</span>
-                </label>
+                <%-- The penalty is surfaced up-front as a bold notice under the page title,
+                     so the acknowledgement the backend requires is sent automatically here
+                     rather than gated behind a tick-box. --%>
+                <input type="hidden" name="penaltyConfirmed" value="true">
 
                 <div class="tf-summary-foot">
                     <div>

@@ -141,19 +141,14 @@
                             <h2 class="pl-panel-title">Availability</h2>
                             <span class="pl-avail ${availClass}">${fn:escapeXml(fn:substring(status, 0, 1))}${fn:toLowerCase(fn:substring(status, 1, fn:length(status)))}</span>
 
-                            <c:choose>
-                                <c:when test="${not empty availability}">
-                                    <p class="pl-avail-line">
-                                        In effect from ${availability.effectiveDate}<c:if test="${not empty availability.endDate}"> to ${availability.endDate}</c:if>.
-                                    </p>
-                                    <c:if test="${not empty availability.notes}">
-                                        <p class="pl-notes"><c:out value="${availability.notes}" /></p>
-                                    </c:if>
-                                </c:when>
-                                <c:otherwise>
-                                    <p class="pl-avail-line">No availability record has been set; status is derived from the player's active flag.</p>
-                                </c:otherwise>
-                            </c:choose>
+                            <c:if test="${not empty availability}">
+                                <p class="pl-avail-line">
+                                    In effect from ${availability.effectiveDate}<c:if test="${not empty availability.endDate}"> to ${availability.endDate}</c:if>.
+                                </p>
+                                <c:if test="${not empty availability.notes}">
+                                    <p class="pl-notes"><c:out value="${availability.notes}" /></p>
+                                </c:if>
+                            </c:if>
                         </section>
 
                         <%-- Admin set-availability form: shown only to administrators; the backend

@@ -10,6 +10,7 @@ import com.vzap.trytons.model.catalog.PlayerAvailability;
 import com.vzap.trytons.model.catalog.Position;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
 import java.util.*;
 
 
@@ -30,7 +31,7 @@ public class SquadValidationServiceImpl implements SquadValidationService {
     private static final int MAX_PROPS = 4;
     private static final int MAX_HOOKERS = 2;
     private static final int MAX_LOCKS = 4;
-    private static final int MAX_LOOSE_FORWARDS = 6;
+    private static final int MAX_LOOSE_FORWARDS = 5;
     private static final int MAX_SCRUM_HALVES = 2;
     private static final int MAX_FLY_HALVES = 2;
     private static final int MAX_CENTRES = 4;
@@ -44,11 +45,21 @@ public class SquadValidationServiceImpl implements SquadValidationService {
 
     @Override
     public SquadValidationResultDTO validateSquad(List<UUID> proposedPlayerIds) {
+        return validateSquad(proposedPlayerIds, proposedPlayerIds);
+    }
+
+    @Override
+    public SquadValidationResultDTO validateSquad(List<UUID> proposedPlayerIds, List<UUID> playersRequiringAvailabilityCheck) {
         SquadValidationResultDTO result = new SquadValidationResultDTO();
         validateDuplicatePlayers(proposedPlayerIds, result);
         List<Player> players = getPlayers(proposedPlayerIds, result);
         validateSquadSize(proposedPlayerIds, result);
-        validatePlayerAvailability(players, result);
+
+        List<Player> playersToCheck = players.stream()
+                .filter(p -> playersRequiringAvailabilityCheck.contains(p.getPlayerId()))
+                .collect(java.util.stream.Collectors.toList());
+        validatePlayerAvailability(playersToCheck, result);
+
         validatePositionRules(players, result);
         return result;
     }
@@ -63,10 +74,11 @@ public class SquadValidationServiceImpl implements SquadValidationService {
         }
         return players;
     }
+
     private Player validatePlayerIdsExist(UUID playerId, SquadValidationResultDTO result) {
-        Optional<Player>player = playerDAO.getPlayerById(playerId);
-        if(player.isEmpty()){
-            result.addError("PLAYER_NOT_FOUND","Player not found.","List<UUID> proposedPlayersIds");
+        Optional<Player> player = playerDAO.getPlayerById(playerId);
+        if (player.isEmpty()) {
+            result.addError("PLAYER_NOT_FOUND", "Player not found.", "List<UUID> proposedPlayersIds");
             return null;
         }
         return player.get();
@@ -82,8 +94,8 @@ public class SquadValidationServiceImpl implements SquadValidationService {
     private void validateDuplicatePlayers(List<UUID> proposedPlayerIds, SquadValidationResultDTO result) {
         Set<UUID> uniquePlayers = new HashSet<>();
         for (UUID playerId : proposedPlayerIds) {
-            if(!uniquePlayers.add(playerId)){
-                result.addError("DUPLICATE_PLAYERS","Duplicate player found.", "List<UUID> proposedPlayerIds");
+            if (!uniquePlayers.add(playerId)) {
+                result.addError("DUPLICATE_PLAYERS", "Duplicate player found.", "List<UUID> proposedPlayerIds");
                 return;
             }
         }
@@ -94,8 +106,8 @@ public class SquadValidationServiceImpl implements SquadValidationService {
 
         for (Player player : players) {
             PlayerAvailability availability = playerDAO.getCurrentAvailability(player.getPlayerId()).orElseThrow(() -> new ResourceNotFoundException("Player Not Found."));
-            if (availability.getStatus() != AvailabilityStatus.ACTIVE ){
-                result.addError("PLAYER_NOT_AVAILABLE", "Player is not available: "+player.getPlayerName(), "List<UUID> proposedPlayerIds");
+            if (availability.getStatus() != AvailabilityStatus.ACTIVE) {
+                result.addError("PLAYER_NOT_AVAILABLE", "Player is not available: " + player.getPlayerName(), "List<UUID> proposedPlayerIds");
             }
         }
     }
@@ -115,7 +127,7 @@ public class SquadValidationServiceImpl implements SquadValidationService {
 
         for (Player player : players) {
             Position position = positionDAO.findById(player.getPositionId()).orElseThrow(() -> new ResourceNotFoundException("Position Not Found."));
-            if(position.getPositionName() == null){
+            if (position.getPositionName() == null) {
                 invalidCount++;
                 continue;
             }
@@ -133,10 +145,11 @@ public class SquadValidationServiceImpl implements SquadValidationService {
                     lockCount++;
                     break;
 
+                case "Loose Forward":
                 case "Flanker":
-                    case "Number Eight":
-                        looseForwardCount++;
-                        break;
+                case "Number Eight":
+                    looseForwardCount++;
+                    break;
 
                 case "Scrum Half":
                     scrumHalfCount++;

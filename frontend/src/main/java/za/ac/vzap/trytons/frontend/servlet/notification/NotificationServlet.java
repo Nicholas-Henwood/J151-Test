@@ -71,6 +71,7 @@ public class NotificationServlet extends AbstractServlet {
         }
 
         if (request.getAttribute("success") != null) {
+            flashSuccess(request, (String) request.getAttribute("success"));
             response.sendRedirect(request.getContextPath() + "/notifications");
             return;
         }

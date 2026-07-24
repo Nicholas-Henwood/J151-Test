@@ -1,0 +1,201 @@
+/* ============================================================================
+   TryTons — Create League page (Green-Gold redesign)
+   A single centred form card. Loads on top of theme.css (palette tokens,
+   fonts, .brand-font, .btn-gold), sidebar.css (shared left nav) and
+   catalog.css (main column, page header).
+   ========================================================================== */
+
+.cl-page .catalog-content {
+    max-width: 620px;
+}
+
+/* ---------- Back link + alert ------------------------------------------------------- */
+.cl-back {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--silver-dim);
+    font-size: .84rem;
+    border-bottom: none;
+}
+
+.cl-back:hover {
+    color: var(--gold-bright);
+    text-decoration: underline;
+}
+
+.cl-alert {
+    margin: 0 0 18px;
+    border: 1px solid var(--line);
+    border-left: 3px solid #c0524a;
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
+}
+
+/* ---------- Form card --------------------------------------------------------------- */
+.cl-card {
+    margin: 6px 0 0;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
+}
+
+.cl-field + .cl-field,
+.cl-row {
+    margin-top: 18px;
+}
+
+.cl-label {
+    display: block;
+    margin-bottom: .5rem;
+    color: var(--silver-dim);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+/* Boxed inputs, matching the create-team form. */
+.cl-input,
+.cl-textarea,
+.cl-select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 .85rem;
+    background: #08120d;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .9rem;
+    transition: border-color .15s ease;
+}
+
+.cl-input,
+.cl-select {
+    height: 44px;
+}
+
+.cl-textarea {
+    padding: .7rem .85rem;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 84px;
+}
+
+.cl-input:focus,
+.cl-textarea:focus,
+.cl-select:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.cl-input::placeholder,
+.cl-textarea::placeholder {
+    color: #5c6e64;
+}
+
+/* Native select with a custom caret so it reads like the other inputs. */
+.cl-select-wrap {
+    position: relative;
+}
+
+.cl-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2.2rem;
+    cursor: pointer;
+}
+
+.cl-select-caret {
+    position: absolute;
+    top: 50%;
+    right: .85rem;
+    transform: translateY(-50%);
+    color: var(--silver-dim);
+    pointer-events: none;
+}
+
+.cl-help {
+    margin: .5rem 0 0;
+    color: var(--silver-dim);
+    font-size: .76rem;
+    line-height: 1.45;
+}
+
+/* Visibility + max members sit side by side on wider screens. */
+.cl-row {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 18px;
+    align-items: start;
+}
+
+.cl-row .cl-field {
+    margin-top: 0;
+}
+
+.cl-submit {
+    width: 100%;
+    margin-top: 24px;
+    padding: .85rem 1rem;
+}
+
+/* ---------- No-team notice ---------------------------------------------------------- */
+.cl-notice {
+    margin-top: 6px;
+    padding: 40px 26px;
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.cl-notice-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+    background: #0c1c13;
+    color: var(--gold);
+}
+
+.cl-notice h2 {
+    margin: 0 0 .5rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.cl-notice p {
+    margin: 0 auto 20px;
+    max-width: 420px;
+    color: var(--silver-dim);
+    font-size: .88rem;
+    line-height: 1.55;
+}
+
+.cl-notice-cta {
+    display: inline-block;
+    width: auto;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+/* ---------- Narrow screens ---------------------------------------------------------- */
+@media (max-width: 620px) {
+    .cl-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .cl-row .cl-field + .cl-field {
+        margin-top: 18px;
+    }
+}

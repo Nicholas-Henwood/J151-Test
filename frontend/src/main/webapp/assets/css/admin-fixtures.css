@@ -1,206 +1,330 @@
 /* ============================================================================
-   TryTons — Fantasy Rugby | Admin Fixture Administration (E2E-09)
-   Vanilla CSS. Shares the palette, type, radii and spacing tokens used by the
-   other admin CRUD screens so this page sits alongside the rest of the admin
-   area. Targets only the markup in admin-fixtures.jsp.
+   TryTons — Admin: Fixture Administration (Green-Gold redesign)
+   Fixtures table with a status filter and per-row status update, beside a
+   create-fixture form. Loads on top of theme.css (palette tokens, fonts,
+   .brand-font, .btn-gold), sidebar.css (shared left nav, including the
+   admin-only Administration section) and catalog.css (main column, header).
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
-
-:root {
-    --navy: #eef3ef;
-    --navy-700: #eef3ef;
-    --teal: #c9a227;
-    --teal-600: #8a6a15;
-    --bg: #0c1712;
-    --surface: #132a1f;
-
-    --ink: #c7d1c9;
-    --ink-muted: #7f9187;
-
-    --danger: #e0847a;
-    --danger-bg: rgba(192, 82, 74, 0.12);
-    --danger-border: #c0524a;
-    --success: #6fcf8e;
-    --success-bg: rgba(21, 128, 61, 0.14);
-    --success-border: #2f6b45;
-
-    --border: #2c4437;
-    --field-bg: #0f2118;
-
-    --radius-card: 12px;
-    --radius-field: 8px;
-
-    --sp-2: 8px;
-    --sp-3: 12px;
-    --sp-4: 16px;
-    --sp-5: 20px;
-    --sp-6: 24px;
-    --sp-8: 32px;
+.afx-page .catalog-main {
+    padding: 32px 40px 48px;
 }
 
-body.admin-fixtures {
-    margin: 0;
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    background: var(--bg);
+.afx-intro {
+    margin: .6rem 0 0;
+    max-width: 640px;
+    color: var(--silver);
+    font-size: .9rem;
+    line-height: 1.6;
 }
 
-#adminFixtures {
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: var(--sp-8) var(--sp-5) var(--sp-8);
+/* ---------- Feedback ---------------------------------------------------------------- */
+.afx-alert {
+    margin: 18px 0 0;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
 }
 
-#adminFixtures h1 {
-    color: var(--navy-700);
-    margin-bottom: var(--sp-2);
+.afx-alert-success { border-left-color: #5fae7a; }
+.afx-alert-error { border-left-color: #c0524a; }
+
+/* ---------- Layout ------------------------------------------------------------------ */
+.afx-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 22px;
+    align-items: start;
+    margin-top: 24px;
 }
 
-#adminFixtures h2 {
-    color: var(--navy);
-    margin-top: 0;
-}
+.afx-col { min-width: 0; }
 
-.page-intro {
-    color: var(--ink-muted);
-    margin-bottom: var(--sp-6);
-}
-
-/* ---------- Feedback ------------------------------------------------------- */
-.success-message,
-.error-message {
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-4);
-    margin: var(--sp-3) 0;
-    font-weight: 500;
-}
-
-.success-message {
-    color: var(--success);
-    background: var(--success-bg);
-    border: 1px solid var(--success-border);
-}
-
-.error-message {
-    color: var(--danger);
-    background: var(--danger-bg);
-    border: 1px solid var(--danger-border);
-}
-
-/* ---------- Sections -------------------------------------------------------- */
-#adminFixtures section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: var(--sp-5);
-    margin-bottom: var(--sp-5);
-}
-
-/* ---------- Fields ----------------------------------------------------------- */
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-    margin-bottom: var(--sp-4);
-}
-
-.field label {
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-#adminFixtures select {
-    padding: var(--sp-3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-field);
-    background: var(--field-bg);
-    font: inherit;
-    color: inherit;
-}
-
-#adminFixtures select:focus {
-    outline: none;
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18);
-}
-
-#fixtureFilterForm {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: end;
-    gap: var(--sp-3);
-}
-
-/* ---------- Table -------------------------------------------------------------- */
-#fixturesTable {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#fixturesTable th,
-#fixturesTable td {
-    text-align: left;
-    padding: var(--sp-2) var(--sp-3);
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-}
-
-#fixturesTable th {
-    color: var(--ink-muted);
-    font-weight: 600;
-}
-
-#fixturesEmptyState {
-    color: var(--ink-muted);
-}
-
-/* ---------- Per-row status update form ------------------------------------------ */
-.statusUpdateForm {
+/* ---------- Section header ----------------------------------------------------------- */
+.afx-section-head {
     display: flex;
     align-items: center;
-    gap: var(--sp-2);
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.afx-section-title {
     margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    white-space: nowrap;
 }
 
-.statusUpdateForm select {
-    padding: var(--sp-2) var(--sp-3);
+.afx-rule-line { flex: 1; height: 1px; background: var(--line); }
+
+.afx-count {
+    color: var(--silver-dim);
+    font-size: .78rem;
+    white-space: nowrap;
 }
 
-/* ---------- Buttons -------------------------------------------------------- */
-#adminFixtures button {
-    background: var(--teal);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-5);
-    font: inherit;
+.afx-empty {
+    margin: 0;
+    padding: 34px 20px;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    text-align: center;
+    color: var(--silver-dim);
+    font-size: .88rem;
+}
+
+/* ---------- Filter row --------------------------------------------------------------- */
+.afx-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.afx-filter-select { width: 200px; }
+
+/* ---------- Shared fields ------------------------------------------------------------ */
+.afx-field { min-width: 0; }
+.afx-field + .afx-field,
+.afx-field + .afx-row-2 { margin-top: 16px; }
+
+.afx-label {
+    display: block;
+    margin-bottom: .45rem;
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.afx-input,
+.afx-select {
+    width: 100%;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 .8rem;
+    background: #0c1c13;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .88rem;
+    transition: border-color .15s ease;
+}
+
+.afx-input:focus,
+.afx-select:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.afx-select-wrap { position: relative; }
+
+.afx-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2rem;
+    cursor: pointer;
+}
+
+.afx-select-sm { height: 34px; font-size: .8rem; padding-right: 1.8rem; }
+
+.afx-select-caret {
+    position: absolute;
+    top: 50%;
+    right: .7rem;
+    transform: translateY(-50%);
+    color: var(--silver-dim);
+    pointer-events: none;
+}
+
+.afx-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.afx-row-2 .afx-field + .afx-field { margin-top: 0; }
+
+/* ---------- Ghost button (filter) ---------------------------------------------------- */
+.afx-ghost {
+    flex-shrink: 0;
+    height: 42px;
+    padding: 0 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: border-color .15s ease, color .15s ease;
 }
 
-#adminFixtures button:hover {
-    background: var(--teal-600);
+.afx-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold-bright);
+    filter: none;
 }
 
-.statusUpdateForm button {
-    padding: var(--sp-2) var(--sp-4);
+/* ---------- Create-fixture panel ----------------------------------------------------- */
+.afx-panel {
+    padding: 20px 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
 }
 
-/* ---------- Narrow screens ---------------------------------------------------- */
-@media (max-width: 720px) {
-    #adminFixtures {
-        padding: var(--sp-6) var(--sp-3) var(--sp-6);
-    }
+.afx-panel-title {
+    margin: 0 0 16px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
 
-    #fixturesTable {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
+.afx-submit {
+    width: 100%;
+    margin-top: 20px;
+    padding: .8rem 1rem;
+}
 
-    #adminFixtures button {
-        width: 100%;
-    }
+/* ---------- Fixtures table ------------------------------------------------------------ */
+.ftbl {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+    overflow: hidden;
+}
+
+.ftbl-scroll { overflow-x: auto; }
+
+.ftbl-head,
+.ftbl-row {
+    display: grid;
+    grid-template-columns: minmax(104px, 1fr) 118px minmax(0, 1fr) minmax(0, 1fr) 92px 104px 196px;
+    align-items: center;
+    gap: 12px;
+    min-width: 820px;
+    padding: 11px 16px;
+}
+
+.ftbl-head {
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, .015);
+}
+
+.ftbl-row {
+    border-top: 1px solid rgba(44, 68, 55, .5);
+    font-size: .84rem;
+    color: var(--silver);
+}
+
+.ftbl-row:first-of-type { border-top: none; }
+
+.ftbl-league {
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ftbl-round {
+    color: var(--silver-dim);
+    white-space: nowrap;
+}
+
+.ftbl-team {
+    color: var(--silver-bright);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ftbl-date {
+    color: var(--silver);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* Status pill, coloured by lifecycle stage. */
+.afx-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: .2rem .55rem;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.afx-pill-upcoming { background: rgba(199, 209, 201, .1); color: var(--silver); }
+.afx-pill-locked,
+.afx-pill-simulating { background: rgba(201, 162, 39, .14); color: var(--gold-bright); }
+.afx-pill-completed,
+.afx-pill-processed { background: rgba(95, 174, 122, .14); color: #8fd0a5; }
+.afx-pill-cancelled { background: rgba(192, 82, 74, .14); color: #e08279; }
+
+/* Per-row update: select + button */
+.afx-update-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.afx-update-select { flex: 1; min-width: 0; }
+
+/* Terminal states (processed / cancelled) have no valid next status. */
+.afx-update-none {
+    color: var(--silver-dim);
+    font-size: .78rem;
+    font-style: italic;
+}
+
+.afx-update-btn {
+    flex-shrink: 0;
+    height: 34px;
+    padding: 0 .8rem;
+    border: 1px solid var(--gold-deep);
+    border-radius: 8px;
+    background: rgba(201, 162, 39, .1);
+    color: var(--gold-bright);
+    font-family: inherit;
+    font-size: .78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+
+.afx-update-btn:hover { background: rgba(201, 162, 39, .2); filter: none; }
+
+/* ---------- Narrow screens ----------------------------------------------------------- */
+/* The two-column layout only leaves room for the full fixtures table on very wide
+   screens; below that, stack the create panel under the table so every column
+   (including "Update status") is visible without horizontal scrolling. */
+@media (max-width: 1500px) {
+    .afx-grid { grid-template-columns: minmax(0, 1fr); }
+    #createFixtureSection { max-width: 520px; }
+}
+
+@media (max-width: 640px) {
+    .afx-page .catalog-main { padding: 24px 16px 32px; }
+    .afx-row-2 { grid-template-columns: 1fr; }
+    .afx-filter { flex-wrap: wrap; }
+    .afx-filter-select { width: 100%; }
+    .afx-ghost { width: 100%; }
 }

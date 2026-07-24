@@ -41,11 +41,15 @@ public class PlayerResource {
     }
 
     @GET
-    public Response listPlayers(@QueryParam("search") String search, @QueryParam("clubId") UUID clubId, @QueryParam("positionId") UUID positionId ) {
+    public Response listPlayers(@QueryParam("search") String search, @QueryParam("clubId") UUID clubId,
+                                @QueryParam("positionId") UUID positionId, @QueryParam("available") Boolean available) {
         List<PlayerResponseDTO> players;
-        if (search != null || clubId != null || positionId != null) {
+        if (Boolean.TRUE.equals(available)) {
+            // Team-selection pool: only players actually available for selection.
+            players = playerService.searchPlayers(search, clubId, positionId, true);
+        } else if (search != null || clubId != null || positionId != null) {
             players = playerService.searchPlayers(search, clubId, positionId);
-        }else{
+        } else {
             players = playerService.getAllPlayers();
         }
         return Response.ok(players).build();

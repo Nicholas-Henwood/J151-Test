@@ -120,6 +120,17 @@ public class LeaderboardServiceImpl implements LeaderboardService{
     }
 
     @Override
+    public List<LeaderboardEntryResponseDTO> getPublicOverallLeaderboard(int limit) {
+        // getOverallLeaderboard does not use the actor id (it reads only the master
+        // leaderboard), so a null actor is safe here and keeps this preview user-less.
+        List<LeaderboardEntryResponseDTO> all = getOverallLeaderboard(null);
+        if (limit > 0 && all.size() > limit) {
+            return new ArrayList<>(all.subList(0, limit));
+        }
+        return all;
+    }
+
+    @Override
     public List<LeaderboardEntryResponseDTO> getLeaderboardForLeague(UUID leagueId, UUID requestingUserId) throws AuthorisationException {
         if (!leagueMembershipDAO.existsActiveByLeagueAndUser(leagueId, requestingUserId)){
             throw new AuthorisationException("FORBIDDEN");

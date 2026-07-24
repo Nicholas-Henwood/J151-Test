@@ -245,6 +245,180 @@
     padding-left: 1.1rem;
 }
 
+/* ---------- Already-has-a-team notice ----------------------------------------------- */
+.ct-notice {
+    margin-top: 8px;
+    padding: 44px 26px;
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.ct-notice-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+    background: #0c1c13;
+    color: var(--gold);
+}
+
+.ct-notice h2 {
+    margin: 0 0 .5rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.ct-notice p {
+    margin: 0 auto 20px;
+    max-width: 420px;
+    color: var(--silver-dim);
+    font-size: .9rem;
+    line-height: 1.55;
+}
+
+.ct-notice-cta {
+    display: inline-block;
+    width: auto;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+/* ---------- Squad requirements helper ----------------------------------------------- */
+.ct-reqs-panel {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(44, 68, 55, .55);
+}
+
+.ct-reqs-title {
+    margin: 0 0 .5rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--silver-bright);
+}
+
+/* One-line status set by create-team.js: what's still needed, or the all-clear. */
+.ct-reqs-summary {
+    margin: 0 0 12px;
+    color: var(--silver-dim);
+    font-size: .78rem;
+    line-height: 1.45;
+}
+
+.ct-reqs-summary:empty {
+    display: none;
+}
+
+.ct-reqs-summary.is-complete {
+    color: #8fd0a5;
+    font-weight: 600;
+}
+
+.ct-reqs-group {
+    margin: 10px 0 4px;
+    color: var(--silver-dim);
+    font-size: .62rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.ct-reqs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ct-req {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 4px 2px;
+    font-size: .82rem;
+}
+
+.ct-req-dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--silver-dim);
+    transition: background .15s ease;
+}
+
+.ct-req-name {
+    flex: 1;
+    min-width: 0;
+    color: var(--silver);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ct-req-tally {
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.ct-req-count {
+    font-weight: 600;
+    color: var(--silver-bright);
+}
+
+.ct-req-range {
+    color: var(--silver-dim);
+}
+
+/* States, driven by create-team.js: below minimum, satisfied, or over maximum. */
+.ct-req.is-under .ct-req-dot { background: #e0a54a; }
+.ct-req.is-ok   .ct-req-dot { background: #5fae7a; }
+.ct-req.is-ok   .ct-req-name { color: var(--silver-bright); }
+.ct-req.is-over .ct-req-dot { background: #c0524a; }
+.ct-req.is-over .ct-req-count { color: #e08279; }
+
+/* ---------- Illegal-pick flash toast ------------------------------------------------ */
+.ct-flash {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    z-index: 60;
+    max-width: min(440px, calc(100vw - 32px));
+    transform: translateX(-50%) translateY(12px);
+    padding: .8rem 1.05rem;
+    border: 1px solid var(--line);
+    border-left: 3px solid #c0524a;
+    border-radius: 11px;
+    background: #0c1c13;
+    color: var(--silver-bright);
+    font-size: .85rem;
+    line-height: 1.4;
+    box-shadow: 0 16px 40px -16px rgba(0, 0, 0, .85);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .22s ease, transform .22s ease;
+}
+
+.ct-flash.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ct-flash { transition: opacity .22s ease; transform: translateX(-50%); }
+    .ct-flash.is-visible { transform: translateX(-50%); }
+}
+
 /* ---------- Narrow screens ----------------------------------------------------------- */
 @media (max-width: 900px) {
     .ct-summary {

@@ -31,7 +31,10 @@ public class AuthServlet extends AbstractServlet {
             case "/logout" -> {
                 authRestClient.logout();
                 clearAuthSession(request);
-                response.sendRedirect(request.getContextPath() + "/login");
+                // Signing out returns to the public landing page rather than the login
+                // form: the session is gone, so the app root shows the marketing page
+                // with its own Log in / Sign up entry points.
+                response.sendRedirect(request.getContextPath() + "/");
             }
             default -> response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -91,7 +94,8 @@ public class AuthServlet extends AbstractServlet {
     private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         authRestClient.logout();
         clearAuthSession(request);
-        response.sendRedirect(request.getContextPath() + "/login");
+        // Same destination as the GET route: the public landing page.
+        response.sendRedirect(request.getContextPath() + "/");
     }
 
     @Override

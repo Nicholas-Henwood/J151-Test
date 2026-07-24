@@ -37,6 +37,7 @@ public class ClubServlet extends AbstractServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(!requireAuthenticated(request, response)) return;
         String servletPath = request.getServletPath();
         String submit = request.getParameter("submit");
         if (submit == null) {
@@ -160,6 +161,7 @@ public class ClubServlet extends AbstractServlet {
         ClubRequest clubRequest = buildClubRequest(request);
         Optional<ClubResponse> created = clubRestClient.createClub(clubRequest);
         if (created.isPresent()) {
+            toastSuccess(request, "Club created");
             return reloadClubs(request);
         }
         request.setAttribute("error", "Unable to create club");
@@ -175,6 +177,7 @@ public class ClubServlet extends AbstractServlet {
         ClubRequest clubRequest = buildClubRequest(request);
         Optional<ClubResponse> updated = clubRestClient.updateClub(clubId.get(), clubRequest);
         if (updated.isPresent()) {
+            toastSuccess(request, "Club updated");
             return reloadClubs(request);
         }
         request.setAttribute("error", "Unable to update club");

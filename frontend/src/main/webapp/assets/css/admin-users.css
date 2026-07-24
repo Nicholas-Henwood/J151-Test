@@ -1,194 +1,258 @@
 /* ============================================================================
-   TryTons — Fantasy Rugby | Admin User Management
-   Vanilla CSS. Shares the palette, type, radii and spacing tokens used by the
-   other admin CRUD screens so this page sits alongside the rest of the admin
-   area. Targets only the markup in admin-users.jsp.
+   TryTons — Admin: User Management (Green-Gold redesign)
+   Search row and a users table with per-row activate/deactivate. Loads on top
+   of theme.css (palette tokens, fonts, .brand-font, .btn-gold), sidebar.css
+   (shared left nav, including the admin-only Administration section) and
+   catalog.css (main column, page header).
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
-
-:root {
-    --navy: #eef3ef;
-    --navy-700: #eef3ef;
-    --teal: #c9a227;
-    --teal-600: #8a6a15;
-    --bg: #0c1712;
-    --surface: #132a1f;
-
-    --ink: #c7d1c9;
-    --ink-muted: #7f9187;
-
-    --danger: #e0847a;
-    --danger-bg: rgba(192, 82, 74, 0.12);
-    --danger-border: #c0524a;
-    --success: #6fcf8e;
-    --success-bg: rgba(21, 128, 61, 0.14);
-    --success-border: #2f6b45;
-
-    --border: #2c4437;
-    --field-bg: #0f2118;
-
-    --radius-card: 12px;
-    --radius-field: 8px;
-
-    --sp-2: 8px;
-    --sp-3: 12px;
-    --sp-4: 16px;
-    --sp-5: 20px;
-    --sp-6: 24px;
-    --sp-8: 32px;
+.ausr-page .catalog-main {
+    padding: 32px 40px 48px;
 }
 
-body.admin-users {
-    margin: 0;
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    background: var(--bg);
+/* ---------- Feedback ---------------------------------------------------------------- */
+.ausr-alert {
+    margin: 0 0 18px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
 }
 
-#adminUsers {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: var(--sp-8) var(--sp-5) var(--sp-8);
-}
+.ausr-alert-success { border-left-color: #5fae7a; }
+.ausr-alert-error { border-left-color: #c0524a; }
 
-#adminUsers h1 {
-    color: var(--navy-700);
-    margin-bottom: var(--sp-6);
-}
-
-#adminUsers h2 {
-    color: var(--navy);
-    margin-top: 0;
-}
-
-/* ---------- Feedback ------------------------------------------------------- */
-.success-message,
-.error-message {
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-4);
-    margin: var(--sp-3) 0;
-    font-weight: 500;
-}
-
-.success-message {
-    color: var(--success);
-    background: var(--success-bg);
-    border: 1px solid var(--success-border);
-}
-
-.error-message {
-    color: var(--danger);
-    background: var(--danger-bg);
-    border: 1px solid var(--danger-border);
-}
-
-/* ---------- Sections -------------------------------------------------------- */
-#adminUsers section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: var(--sp-5);
-    margin-bottom: var(--sp-5);
-}
-
-/* ---------- Search form ------------------------------------------------------ */
-.field {
+/* ---------- Search ------------------------------------------------------------------- */
+.ausr-search-row {
     display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-    margin-bottom: var(--sp-4);
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
 }
 
-.field label {
-    font-weight: 600;
-    font-size: 0.9rem;
+.ausr-search {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex: 1;
+    max-width: 460px;
+    height: 42px;
+    box-sizing: border-box;
+    padding: 0 .85rem;
+    background: #0c1c13;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--silver-dim);
+    transition: border-color .15s ease;
 }
 
-#adminUsers input[type="text"] {
-    padding: var(--sp-3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-field);
-    background: var(--field-bg);
-    font: inherit;
-    color: inherit;
+.ausr-search:focus-within {
+    border-color: var(--gold);
+    color: var(--gold);
 }
 
-#adminUsers input:focus {
-    outline: none;
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18);
-}
-
-#adminUsers button {
-    background: var(--teal);
-    color: #141f0e;
-    border: none;
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-5);
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s ease;
-}
-
-#adminUsers button:hover {
-    background: var(--teal-600);
-}
-
-/* ---------- Users table ------------------------------------------------------ */
-#usersEmptyState {
-    color: var(--ink-muted);
-}
-
-#usersTable {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#usersTable th,
-#usersTable td {
-    text-align: left;
-    padding: var(--sp-2) var(--sp-3);
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-}
-
-#usersTable th {
-    color: var(--ink-muted);
-    font-weight: 600;
-}
-
-#usersTable form {
-    margin: 0;
-}
-
-#usersTable button {
+.ausr-search input {
+    flex: 1;
+    min-width: 0;
     background: transparent;
-    color: var(--teal);
-    border: 1px solid var(--teal);
-    border-radius: var(--radius-field);
-    padding: var(--sp-2) var(--sp-3);
-    font: inherit;
-    font-size: 0.85rem;
-    font-weight: 700;
+    border: none;
+    outline: none;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .88rem;
+}
+
+.ausr-search input::placeholder { color: #5c6e64; }
+
+.ausr-search-btn {
+    flex-shrink: 0;
+    height: 42px;
+    padding: 0 1.3rem;
+}
+
+/* ---------- Section header ------------------------------------------------------------ */
+.ausr-section-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.ausr-section-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
+    white-space: nowrap;
+}
+
+.ausr-rule-line { flex: 1; height: 1px; background: var(--line); }
+
+.ausr-count {
+    color: var(--silver-dim);
+    font-size: .78rem;
+    white-space: nowrap;
+}
+
+.ausr-empty {
+    margin: 0;
+    padding: 34px 20px;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    text-align: center;
+    color: var(--silver-dim);
+    font-size: .88rem;
+}
+
+/* ---------- Users table ----------------------------------------------------------------- */
+.utbl {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+    overflow: hidden;
+}
+
+.utbl-scroll { overflow-x: auto; }
+
+.utbl-head,
+.utbl-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr) 150px 108px 128px;
+    align-items: center;
+    gap: 12px;
+    min-width: 720px;
+    padding: 12px 18px;
+}
+
+.utbl-head {
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, .015);
+}
+
+.utbl-row {
+    border-top: 1px solid rgba(44, 68, 55, .5);
+    font-size: .86rem;
+    transition: background .15s ease;
+}
+
+.utbl-row:first-of-type { border-top: none; }
+.utbl-row:hover { background: rgba(201, 162, 39, .05); }
+
+/* Email cell: initial tile + address */
+.utbl-c-email {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+}
+
+.utbl-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #0c1c13;
+    border: 1px solid var(--line);
+    color: var(--gold-bright);
+    font-size: .74rem;
+    font-weight: 600;
+}
+
+.utbl-email {
+    font-weight: 600;
+    color: var(--silver-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.utbl-username {
+    color: var(--silver);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Role pill */
+.utbl-role {
+    display: inline-block;
+    padding: .18rem .55rem;
+    border-radius: 999px;
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    white-space: nowrap;
+}
+
+.utbl-role.is-admin { background: rgba(201, 162, 39, .14); color: var(--gold-bright); }
+.utbl-role.is-user { background: rgba(199, 209, 201, .08); color: var(--silver); }
+
+/* Status pill */
+.utbl-status {
+    display: inline-block;
+    padding: .18rem .55rem;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 600;
+}
+
+.utbl-status.is-active { background: rgba(95, 174, 122, .16); color: #8fd0a5; }
+.utbl-status.is-inactive { background: rgba(255, 255, 255, .04); color: var(--silver-dim); }
+
+/* ---------- Activate / deactivate toggle -------------------------------------------------- */
+.utbl-action { text-align: right; }
+
+.utbl-toggle {
+    width: 100%;
+    height: 32px;
+    padding: 0 .7rem;
+    border-radius: 8px;
+    background: transparent;
+    font-family: inherit;
+    font-size: .78rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background .15s ease, color .15s ease;
 }
 
-#usersTable button:hover {
-    background: var(--teal);
-    color: #141f0e;
+.utbl-toggle.is-deactivate {
+    border: 1px solid rgba(192, 82, 74, .55);
+    color: #e08279;
 }
 
+.utbl-toggle.is-deactivate:hover {
+    background: rgba(192, 82, 74, .14);
+    color: #e08279;
+    filter: none;
+}
+
+.utbl-toggle.is-activate {
+    border: 1px solid var(--gold-deep);
+    color: var(--gold-bright);
+}
+
+.utbl-toggle.is-activate:hover {
+    background: rgba(201, 162, 39, .14);
+    color: var(--gold-bright);
+    filter: none;
+}
+
+/* ---------- Narrow screens ------------------------------------------------------------------ */
 @media (max-width: 640px) {
-    #adminUsers {
-        padding: var(--sp-6) var(--sp-3) var(--sp-6);
-    }
+    .ausr-page .catalog-main { padding: 24px 16px 32px; }
 
-    #usersTable {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
+    .ausr-search-row { flex-wrap: wrap; }
+    .ausr-search { max-width: none; }
+    .ausr-search-btn { width: 100%; }
 }

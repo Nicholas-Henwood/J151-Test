@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import za.ac.vzap.trytons.frontend.client.round.RoundRestClient;
 import za.ac.vzap.trytons.frontend.client.fantasyteam.FantasyTeamRestClient;
 import za.ac.vzap.trytons.frontend.servlet.shared.AbstractServlet;
@@ -27,6 +28,8 @@ import za.ac.vzap.trytons.frontend.client.results.MatchResultResponse;
 import za.ac.vzap.trytons.frontend.client.results.MatchTeamScoreResponse;
 import za.ac.vzap.trytons.frontend.client.results.MatchTeamScoreRestClient;
 import za.ac.vzap.trytons.frontend.client.results.PlayerStatisticsResponse;
+import za.ac.vzap.trytons.frontend.client.catalog.PlayerRestClient;
+import za.ac.vzap.trytons.frontend.client.catalog.PlayerResponse;
 import za.ac.vzap.trytons.frontend.client.scoring.FantasyPointBreakdownResponse;
 import za.ac.vzap.trytons.frontend.client.scoring.FantasyPointsResponse;
 import za.ac.vzap.trytons.frontend.client.scoring.FantasyPointsRestClient;
@@ -45,9 +48,12 @@ public class FixtureServlet extends AbstractServlet {
     private RoundRestClient roundRestClient;
     @Inject
     private FantasyTeamRestClient fantasyTeamRestClient;
+    @Inject
+    private PlayerRestClient playerRestClient;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(!requireAuthenticated(request, response)) return;
         String submit = request.getParameter("submit");
         if (submit == null) {
             submit = "";
@@ -86,30 +92,21 @@ public class FixtureServlet extends AbstractServlet {
         }
     }
 
-    /**
-     * Supplies what the fixtures list needs beyond the raw DTOs.
-     *
-     * FixtureResponse carries only a roundId and no score, so:
-     *  - round numbers are resolved from the rounds list, letting the page group by
-     *    "Round n" rather than falling back to grouping by date;
-     *  - scores are fetched per COMPLETED fixture. The list endpoint does not include
-     *    them and there is no bulk results call, so this is one request per completed
-     *    fixture — fine at this scale, worth revisiting if a season's worth is listed
-     *    at once;
-     *  - the caller's own team id lets the page highlight their name in a matchup.
-     */
+
     private void decorateFixtureList(HttpServletRequest request, List<FixtureResponse> fixtures) {
-        Map<String, Integer> roundNumbers = new HashMap<>();
+
+        Map<UUID, Integer> roundNumbers = new HashMap<>();
         roundRestClient.listRounds().orElse(List.of()).forEach(
-                round -> roundNumbers.put(String.valueOf(round.getRoundId()), round.getRoundNumber()));
+                round -> parseUuid(round.getRoundId())
+                        .ifPresent(roundId -> roundNumbers.put(roundId, round.getRoundNumber())));
         request.setAttribute("roundNumbersById", roundNumbers);
 
-        Map<String, MatchResultResponse> scores = new HashMap<>();
+        Map<UUID, MatchResultResponse> scores = new HashMap<>();
         for (FixtureResponse fixture : fixtures) {
             if (fixture == null || fixture.getFixtureId() == null) continue;
             if (!"COMPLETED".equalsIgnoreCase(fixture.getFixtureStatus())) continue;
             matchResultRestClient.getMatchResult(fixture.getFixtureId().toString())
-                    .ifPresent(result -> scores.put(fixture.getFixtureId().toString(), result));
+                    .ifPresent(result -> scores.put(fixture.getFixtureId(), result));
         }
         request.setAttribute("scoresByFixtureId", scores);
 
@@ -120,13 +117,11 @@ public class FixtureServlet extends AbstractServlet {
         request.setAttribute("fixtureGroups", groupByRound(fixtures, roundNumbers));
         request.setAttribute("featuredFixture", pickFeatured(fixtures));
 
-        // Dates and times are formatted here rather than in the JSP: fixtureDate is a
-        // LocalDate and fixtureTime a LocalTime, and fmt:formatDate takes java.util.Date.
-        Map<String, String> dateLabels = new HashMap<>();
-        Map<String, String> timeLabels = new HashMap<>();
+        Map<UUID, String> dateLabels = new HashMap<>();
+        Map<UUID, String> timeLabels = new HashMap<>();
         for (FixtureResponse fixture : fixtures) {
             if (fixture == null || fixture.getFixtureId() == null) continue;
-            String key = fixture.getFixtureId().toString();
+            UUID key = fixture.getFixtureId();
             if (fixture.getFixtureDate() != null) {
                 dateLabels.put(key, fixture.getFixtureDate().format(FIXTURE_DATE));
             }
@@ -145,14 +140,14 @@ public class FixtureServlet extends AbstractServlet {
 
     /** Fixtures grouped under a "Round n" label, highest round first. */
     private Map<String, List<FixtureResponse>> groupByRound(List<FixtureResponse> fixtures,
-                                                            Map<String, Integer> roundNumbers) {
+                                                            Map<UUID, Integer> roundNumbers) {
         Map<Integer, List<FixtureResponse>> byRound = new TreeMap<>(Comparator.reverseOrder());
         for (FixtureResponse fixture : fixtures) {
             if (fixture == null) continue;
             // Unknown rounds sort last under their own heading rather than being dropped.
             Integer number = fixture.getRoundId() == null
                     ? null
-                    : roundNumbers.get(fixture.getRoundId().toString());
+                    : roundNumbers.get(fixture.getRoundId());
             byRound.computeIfAbsent(number == null ? Integer.MIN_VALUE : number, key -> new ArrayList<>())
                     .add(fixture);
         }
@@ -196,7 +191,21 @@ public class FixtureServlet extends AbstractServlet {
         teamScores.ifPresent(scores -> request.setAttribute("teamScores", scores));
 
         Optional<List<PlayerStatisticsResponse>> playerStats = matchResultRestClient.listResultStatistics(resultId);
-        playerStats.ifPresent(stats -> request.setAttribute("playerStats", stats));
+        playerStats.ifPresent(stats -> {
+            request.setAttribute("playerStats", stats);
+            request.setAttribute("playerNamesById", buildPlayerNameLookup());
+        });
+    }
+
+    // Resolves player ids to names for the read-back table, so the page never shows a raw
+    // UUID. Keyed by the id object itself (not its string form): the JSP indexes with
+    // ${playerNamesById[ps.playerId]}, and both PlayerResponse and PlayerStatisticsResponse
+    // carry UUID player ids, so a UUID key matches on Map.get where a String key would not.
+    private Map<UUID, String> buildPlayerNameLookup() {
+        Map<UUID, String> names = new HashMap<>();
+        playerRestClient.listPlayers(null, null, null).orElse(List.of())
+                .forEach(player -> names.put(player.getPlayerId(), player.getPlayerName()));
+        return names;
     }
 
     // Optional drill-down: when the page is reloaded with ?statId=<uuid> (a link next to a row in

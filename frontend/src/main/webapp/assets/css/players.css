@@ -38,3 +38,47 @@
         display: none;
     }
 }
+
+/* ---------- Admin: live-feed refresh ------------------------------------------- */
+/* Sits on the right of the catalog header, under the player count. */
+.catalog-header-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.feed-refresh {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    margin: 0;
+}
+
+.feed-refresh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.feed-refresh-hint {
+    color: var(--silver-dim);
+    font-size: .72rem;
+}
+
+@media (max-width: 640px) {
+    .catalog-header-side {
+        align-items: flex-start;
+    }
+
+    .feed-refresh,
+    .feed-refresh-btn {
+        width: 100%;
+    }
+
+    .feed-refresh-btn {
+        justify-content: center;
+    }
+}

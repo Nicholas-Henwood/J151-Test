@@ -108,4 +108,6 @@
         </c:otherwise>
     </c:choose>
 </nav>
+<%-- System-wide success/error/info feedback host (same one the sidebar layout uses). --%>
+<%@ include file="/WEB-INF/jspf/toast.jspf" %>
 <script src="${pageContext.request.contextPath}/assets/js/page-transitions.js"></script>

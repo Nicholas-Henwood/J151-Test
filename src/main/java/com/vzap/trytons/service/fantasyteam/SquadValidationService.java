@@ -7,5 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SquadValidationService {
-    SquadValidationResultDTO  validateSquad(List<UUID> proposedPlayerIds);
+    SquadValidationResultDTO validateSquad(List<UUID> proposedPlayerIds);
+    SquadValidationResultDTO validateSquad(List<UUID> proposedPlayerIds, List<UUID> playersRequiringAvailabilityCheck);
 }

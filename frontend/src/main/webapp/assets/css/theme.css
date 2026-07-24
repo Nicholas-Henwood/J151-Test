@@ -1,5 +1,5 @@
-/* ============================================================================
-   TryTons — Bootstrap 5 theme overrides
+﻿/* ============================================================================
+   TryTons â€” Bootstrap 5 theme overrides
    Shared across every Bootstrap-based page. Dark green + gold + silver
    "premium sports crest" palette (Green-Gold design, per
    design_handoff_login_redesign/README.md).
@@ -50,7 +50,7 @@ body.page-fade-out {
 }
 
 /* ============================================================================
-   Baseline fallback for pages with no bespoke CSS of their own yet — makes
+   Baseline fallback for pages with no bespoke CSS of their own yet â€” makes
    raw, unclassed form controls and tables legible against the dark
    background. Any page-specific CSS or Bootstrap component class overrides
    these automatically (plain element selectors lose to classes/ids on

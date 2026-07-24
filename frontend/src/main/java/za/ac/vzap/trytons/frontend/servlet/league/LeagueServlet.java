@@ -137,6 +137,7 @@ public class LeagueServlet extends AbstractServlet {
             case "league/create" -> {
                 Optional<LeagueResponse> created = leagueRestClient.createLeague(buildLeagueRequest(request));
                 if (created.isPresent()) {
+                    flashSuccess(request, "League created");
                     response.sendRedirect(request.getContextPath() + "/league?leagueId=" + created.get().getLeagueId());
                     return;
                 }
@@ -150,6 +151,7 @@ public class LeagueServlet extends AbstractServlet {
                         request.getParameter("leagueCode"));
                 Optional<JoinLeagueResponse> joined = leagueRestClient.joinLeague(joinRequest);
                 if (joined.isPresent()) {
+                    flashSuccess(request, "Joined league");
                     response.sendRedirect(request.getContextPath() + "/league?leagueId=" + joined.get().getLeagueId());
                     return;
                 }
@@ -167,6 +169,7 @@ public class LeagueServlet extends AbstractServlet {
                     removed = apiCallStatus.isSuccess();
                 }
                 if (removed) {
+                    flashSuccess(request, "Member removed");
                     response.sendRedirect(request.getContextPath() + "/league/members?leagueId=" + leagueId);
                     return;
                 }

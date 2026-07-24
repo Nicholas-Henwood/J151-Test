@@ -1,7 +1,9 @@
 package com.vzap.trytons.service.history;
 
 import com.vzap.trytons.dao.fantasyteam.FantasyTeamDAO;
+import com.vzap.trytons.dao.fixture.FantasyRoundDAO;
 import com.vzap.trytons.dao.fixture.FixtureDAO;
+import com.vzap.trytons.dao.leaderboard.LeaderboardDAO;
 import com.vzap.trytons.dao.results.MatchResultDAO;
 import com.vzap.trytons.dao.results.MatchTeamScoreDAO;
 import com.vzap.trytons.dto.history.UserPointsHistoryResponseDTO;
@@ -10,7 +12,9 @@ import com.vzap.trytons.enums.MatchTeamSide;
 import com.vzap.trytons.exceptions.AuthorisationException;
 import com.vzap.trytons.exceptions.ResourceNotFoundException;
 import com.vzap.trytons.model.fantasyteam.FantasyTeam;
+import com.vzap.trytons.model.fixture.FantasyRound;
 import com.vzap.trytons.model.fixture.Fixture;
+import com.vzap.trytons.model.leaderboard.Ranking;
 import com.vzap.trytons.model.results.MatchResult;
 import com.vzap.trytons.model.results.MatchTeamScore;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,6 +36,12 @@ public class UserHistoryServiceImpl implements UserHistoryService {
     @Inject
     private MatchTeamScoreDAO matchTeamScoreDAO;
 
+    @Inject
+    private LeaderboardDAO leaderboardDAO;
+
+    @Inject
+    private FantasyRoundDAO fantasyRoundDAO;
+
     @Override
     public UserPointsHistoryResponseDTO getUserPointsHistory(UUID actorUserId) {
 
@@ -46,8 +56,38 @@ public class UserHistoryServiceImpl implements UserHistoryService {
         return UserPointsHistoryResponseDTO.builder()
                 .totals(totals)
                 .rounds(rounds)
-                .ranking(null)
+                .ranking(resolveMasterRanking(fantasyTeam))
                 .build();
+    }
+
+    private Integer resolveMasterRanking(FantasyTeam fantasyTeam) {
+        String season = currentSeason();
+        if (season == null) {
+            return null;
+        }
+        return leaderboardDAO.getMasterLeaderboard(season)
+                .flatMap(master -> leaderboardDAO.getRankingByTeamId(fantasyTeam.getTeamId(), master.getLeaderboardId()))
+                .map(Ranking::getCurrentRanking)
+                .orElse(null);
+    }
+
+
+    private String currentSeason() {
+        Optional<FantasyRound> openRound = fantasyRoundDAO.getCurrentOpenRound();
+        if (openRound.isPresent()) {
+            return openRound.get().getSeason();
+        }
+
+        FantasyRound latest = null;
+        for (FantasyRound round : fantasyRoundDAO.getAllRounds()) {
+            if (round == null || round.getOpenDate() == null) {
+                continue;
+            }
+            if (latest == null || round.getOpenDate().isAfter(latest.getOpenDate())) {
+                latest = round;
+            }
+        }
+        return latest == null ? null : latest.getSeason();
     }
 
     @Override

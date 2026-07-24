@@ -309,6 +309,9 @@
 }
 
 .pl-rating-fill {
+    /* Inline <span> by default, so width/height are ignored and the bar looks
+       empty — make it a block so the inline width:{n}% actually renders. */
+    display: block;
     height: 100%;
     border-radius: 4px;
     background: linear-gradient(90deg, var(--gold-deep), var(--gold-bright));

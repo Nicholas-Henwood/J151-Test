@@ -5,7 +5,9 @@ import com.vzap.trytons.dto.fantasyteam.FantasyTeamRequestDTO;
 import com.vzap.trytons.dto.fantasyteam.FantasyTeamResponseDTO;
 import com.vzap.trytons.dto.fantasyteam.ViewOpponentTeamDTO;
 import com.vzap.trytons.dto.fantasyteam.ViewOwnTeamDTO;
+import com.vzap.trytons.enums.UserRole;
 import com.vzap.trytons.exceptions.AuthenticationException;
+import com.vzap.trytons.exceptions.AuthorisationException;
 import com.vzap.trytons.filter.AuthFilter;
 import com.vzap.trytons.security.AuthPrincipal;
 import com.vzap.trytons.service.fantasyteam.FantasyTeamService;
@@ -33,15 +35,19 @@ import java.util.UUID;
 @Produces(MediaType.APPLICATION_JSON)
 
 public class FantasyTeamResource {
+
     @Inject
     private FantasyTeamService fantasyTeamService;
 
     @POST
     public Response createTeam(@Valid FantasyTeamRequestDTO request, @Context ContainerRequestContext requestContext, @Context UriInfo uriInfo) {
 
-        UUID userId = currentUserId(requestContext);
+        AuthPrincipal principal = currentPrincipal(requestContext);
+        if (principal.getRole() == UserRole.ADMINISTRATOR) {
+            throw new AuthorisationException("Administrators cannot create a fantasy team.");
+        }
 
-        FantasyTeamResponseDTO created = fantasyTeamService.createTeam(userId, request);
+        FantasyTeamResponseDTO created = fantasyTeamService.createTeam(principal.getUserId(), request);
 
         URI location = uriInfo
                 .getAbsolutePathBuilder()
@@ -52,6 +58,16 @@ public class FantasyTeamResource {
                 .created(location)
                 .entity(created)
                 .build();
+    }
+
+    @GET
+    @Path("/mine")
+    public Response getOwnTeam(@Context ContainerRequestContext requestContext) {
+        FantasyTeamResponseDTO team = fantasyTeamService.getOwnTeam(currentUserId(requestContext));
+        if (team == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(team).build();
     }
 
     @GET
@@ -91,7 +107,10 @@ public class FantasyTeamResource {
 
     private UUID currentUserId(
             ContainerRequestContext requestContext) {
+        return currentPrincipal(requestContext).getUserId();
+    }
 
+    private AuthPrincipal currentPrincipal(ContainerRequestContext requestContext) {
         Object currentUser = requestContext.getProperty(AuthFilter.CURRENT_USER_PROPERTY);
 
         if (!(currentUser instanceof AuthPrincipal principal) || principal.getUserId() == null) {
@@ -99,6 +118,6 @@ public class FantasyTeamResource {
             throw new AuthenticationException("Authentication required.");
         }
 
-        return principal.getUserId();
+        return principal;
     }
 }

@@ -183,9 +183,9 @@ public class MatchResultDAOImpl extends BaseDAO implements MatchResultDAO {
             return Optional.empty();
         }
 
-        String query = MATCH_RESULT_SELECT + "WHERE mr.fixtureId = ?"+
-                "AND mr.isCurrent = TRUE"+
-                "ORDER BY mr.simulation_run_number DESC"+
+        String query = MATCH_RESULT_SELECT + "WHERE mr.fixtureId = ? "+
+                "AND mr.isCurrent = TRUE "+
+                "ORDER BY mr.simulation_run_number DESC "+
                 "LIMIT 1";
 
         try (Connection connection = getConnection();
@@ -221,7 +221,7 @@ public class MatchResultDAOImpl extends BaseDAO implements MatchResultDAO {
             return results;
         }
 
-        String query = MATCH_RESULT_SELECT + "WHERE mr.fixtureId = ?"+
+        String query = MATCH_RESULT_SELECT + "WHERE mr.fixtureId = ? "+
                 "ORDER BY mr.simulation_run_number ASC";
 
         try (Connection connection = getConnection();
@@ -254,8 +254,8 @@ public class MatchResultDAOImpl extends BaseDAO implements MatchResultDAO {
         }
 
         String query =
-                "SELECT MAX(simulation_run_number)"+
-                "FROM matchResult"+
+                "SELECT MAX(simulation_run_number) "+
+                "FROM matchResult "+
                 "WHERE fixtureId = ?";
 
 
@@ -293,9 +293,9 @@ public class MatchResultDAOImpl extends BaseDAO implements MatchResultDAO {
             throw new DataAccessException("Fixture ID is required.", null);
         }
 
-        String query = "UPDATE matchResult"+
-                "SET isCurrent = FALSE"+
-                "WHERE fixtureId = ?"+
+        String query = "UPDATE matchResult "+
+                "SET isCurrent = FALSE "+
+                "WHERE fixtureId = ? "+
                 "AND isCurrent = TRUE";
 
 

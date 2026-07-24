@@ -1,186 +1,269 @@
 /* ============================================================================
-   TryTons — Fantasy Rugby | Admin System Reports
-   Vanilla CSS. Shares the palette, type, radii and spacing tokens used by the
-   other admin CRUD screens so this page sits alongside the rest of the admin
-   area. Targets only the markup in admin-reports.jsp.
+   TryTons — Admin: System Reports (Green-Gold redesign)
+   Generate-report form beside a generated-reports table, then a full-width
+   system-activity log table. Loads on top of theme.css (palette tokens,
+   fonts, .brand-font, .btn-gold), sidebar.css (shared left nav, including the
+   admin-only Administration section) and catalog.css (main column, header).
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
-
-:root {
-    --navy: #eef3ef;
-    --navy-700: #eef3ef;
-    --teal: #c9a227;
-    --teal-600: #8a6a15;
-    --bg: #0c1712;
-    --surface: #132a1f;
-
-    --ink: #c7d1c9;
-    --ink-muted: #7f9187;
-
-    --danger: #e0847a;
-    --danger-bg: rgba(192, 82, 74, 0.12);
-    --danger-border: #c0524a;
-    --success: #6fcf8e;
-    --success-bg: rgba(21, 128, 61, 0.14);
-    --success-border: #2f6b45;
-
-    --border: #2c4437;
-    --field-bg: #0f2118;
-
-    --radius-card: 12px;
-    --radius-field: 8px;
-
-    --sp-2: 8px;
-    --sp-3: 12px;
-    --sp-4: 16px;
-    --sp-5: 20px;
-    --sp-6: 24px;
-    --sp-8: 32px;
+.arep-page .catalog-main {
+    padding: 32px 40px 48px;
 }
 
-body.admin-reports {
-    margin: 0;
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    background: var(--bg);
+/* ---------- Feedback ---------------------------------------------------------------- */
+.arep-alert {
+    margin: 0 0 18px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: .7rem .95rem;
+    color: var(--silver-bright);
+    font-size: .85rem;
 }
 
-#adminReports {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: var(--sp-8) var(--sp-5) var(--sp-8);
-}
+.arep-alert-success { border-left-color: #5fae7a; }
+.arep-alert-error { border-left-color: #c0524a; }
 
-#adminReports h1 {
-    color: var(--navy-700);
-    margin-bottom: var(--sp-6);
-}
-
-#adminReports h2 {
-    color: var(--navy);
-    margin-top: 0;
-}
-
-/* ---------- Feedback ------------------------------------------------------- */
-.success-message,
-.error-message {
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-4);
-    margin: var(--sp-3) 0;
-    font-weight: 500;
-}
-
-.success-message {
-    color: var(--success);
-    background: var(--success-bg);
-    border: 1px solid var(--success-border);
-}
-
-.error-message {
-    color: var(--danger);
-    background: var(--danger-bg);
-    border: 1px solid var(--danger-border);
-}
-
-/* ---------- Sections -------------------------------------------------------- */
-#adminReports section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    padding: var(--sp-5);
-    margin-bottom: var(--sp-5);
-}
-
-/* ---------- Form fields ------------------------------------------------------ */
-.field {
+/* ---------- Section header ----------------------------------------------------------- */
+.arep-section-head {
     display: flex;
-    flex-direction: column;
-    gap: var(--sp-2);
-    margin-bottom: var(--sp-4);
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
 }
 
-.field label {
+.arep-section-title {
+    margin: 0;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
     font-weight: 600;
-    font-size: 0.9rem;
+    color: var(--silver-bright);
+    white-space: nowrap;
 }
 
-#adminReports input[type="text"],
-#adminReports select,
-#adminReports textarea {
-    padding: var(--sp-3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-field);
-    background: var(--field-bg);
-    font: inherit;
-    color: inherit;
+.arep-rule-line { flex: 1; height: 1px; background: var(--line); }
+
+.arep-count {
+    color: var(--silver-dim);
+    font-size: .78rem;
+    white-space: nowrap;
 }
 
-#adminReports textarea {
-    resize: vertical;
-    min-height: 5rem;
+.arep-empty {
+    margin: 0;
+    padding: 34px 20px;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    text-align: center;
+    color: var(--silver-dim);
+    font-size: .88rem;
 }
 
-#adminReports input:focus,
-#adminReports select:focus,
-#adminReports textarea:focus {
-    outline: none;
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18);
+/* ---------- Layout ------------------------------------------------------------------ */
+.arep-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 22px;
+    align-items: start;
 }
 
-#adminReports small {
-    color: var(--ink-muted);
-    font-size: 0.8rem;
+#systemLogs { margin-top: 30px; }
+
+/* ---------- Generate-report panel ---------------------------------------------------- */
+.arep-panel {
+    padding: 20px 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #091810;
 }
 
-#adminReports button {
-    background: var(--teal);
-    color: #141f0e;
-    border: none;
-    border-radius: var(--radius-field);
-    padding: var(--sp-3) var(--sp-5);
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s ease;
+.arep-panel-title {
+    margin: 0 0 16px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--silver-bright);
 }
 
-#adminReports button:hover {
-    background: var(--teal-600);
+.arep-field + .arep-field { margin-top: 16px; }
+
+.arep-label {
+    display: block;
+    margin-bottom: .45rem;
+    color: var(--silver-dim);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
 }
 
-/* ---------- Tables --------------------------------------------------------- */
-#reportsTable,
-#logsTable {
-    border-collapse: collapse;
+.arep-input,
+.arep-select,
+.arep-textarea {
     width: 100%;
+    box-sizing: border-box;
+    padding: 0 .8rem;
+    background: #0c1c13;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--silver-bright);
+    font-family: inherit;
+    font-size: .88rem;
+    transition: border-color .15s ease;
 }
 
-#reportsTable th,
-#reportsTable td,
-#logsTable th,
-#logsTable td {
-    text-align: left;
-    padding: var(--sp-2) var(--sp-3);
-    border-bottom: 1px solid var(--border);
+.arep-input,
+.arep-select { height: 42px; }
+
+.arep-textarea {
+    padding: .65rem .8rem;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 92px;
 }
 
-#reportsTable th,
-#logsTable th {
-    color: var(--ink-muted);
+.arep-input:focus,
+.arep-select:focus,
+.arep-textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.arep-input::placeholder,
+.arep-textarea::placeholder { color: #5c6e64; }
+
+.arep-select-wrap { position: relative; }
+
+.arep-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2.2rem;
+    cursor: pointer;
+}
+
+.arep-select-caret {
+    position: absolute;
+    top: 50%;
+    right: .8rem;
+    transform: translateY(-50%);
+    color: var(--silver-dim);
+    pointer-events: none;
+}
+
+.arep-help {
+    margin: .5rem 0 0;
+    color: var(--silver-dim);
+    font-size: .76rem;
+}
+
+.arep-submit {
+    width: 100%;
+    margin-top: 20px;
+    padding: .8rem 1rem;
+}
+
+/* ---------- Type / action chip ------------------------------------------------------- */
+.arep-chip {
+    display: inline-block;
+    padding: .18rem .5rem;
+    border-radius: 6px;
+    background: rgba(201, 162, 39, .12);
+    color: var(--gold-bright);
+    font-size: .68rem;
     font-weight: 600;
+    letter-spacing: .03em;
+    white-space: nowrap;
+}
+
+/* ---------- Tables (shared look) ----------------------------------------------------- */
+.rtbl2,
+.ltbl {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #091810;
+    overflow: hidden;
+}
+
+.rtbl2-scroll,
+.ltbl-scroll { overflow-x: auto; }
+
+.rtbl2-head,
+.rtbl2-row {
+    display: grid;
+    grid-template-columns: minmax(140px, 1fr) minmax(0, 1.6fr) 140px;
+    align-items: center;
+    gap: 12px;
+    min-width: 480px;
+    padding: 11px 16px;
+}
+
+.ltbl-head,
+.ltbl-row {
+    display: grid;
+    grid-template-columns: 140px 150px 130px minmax(0, 1.8fr);
+    align-items: center;
+    gap: 12px;
+    min-width: 640px;
+    padding: 11px 16px;
+}
+
+.rtbl2-head,
+.ltbl-head {
+    color: var(--silver-dim);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, .015);
+}
+
+.rtbl2-row,
+.ltbl-row {
+    border-top: 1px solid rgba(44, 68, 55, .5);
+    font-size: .84rem;
+    color: var(--silver);
+}
+
+.rtbl2-row:first-of-type,
+.ltbl-row:first-of-type { border-top: none; }
+
+.rtbl2-title {
+    color: var(--silver-bright);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rtbl2-when,
+.ltbl-when {
+    color: var(--silver-dim);
+    font-variant-numeric: tabular-nums;
+}
+
+.rtbl2-id,
+.ltbl-id {
+    color: var(--silver-dim);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: .8rem;
+}
+
+.ltbl-entity { color: var(--silver-bright); }
+
+.ltbl-desc {
+    color: var(--silver-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---------- Narrow screens ----------------------------------------------------------- */
+@media (max-width: 1000px) {
+    .arep-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 640px) {
-    #adminReports {
-        padding: var(--sp-6) var(--sp-3) var(--sp-6);
-    }
-
-    #reportsTable,
-    #logsTable {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
+    .arep-page .catalog-main { padding: 24px 16px 32px; }
 }

@@ -1,2 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<% response.sendRedirect(request.getContextPath() + "/login"); %>
+<%-- Application entry point: the public landing page. LandingServlet redirects
+     already-authenticated visitors on to their dashboard. --%>
+<jsp:forward page="/landing" />

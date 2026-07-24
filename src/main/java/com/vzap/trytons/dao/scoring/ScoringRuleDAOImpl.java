@@ -205,6 +205,32 @@ public class ScoringRuleDAOImpl extends BaseDAO implements ScoringRuleDAO {
         }
     }
 
+    @Override
+    public boolean seasonHasResults(String season) {
+
+        // Mirrors the trg_scoringRule_season_locked_* triggers so the UI can tell,
+        // ahead of any write, whether the season's ruleset is locked.
+        String query = "SELECT 1 " +
+                "FROM matchResult mr " +
+                "JOIN fixture f ON f.fixtureId = mr.fixtureId " +
+                "JOIN fantasyRound fr ON fr.roundId = f.roundId " +
+                "WHERE fr.season = ? " +
+                "LIMIT 1";
+
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, season);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch (SQLException e) {
+            LOG.log(Level.SEVERE, "Unable to determine whether season has results", e);
+            throw new DataAccessException("Unable to determine whether season has results", e);
+        }
+    }
+
     private ScoringRule mapRow(ResultSet rs) throws SQLException {
 
         ScoringRule rule = new ScoringRule();

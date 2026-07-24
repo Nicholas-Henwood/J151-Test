@@ -37,6 +37,12 @@ public class ScoringRuleServiceImpl implements ScoringRuleService {
     }
 
     @Override
+    public boolean isSeasonLocked(UUID actorUserId, String season) {
+        requireAdmin(actorUserId);
+        return scoringRuleDAO.seasonHasResults(season);
+    }
+
+    @Override
     public ScoringRuleResponseDTO saveRule(UUID actorUserId, ScoringRuleRequestDTO request) {
         requireAdmin(actorUserId);
 

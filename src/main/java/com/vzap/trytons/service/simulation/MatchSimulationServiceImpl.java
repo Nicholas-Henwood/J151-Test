@@ -794,9 +794,11 @@ public class MatchSimulationServiceImpl implements MatchSimulationService {
             return 0.0;
         }
 
-        double abilityPerformance = playerAbility * abilityWeight;
-        double formPerformance = player.getCurrentForm() * formWeight;
-        double teamBalancePerformance = teamBalance * teamBalanceWeight;
+        double additiveWeightTotal = abilityWeight + formWeight + teamBalanceWeight;
+
+        double abilityPerformance = playerAbility * (abilityWeight / additiveWeightTotal);
+        double formPerformance = player.getCurrentForm() * (formWeight / additiveWeightTotal);
+        double teamBalancePerformance = teamBalance * (teamBalanceWeight / additiveWeightTotal);
         double basePerformance = abilityPerformance + formPerformance + teamBalancePerformance;
 
         double randomMultiplier = calculateRandomMultiplier(player, randomnessWeight, random);
